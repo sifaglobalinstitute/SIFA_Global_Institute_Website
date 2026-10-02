@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Courses & Programs | SIFA Global Institute</title>
+
+    <meta
+        name="description"
+        content="Explore the SIFA Global Institute learning roadmap across accounting software, Excel, cloud accounting, ERP systems, financial technology, and professional digital tools."
+    >
+
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* =========================================================
+           SIFA COURSES PAGE
+           ========================================================= */
+
+        .courses-hero {
+            background:
+                radial-gradient(circle at 85% 20%, rgba(60, 205, 75, 0.22), transparent 28%),
+                radial-gradient(circle at 15% 80%, rgba(0, 150, 255, 0.18), transparent 30%),
+                linear-gradient(135deg, #062d59, #0b4f88 60%, #087d69);
+            color: white;
+            padding: 95px 0 80px;
+        }
+
+        .courses-hero-inner {
+            max-width: 1180px;
+            margin: auto;
+            padding: 0 24px;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            padding: 9px 15px;
+            border: 1px solid rgba(255,255,255,0.30);
+            border-radius: 999px;
+            background: rgba(255,255,255,0.10);
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 22px;
+        }
+
+        .courses-hero h1 {
+            max-width: 850px;
+            font-size: clamp(42px, 6vw, 76px);
+            line-height: 1.02;
+            margin: 0 0 24px;
+            font-weight: 900;
+        }
+
+        .courses-hero h1 span {
+            color: #63df32;
+        }
+
+        .courses-hero p {
+            max-width: 800px;
+            font-size: 19px;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.90);
+            margin-bottom: 30px;
+        }
+
+        .hero-points {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .hero-point {
+            padding: 10px 15px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.11);
+            border: 1px solid rgba(255,255,255,0.18);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .catalog-intro {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 70px 24px 30px;
+        }
+
+        .catalog-intro h2 {
+            font-size: 38px;
+            margin-bottom: 15px;
+            color: #082f5c;
+        }
+
+        .catalog-intro p {
+            max-width: 850px;
+            color: #5c6b7a;
+            line-height: 1.8;
+            font-size: 17px;
+        }
+
+        .course-controls {
+            max-width: 1180px;
+            margin: 20px auto 45px;
+            padding: 0 24px;
+        }
+
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-button {
+            border: 1px solid #d7e0e8;
+            background: white;
+            color: #16395e;
+            padding: 11px 17px;
+            border-radius: 999px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .filter-button:hover,
+        .filter-button.active {
+            background: #082f5c;
+            color: white;
+            border-color: #082f5c;
+        }
+
+        .course-section {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 10px 24px 70px;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .section-title h2 {
+            margin: 0;
+            font-size: 30px;
+            color: #082f5c;
+        }
+
+        .section-title p {
+            margin: 5px 0 0;
+            color: #68798b;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .program-card {
+            position: relative;
+            background: white;
+            border: 1px solid #dce5ec;
+            border-radius: 20px;
+            padding: 27px;
+            box-shadow: 0 12px 35px rgba(13, 45, 77, 0.07);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            overflow: hidden;
+        }
+
+        .program-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 18px 45px rgba(13, 45, 77, 0.13);
+        }
+
+        .program-card.hidden {
+            display: none;
+        }
+
+        .program-status {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            padding: 7px 11px;
+            border-radius: 999px;
+            margin-bottom: 18px;
+        }
+
+        .status-current {
+            background: #e5f8df;
+            color: #247b1e;
+        }
+
+        .status-coming {
+            background: #e8f2ff;
+            color: #155a9b;
+        }
+
+        .status-future {
+            background: #f0edf9;
+            color: #5a3c91;
+        }
+
+        .program-card h3 {
+            color: #092f5b;
+            font-size: 22px;
+            margin: 0 0 13px;
+            line-height: 1.25;
+        }
+
+        .program-card p {
+            color: #607184;
+            line-height: 1.7;
+            margin-bottom: 22px;
+        }
+
+        .program-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-bottom: 22px;
+        }
+
+        .meta-tag {
+            background: #f4f7fa;
+            color: #536579;
+            border-radius: 8px;
+            padding: 6px 9px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .program-link {
+            display: inline-block;
+            text-decoration: none;
+            background: #4bd12b;
+            color: #072d16;
+            padding: 11px 16px;
+            border-radius: 10px;
+            font-weight: 900;
+        }
+
+        .program-link:hover {
+            background: #38bd1b;
+        }
+
+        .roadmap {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 25px 24px 80px;
+        }
+
+        .roadmap-box {
+            border-radius: 25px;
+            padding: 42px;
+            background: linear-gradient(135deg, #082f5c, #104c7c);
+            color: white;
+        }
+
+        .roadmap-box h2 {
+    margin-top: 0;
+    font-size: 34px;
+    color: white;
+}
+
+        .roadmap-box p {
+            max-width: 850px;
+            color: rgba(255,255,255,0.86);
+            line-height: 1.8;
+        }
+
+        .roadmap-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .roadmap-step {
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.09);
+            border: 1px solid rgba(255,255,255,0.14);
+        }
+
+        .roadmap-step strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #67e33a;
+        }
+
+        .roadmap-step span {
+            color: rgba(255,255,255,0.80);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .course-note {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 24px 70px;
+        }
+
+        .note-box {
+            background: #f5f8fb;
+            border-left: 5px solid #4bd12b;
+            padding: 24px 27px;
+            border-radius: 12px;
+            color: #526477;
+            line-height: 1.75;
+        }
+
+        @media (max-width: 900px) {
+            .course-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .roadmap-steps {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .roadmap-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .roadmap-box {
+                padding: 28px;
+            }
+
+            .courses-hero {
+                padding: 70px 0 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+        <div class="container">
+            <span>Empowering Financial Professionals Through Technology</span>
+            <span>info.sifaglobal@yahoo.com</span>
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <header class="site-header">
+        <div class="container nav">
+            <a class="brand" href="index.html">
+                <img src="assets/sifa-logo.png" alt="SIFA Global Institute logo">
+                <span>
+                    <strong>SIFA Global Institute</strong>
+                    <small>Software Institute for Financial Accountants</small>
+                </span>
+            </a>
+
+            <button class="menu" type="button" aria-label="Open Menu">☰</button>
+
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="founder.html">Founder</a></li>
+                    <li><a class="active" href="courses.html">Courses</a></li>
+                    <li><a href="learning.html">Learning</a></li>
+                    <li><a href="certifications.html">Certification</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li>
+                        <a class="nav-cta" href="apply.html">Apply Now</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- HERO -->
+        <section class="courses-hero">
+            <div class="courses-hero-inner">
+
+                <span class="eyebrow">
+                    SIFA Global Learning Ecosystem
+                </span>
+
+                <h1>
+                    Master the Technology Behind
+                    <span>Modern Accounting.</span>
+                </h1>
+
+                <p>
+                    Explore a structured learning roadmap connecting accounting,
+                    finance, technology, business systems, spreadsheets, cloud
+                    accounting, and enterprise software through practical education.
+                </p>
+
+                <div class="hero-points">
+                    <span class="hero-point">Learn</span>
+                    <span class="hero-point">Practice</span>
+                    <span class="hero-point">Apply</span>
+                    <span class="hero-point">Build Professional Skills</span>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- INTRO -->
+        <section class="catalog-intro">
+
+            <h2>SIFA Course Catalog</h2>
+
+            <p>
+                SIFA Global Institute is building a broad technology-focused
+                learning ecosystem for accounting, finance, business, and
+                professional development. The catalog below shows the current
+                focus areas together with planned expansion areas.
+            </p>
+
+        </section>
+
+        <!-- FILTERS -->
+        <section class="course-controls">
+
+            <div class="filter-bar">
+
+                <button class="filter-button active" data-filter="all">
+                    All Programs
+                </button>
+
+                <button class="filter-button" data-filter="current">
+                    Current Focus
+                </button>
+
+                <button class="filter-button" data-filter="coming">
+                    Coming Soon
+                </button>
+
+                <button class="filter-button" data-filter="future">
+                    Future Programs
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- ACCOUNTING SOFTWARE -->
+        <section class="course-section">
+
+            <div class="section-title">
+                <div>
+                    <h2>Accounting and Bookkeeping Software</h2>
+                    <p>
+                        Practical accounting workflows, transactions, reporting,
+                        reconciliation, and financial management.
+                    </p>
+                </div>
+            </div>
+
+            <div class="course-grid">
+
+                <article class="program-card" data-status="current">
+                    <span class="program-status status-current">Current Focus</span>
+                    <h3>QuickBooks Practical Training</h3>
+                    <p>
+                        Learn company setup, customers, suppliers, transactions,
+                        reconciliation, reporting, and practical bookkeeping workflows.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Accounting</span>
+                        <span class="meta-tag">Bookkeeping</span>
+                        <span class="meta-tag">Reporting</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Apply</a>
+                </article>
+
+                <article class="program-card" data-status="current">
+                    <span class="program-status status-current">Current Focus</span>
+                    <h3>Sage Accounting Training</h3>
+                    <p>
+                        Develop practical competence in computerized accounting,
+                        transaction processing, financial management, and reporting.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Accounting</span>
+                        <span class="meta-tag">Finance</span>
+                        <span class="meta-tag">Reporting</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Apply</a>
+                </article>
+
+                <article class="program-card" data-status="current">
+                    <span class="program-status status-current">Current Focus</span>
+                    <h3>Tally Practical Accounting</h3>
+                    <p>
+                        Practice computerized accounting, business transactions,
+                        ledgers, financial workflows, and reporting.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Accounting</span>
+                        <span class="meta-tag">Tally</span>
+                        <span class="meta-tag">Reports</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Apply</a>
+                </article>
+
+                <article class="program-card" data-status="coming">
+                    <span class="program-status status-coming">Coming Soon</span>
+                    <h3>Xero Accounting</h3>
+                    <p>
+                        Planned practical training in cloud accounting workflows,
+                        transaction management, reconciliation, and reporting.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Cloud</span>
+                        <span class="meta-tag">Accounting</span>
+                        <span class="meta-tag">SMEs</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Register Interest</a>
+                </article>
+
+                <article class="program-card" data-status="coming">
+                    <span class="program-status status-coming">Coming Soon</span>
+                    <h3>Zoho Books</h3>
+                    <p>
+                        Planned training covering cloud bookkeeping, invoicing,
+                        expenses, reconciliation, and financial reporting.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Cloud</span>
+                        <span class="meta-tag">Bookkeeping</span>
+                        <span class="meta-tag">Business</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Register Interest</a>
+                </article>
+
+                <article class="program-card" data-status="coming">
+                    <span class="program-status status-coming">Coming Soon</span>
+                    <h3>Odoo Accounting</h3>
+                    <p>
+                        Planned practical learning around accounting workflows
+                        within broader business management systems.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">ERP</span>
+                        <span class="meta-tag">Accounting</span>
+                        <span class="meta-tag">Business</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Register Interest</a>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- EXCEL -->
+        <section class="course-section">
+
+            <div class="section-title">
+                <div>
+                    <h2>Microsoft Excel and Financial Analysis</h2>
+                    <p>
+                        Build practical spreadsheet skills for accounting,
+                        finance, analysis, reporting, and decision support.
+                    </p>
+                </div>
+            </div>
+
+            <div class="course-grid">
+
+                <article class="program-card" data-status="current">
+                    <span class="program-status status-current">Current Focus</span>
+                    <h3>Excel for Accounting and Finance</h3>
+                    <p>
+                        Build spreadsheet skills for formulas, analysis,
+                        accounting schedules, reporting, and practical financial work.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Excel</span>
+                        <span class="meta-tag">Finance</span>
+                        <span class="meta-tag">Analysis</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Apply</a>
+                </article>
+
+                <article class="program-card" data-status="coming">
+                    <span class="program-status status-coming">Coming Soon</span>
+                    <h3>Intermediate Excel</h3>
+                    <p>
+                        Planned training covering advanced formulas, structured
+                        tables, lookup functions, data organization, and analysis.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Excel</span>
+                        <span class="meta-tag">Analysis</span>
+                        <span class="meta-tag">Reporting</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Register Interest</a>
+                </article>
+
+                <article class="program-card" data-status="coming">
+                    <span class="program-status status-coming">Coming Soon</span>
+                    <h3>Advanced Excel and Financial Models</h3>
+                    <p>
+                        Planned advanced work in financial models, scenario analysis,
+                        forecasting, and professional spreadsheet design.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Modeling</span>
+                        <span class="meta-tag">Forecasting</span>
+                        <span class="meta-tag">Finance</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Register Interest</a>
+                </article>
+
+                <article class="program-card" data-status="future">
+                    <span class="program-status status-future">Future Program</span>
+                    <h3>Excel Dashboards</h3>
+                    <p>
+                        Future training focused on interactive dashboards,
+                        management reporting, visualization, and decision support.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Dashboards</span>
+                        <span class="meta-tag">Reporting</span>
+                        <span class="meta-tag">Data</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Future Interest</a>
+                </article>
+
+                <article class="program-card" data-status="future">
+                    <span class="program-status status-future">Future Program</span>
+                    <h3>Power Query for Finance</h3>
+                    <p>
+                        Future practical training for cleaning, transforming,
+                        combining, and preparing financial data.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Power Query</span>
+                        <span class="meta-tag">Data</span>
+                        <span class="meta-tag">Finance</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Future Interest</a>
+                </article>
+
+                <article class="program-card" data-status="future">
+                    <span class="program-status status-future">Future Program</span>
+                    <h3>Power BI for Financial Reporting</h3>
+                    <p>
+                        Future learning in business intelligence, financial
+                        dashboards, data visualization, and management reporting.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Power BI</span>
+                        <span class="meta-tag">BI</span>
+                        <span class="meta-tag">Finance</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Future Interest</a>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- TURKEY SOFTWARE -->
+        <section class="course-section">
+
+            <div class="section-title">
+                <div>
+                    <h2>Türkiye Accounting and Business Software</h2>
+                    <p>
+                        A planned Türkiye-focused learning portfolio for
+                        computerized accounting and business systems.
+                    </p>
+                </div>
+            </div>
+
+            <div class="course-grid">
+
+                <article class="program-card" data-status="future">
+                    <span class="program-status status-future">Future Program</span>
+                    <h3>Logo</h3>
+                    <p>
+                        Planned Türkiye-focused accounting and business software training,
+                        subject to curriculum development and access.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Türkiye</span>
+                        <span class="meta-tag">Accounting</span>
+                        <span class="meta-tag">Business</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Future Interest</a>
+                </article>
+
+                <article class="program-card" data-status="future">
+                    <span class="program-status status-future">Future Program</span>
+                    <h3>Mikro</h3>
+                    <p>
+                        Planned practical training for computerized accounting
+                        and business management workflows.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Türkiye</span>
+                        <span class="meta-tag">Accounting</span>
+                        <span class="meta-tag">ERP</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Future Interest</a>
+                </article>
+
+                <article class="program-card" data-status="future">
+                    <span class="program-status status-future">Future Program</span>
+                    <h3>ETA</h3>
+                    <p>
+                        Planned Türkiye-focused computerized accounting
+                        training as the SIFA portfolio expands.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Türkiye</span>
+                        <span class="meta-tag">Accounting</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Future Interest</a>
+                </article>
+
+                <article class="program-card" data-status="future">
+                    <span class="program-status status-future">Future Program</span>
+                    <h3>LUCA</h3>
+                    <p>
+                        Planned training in Türkiye-oriented accounting
+                        workflows and professional software use.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Türkiye</span>
+                        <span class="meta-tag">Accounting</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Future Interest</a>
+                </article>
+
+                <article class="program-card" data-status="future">
+                    <span class="program-status status-future">Future Program</span>
+                    <h3>Zirve</h3>
+                    <p>
+                        Planned practical training for computerized accounting
+                        and business operations.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Türkiye</span>
+                        <span class="meta-tag">Accounting</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Future Interest</a>
+                </article>
+
+                <article class="program-card" data-status="future">
+                    <span class="program-status status-future">Future Program</span>
+                    <h3>DİA</h3>
+                    <p>
+                        Planned cloud-based business and accounting systems
+                        training for professional learners.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Cloud</span>
+                        <span class="meta-tag">Türkiye</span>
+                        <span class="meta-tag">Business</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Future Interest</a>
+                </article>
+
+                <article class="program-card" data-status="future">
+                    <span class="program-status status-future">Future Program</span>
+                    <h3>Paraşüt</h3>
+                    <p>
+                        Planned cloud accounting and small-business financial
+                        management training.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Cloud</span>
+                        <span class="meta-tag">Türkiye</span>
+                        <span class="meta-tag">SMEs</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Future Interest</a>
+                </article>
+
+                <article class="program-card" data-status="future">
+                    <span class="program-status status-future">Future Program</span>
+                    <h3>AKINSOFT Wolvox</h3>
+                    <p>
+                        Planned business management and accounting software
+                        training for relevant professional workflows.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Türkiye</span>
+                        <span class="meta-tag">Business</span>
+                        <span class="meta-tag">ERP</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Future Interest</a>
+                </article>
+
+                <article class="program-card" data-status="future">
+                    <span class="program-status status-future">Future Program</span>
+                    <h3>Nebim</h3>
+                    <p>
+                        Planned enterprise and retail business systems learning
+                        for future SIFA expansion.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Enterprise</span>
+                        <span class="meta-tag">Türkiye</span>
+                        <span class="meta-tag">Business</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Future Interest</a>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- ENTERPRISE SYSTEMS -->
+        <section class="course-section">
+
+            <div class="section-title">
+                <div>
+                    <h2>Enterprise Systems and ERP</h2>
+                    <p>
+                        Long-term expansion into larger financial and enterprise
+                        technology environments.
+                    </p>
+                </div>
+            </div>
+
+            <div class="course-grid">
+
+                <article class="program-card" data-status="future">
+                    <span class="program-status status-future">Future Program</span>
+                    <h3>SAP Financial Systems</h3>
+                    <p>
+                        Future enterprise learning focused on financial processes,
+                        systems concepts, and professional ERP environments.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">SAP</span>
+                        <span class="meta-tag">ERP</span>
+                        <span class="meta-tag">Finance</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Future Interest</a>
+                </article>
+
+                <article class="program-card" data-status="future">
+                    <span class="program-status status-future">Future Program</span>
+                    <h3>Oracle NetSuite</h3>
+                    <p>
+                        Future enterprise resource planning and financial systems
+                        learning as the SIFA curriculum expands.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">ERP</span>
+                        <span class="meta-tag">Finance</span>
+                        <span class="meta-tag">Enterprise</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Future Interest</a>
+                </article>
+
+                <article class="program-card" data-status="future">
+                    <span class="program-status status-future">Future Program</span>
+                    <h3>Microsoft Dynamics 365</h3>
+                    <p>
+                        Future training in enterprise business applications,
+                        financial operations, and digital business processes.
+                    </p>
+                    <div class="program-meta">
+                        <span class="meta-tag">Microsoft</span>
+                        <span class="meta-tag">ERP</span>
+                        <span class="meta-tag">Business</span>
+                    </div>
+                    <a class="program-link" href="apply.html">Future Interest</a>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- SIFA LEARNING MODEL -->
+        <section class="roadmap">
+
+            <div class="roadmap-box">
+
+                <h2>The SIFA Learning Model</h2>
+
+                <p>
+                    SIFA is designed around practical application. Learners should
+                    understand the accounting or business concept, practice the
+                    workflow using appropriate technology, and then apply the skill
+                    in realistic professional situations.
+                </p>
+
+                <div class="roadmap-steps">
+
+                    <div class="roadmap-step">
+                        <strong>01 — Learn</strong>
+                        <span>
+                            Understand the concept, terminology, workflow,
+                            and purpose behind the task.
+                        </span>
+                    </div>
+
+                    <div class="roadmap-step">
+                        <strong>02 — Practice</strong>
+                        <span>
+                            Work through guided exercises using realistic
+                            accounting and business scenarios.
+                        </span>
+                    </div>
+
+                    <div class="roadmap-step">
+                        <strong>03 — Apply</strong>
+                        <span>
+                            Perform the workflow independently and interpret
+                            the resulting financial information.
+                        </span>
+                    </div>
+
+                    <div class="roadmap-step">
+                        <strong>04 — Develop</strong>
+                        <span>
+                            Continue building professional technology skills
+                            through advanced tools and systems.
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- IMPORTANT NOTE -->
+        <section class="course-note">
+
+            <div class="note-box">
+                <strong>Program availability:</strong>
+                SIFA Global Institute is developing its learning portfolio in
+                stages. Programs marked as Current Focus represent the present
+                training direction, while Coming Soon and Future Program areas
+                represent planned curriculum expansion. Software names are shown
+                as learning areas and do not imply endorsement, partnership,
+                accreditation, or authorization by the software vendors.
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer-grid">
+
+            <div>
+                <img
+                    src="assets/sifa-logo.png"
+                    alt="SIFA Global Institute logo"
+                    style="width:100px; background:#ffffff; border-radius:12px;"
+                >
+                <p>
+                    Empowering Financial Professionals Through Technology.
+                </p>
+            </div>
+
+            <div>
+                <h3>Explore</h3>
+                <p><a href="about.html">About SIFA</a></p>
+                <p><a href="founder.html">Founder</a></p>
+                <p><a href="courses.html">Courses</a></p>
+            </div>
+
+            <div>
+                <h3>Credentials</h3>
+                <p><a href="certifications.html">SIFA Certifications</a></p>
+                <p><a href="verify.html">Verify Certificate</a></p>
+            </div>
+
+            <div>
+                <h3>Contact</h3>
+                <p>
+                    <a href="mailto:info.sifaglobal@yahoo.com">
+                        info.sifaglobal@yahoo.com
+                    </a>
+                </p>
+            </div>
+
+        </div>
+
+        <div class="container">
+            <p>
+                © <span id="year"></span> SIFA Global Institute. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+
+    <script>
+        /* Course filtering */
+        const filterButtons = document.querySelectorAll(".filter-button");
+        const programCards = document.querySelectorAll(".program-card");
+
+        filterButtons.forEach(function(button) {
+            button.addEventListener("click", function() {
+
+                filterButtons.forEach(function(item) {
+                    item.classList.remove("active");
+                });
+
+                button.classList.add("active");
+
+                const filter = button.getAttribute("data-filter");
+
+                programCards.forEach(function(card) {
+
+                    if (filter === "all") {
+                        card.classList.remove("hidden");
+                    } else if (card.getAttribute("data-status") === filter) {
+                        card.classList.remove("hidden");
+                    } else {
+                        card.classList.add("hidden");
+                    }
+
+                });
+            });
+        });
+
+        /* Current year */
+        const yearElement = document.getElementById("year");
+
+        if (yearElement) {
+            yearElement.textContent = new Date().getFullYear();
+        }
+    </script>
+
+</body>
+</html>

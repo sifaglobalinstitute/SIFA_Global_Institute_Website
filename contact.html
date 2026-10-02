@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | SIFA Global Institute</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        .contact-hero {
+            background: #08284d;
+            color: white;
+            padding: 95px 0 90px;
+        }
+
+        .contact-hero .container {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 28px;
+        }
+
+        .contact-hero .eyebrow {
+            display: inline-block;
+            padding: 10px 18px;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 30px;
+            background: rgba(255,255,255,0.08);
+            color: #63d471;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+        }
+
+        .contact-hero h1 {
+            font-size: clamp(48px, 6vw, 78px);
+            line-height: 1.03;
+            margin: 0 0 28px;
+            max-width: 900px;
+            color: white;
+        }
+
+        .contact-hero p {
+            max-width: 850px;
+            font-size: 20px;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.9);
+            margin: 0;
+        }
+
+        .contact-section {
+            padding: 90px 0;
+        }
+
+        .contact-section .container {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 28px;
+        }
+
+        .section-heading {
+            text-align: center;
+            max-width: 850px;
+            margin: 0 auto 55px;
+        }
+
+        .section-heading .eyebrow {
+            color: #0874a9;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .section-heading h2 {
+            font-size: clamp(38px, 5vw, 58px);
+            line-height: 1.1;
+            color: #092b55;
+            margin: 0 0 20px;
+        }
+
+        .section-heading p {
+            color: #61748e;
+            font-size: 18px;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .contact-card {
+            background: white;
+            border: 1px solid #dce5ee;
+            border-radius: 22px;
+            padding: 34px;
+            box-shadow: 0 12px 35px rgba(8, 40, 77, 0.06);
+        }
+
+        .contact-number {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            background: #eaf8f0;
+            color: #07884d;
+            font-weight: 800;
+            margin-bottom: 22px;
+        }
+
+        .contact-card h3 {
+            color: #092b55;
+            font-size: 24px;
+            margin: 0 0 14px;
+        }
+
+        .contact-card p {
+            color: #61748e;
+            line-height: 1.75;
+            margin: 0;
+        }
+
+        .contact-card a {
+            color: #0874a9;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .contact-card a:hover {
+            text-decoration: underline;
+        }
+
+        .contact-details {
+            background: #f3f7fb;
+            padding: 90px 0;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 35px;
+            align-items: stretch;
+        }
+
+        .details-box {
+            background: white;
+            border-radius: 24px;
+            padding: 42px;
+            border: 1px solid #dce5ee;
+        }
+
+        .details-box h2 {
+            color: #092b55;
+            font-size: 34px;
+            margin: 0 0 22px;
+        }
+
+        .details-box p {
+            color: #61748e;
+            line-height: 1.8;
+            margin: 0 0 22px;
+        }
+
+        .detail-item {
+            padding: 18px 0;
+            border-bottom: 1px solid #e4ebf2;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            display: block;
+            color: #0874a9;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 7px;
+        }
+
+        .detail-value {
+            color: #092b55;
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.6;
+        }
+
+        .inquiry-list {
+            margin: 25px 0 0;
+            padding-left: 20px;
+            color: #61748e;
+            line-height: 2;
+        }
+
+        .contact-note {
+            margin-top: 28px;
+            padding: 22px 25px;
+            border-left: 4px solid #19a85b;
+            background: #f0f8f4;
+            border-radius: 0 14px 14px 0;
+            color: #52677f;
+            line-height: 1.7;
+        }
+
+        .contact-cta {
+            padding: 80px 0;
+        }
+
+        .contact-cta .cta-box {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 70px 35px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, #eaf8f2, #eef7fb);
+            text-align: center;
+        }
+
+        .contact-cta .eyebrow {
+            color: #0874a9;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .contact-cta h2 {
+            color: #092b55;
+            font-size: clamp(38px, 5vw, 58px);
+            margin: 0 0 20px;
+        }
+
+        .contact-cta p {
+            max-width: 720px;
+            margin: 0 auto 30px;
+            color: #61748e;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .contact-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .contact-buttons a {
+            display: inline-block;
+            padding: 15px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+        .primary-contact-button {
+            background: #129653;
+            color: white;
+        }
+
+        .secondary-contact-button {
+            border: 1px solid #cbd9e5;
+            color: #092b55;
+            background: white;
+        }
+
+        @media (max-width: 850px) {
+            .contact-grid,
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-hero {
+                padding: 70px 0;
+            }
+
+            .contact-card,
+            .details-box {
+                padding: 28px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .contact-hero h1 {
+                font-size: 46px;
+            }
+
+            .contact-hero p {
+                font-size: 17px;
+            }
+
+            .contact-section,
+            .contact-details,
+            .contact-cta {
+                padding: 65px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="top-bar">
+        <div class="container">
+            <span>Empowering Financial Professionals Through Technology</span>
+            <a href="mailto:info.sifaglobal@yahoo.com">info.sifaglobal@yahoo.com</a>
+        </div>
+    </div>
+
+    <header class="site-header">
+        <div class="container">
+            <a href="index.html" class="brand">
+                <img src="assets/sifa-logo.png" alt="SIFA Global Institute Logo">
+                <div class="brand-text">
+                    <strong>SIFA Global Institute</strong>
+                    <span>Software Institute for Financial Accountants</span>
+                </div>
+            </a>
+
+            <nav class="main-nav">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="founder.html">Founder</a>
+                <a href="courses.html">Courses</a>
+                <a href="learning.html">Learning</a>
+                <a href="certifications.html">Certification</a>
+                <a href="resources.html">Resources</a>
+                <a href="contact.html" class="active">Contact</a>
+                <a href="apply.html" class="nav-apply">Apply Now</a>
+            </nav>
+        </div>
+    </header>
+
+
+    <main>
+
+        <section class="contact-hero">
+            <div class="container">
+
+                <span class="eyebrow">SIFA CONTACT</span>
+
+                <h1>Let's Connect.<br>Let's Build Skills.</h1>
+
+                <p>
+                    Whether you are a learner, professional, business owner,
+                    organization, or potential partner, SIFA Global Institute
+                    welcomes inquiries about learning, training, programs,
+                    partnerships, and institutional development.
+                </p>
+
+            </div>
+        </section>
+
+
+        <section class="contact-section">
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <div class="eyebrow">HOW WE CAN HELP</div>
+
+                    <h2>Connect With SIFA Global Institute</h2>
+
+                    <p>
+                        Contact SIFA for information about practical accounting
+                        technology education, learning opportunities, applications,
+                        and future institutional initiatives.
+                    </p>
+
+                </div>
+
+
+                <div class="contact-grid">
+
+                    <div class="contact-card">
+
+                        <div class="contact-number">01</div>
+
+                        <h3>General Inquiries</h3>
+
+                        <p>
+                            Ask questions about SIFA, our learning approach,
+                            programs, educational resources, and future activities.
+                        </p>
+
+                    </div>
+
+
+                    <div class="contact-card">
+
+                        <div class="contact-number">02</div>
+
+                        <h3>Learning & Applications</h3>
+
+                        <p>
+                            Contact us about courses, learning pathways,
+                            applications, scholarships or fee-waiver opportunities
+                            when available.
+                        </p>
+
+                    </div>
+
+
+                    <div class="contact-card">
+
+                        <div class="contact-number">03</div>
+
+                        <h3>Partnerships</h3>
+
+                        <p>
+                            Organizations and potential partners can contact SIFA
+                            regarding educational collaboration, training,
+                            institutional development, or future opportunities.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="contact-details">
+
+            <div class="container">
+
+                <div class="details-grid">
+
+                    <div class="details-box">
+
+                        <h2>Official Contact Information</h2>
+
+                        <p>
+                            SIFA Global Institute currently operates with an
+                            international orientation and maintains contact
+                            points connected to Türkiye and Rwanda.
+                        </p>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">Official Email</span>
+
+                            <div class="detail-value">
+                                <a href="mailto:info.sifaglobal@yahoo.com">
+                                    info.sifaglobal@yahoo.com
+                                </a>
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">Türkiye</span>
+
+                            <div class="detail-value">
+                                <a href="tel:+905372746944">
+                                    +90 537 274 6944
+                                </a>
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">Rwanda</span>
+
+                            <div class="detail-value">
+                                <a href="tel:+250782817643">
+                                    +250 782 817 643
+                                </a>
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">Additional Rwanda Contact</span>
+
+                            <div class="detail-value">
+                                <a href="tel:+250793899193">
+                                    +250 793 899 193
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="details-box">
+
+                        <h2>What Can You Contact Us About?</h2>
+
+                        <p>
+                            You can contact SIFA regarding matters such as:
+                        </p>
+
+                        <ul class="inquiry-list">
+
+                            <li>Course information</li>
+                            <li>Program applications</li>
+                            <li>Learning opportunities</li>
+                            <li>Scholarships and fee waivers</li>
+                            <li>Educational resources</li>
+                            <li>Training inquiries</li>
+                            <li>Corporate learning</li>
+                            <li>Potential partnerships</li>
+                            <li>Institutional inquiries</li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+
+                <div class="contact-note">
+
+                    <strong>Current development:</strong>
+                    SIFA is continuing to develop its digital learning,
+                    application, resource, and certificate-verification systems.
+                    Some services shown as future initiatives are not yet fully
+                    operational.
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="contact-cta">
+
+            <div class="cta-box">
+
+                <div class="eyebrow">START YOUR JOURNEY</div>
+
+                <h2>Ready to Learn With SIFA?</h2>
+
+                <p>
+                    Explore the current training programs or submit an application
+                    to begin your learning journey with SIFA Global Institute.
+                </p>
+
+                <div class="contact-buttons">
+
+                    <a href="courses.html" class="primary-contact-button">
+                        Explore Courses
+                    </a>
+
+                    <a href="apply.html" class="secondary-contact-button">
+                        Apply to SIFA
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer class="site-footer">
+
+        <div class="container">
+
+            <div class="footer-grid">
+
+                <div class="footer-brand">
+
+                    <img src="assets/sifa-logo.png" alt="SIFA Global Institute Logo">
+
+                    <h3>SIFA Global Institute</h3>
+
+                    <p>
+                        Empowering Financial Professionals Through Technology.
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <h3>Explore</h3>
+
+                    <a href="about.html">About SIFA</a>
+                    <a href="founder.html">Founder</a>
+                    <a href="courses.html">Courses</a>
+                    <a href="learning.html">Learning</a>
+
+                </div>
+
+
+                <div>
+
+                    <h3>Credentials</h3>
+
+                    <a href="certifications.html">SIFA Certifications</a>
+                    <a href="verify.html">Verify a Certificate</a>
+                    <a href="resources.html">Resources</a>
+
+                </div>
+
+
+                <div>
+
+                    <h3>Contact</h3>
+
+                    <p>info.sifaglobal@yahoo.com</p>
+                    <p>Türkiye:<br>+90 537 274 6944</p>
+                    <p>Rwanda:<br>+250 782 817 643</p>
+                    <p>Rwanda:<br>+250 793 899 193</p>
+
+                </div>
+
+            </div>
+
+
+            <div class="footer-bottom">
+
+                <span>© 2026 SIFA Global Institute. All rights reserved.</span>
+
+                <span>Software Institute for Financial Accountants</span>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+</body>
+</html>

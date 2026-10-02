@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Apply | SIFA Global Institute</title>
+
+    <meta
+        name="description"
+        content="Apply to SIFA Global Institute for practical training in accounting software, finance technology, Excel, and professional digital tools."
+    >
+
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        .application-page {
+            background: #f5f8fc;
+            padding-bottom: 80px;
+        }
+
+        .application-hero {
+            background: linear-gradient(135deg, #082f5c, #0b4f88);
+            color: white;
+            padding: 80px 20px;
+        }
+
+        .application-hero .container {
+            max-width: 1180px;
+            margin: auto;
+        }
+
+        .application-badge {
+            display: inline-block;
+            padding: 9px 16px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.25);
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .application-hero h1 {
+            max-width: 950px;
+            margin: 20px 0 18px;
+            color: white;
+            font-size: clamp(42px, 6vw, 72px);
+            line-height: 1.02;
+        }
+
+        .application-hero p {
+            max-width: 820px;
+            margin: 0;
+            color: rgba(255,255,255,0.9);
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .application-layout {
+            max-width: 1180px;
+            margin: -35px auto 0;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .application-card {
+            background: white;
+            border: 1px solid #dce5ef;
+            border-radius: 24px;
+            box-shadow: 0 20px 55px rgba(8,47,92,0.10);
+            padding: 42px;
+        }
+
+        .application-intro {
+            margin-bottom: 35px;
+        }
+
+        .application-intro h2 {
+            margin: 0 0 10px;
+            color: #082f5c;
+            font-size: 32px;
+        }
+
+        .application-intro p {
+            margin: 0;
+            color: #60748a;
+            line-height: 1.8;
+        }
+
+        .form-section {
+            margin-top: 38px;
+            padding-top: 32px;
+            border-top: 1px solid #e5ebf2;
+        }
+
+        .form-section h3 {
+            margin: 0 0 8px;
+            color: #082f5c;
+            font-size: 22px;
+        }
+
+        .form-section > p {
+            margin: 0 0 24px;
+            color: #6b7d90;
+            line-height: 1.7;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            color: #12385f;
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        .form-group label span {
+            color: #718399;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #d7e1eb;
+            border-radius: 12px;
+            background: #fbfdff;
+            color: #173a60;
+            padding: 14px 15px;
+            font-family: inherit;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s ease;
+        }
+
+        .form-group input,
+        .form-group select {
+            min-height: 50px;
+        }
+
+        .form-group textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #3ccf22;
+            box-shadow: 0 0 0 3px rgba(60,207,34,0.10);
+            background: white;
+        }
+
+        .choice-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .choice {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 14px;
+            border: 1px solid #d7e1eb;
+            border-radius: 12px;
+            background: #fbfdff;
+            color: #234668;
+            cursor: pointer;
+        }
+
+        .choice input {
+            width: auto;
+        }
+
+        .consent-box {
+            margin-top: 30px;
+            padding: 18px;
+            border-radius: 14px;
+            background: #f1f7fb;
+            border: 1px solid #dce8f1;
+        }
+
+        .consent-box label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            color: #3d5872;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .consent-box input {
+            margin-top: 4px;
+        }
+
+        .application-actions {
+            margin-top: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .submit-button {
+            border: 0;
+            border-radius: 12px;
+            padding: 15px 25px;
+            background: #43cf26;
+            color: #062b13;
+            font-size: 16px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .reset-button {
+            border: 1px solid #cfdbe7;
+            border-radius: 12px;
+            padding: 15px 25px;
+            background: white;
+            color: #163d63;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .application-note {
+            margin-top: 24px;
+            padding: 18px 20px;
+            border-left: 4px solid #43cf26;
+            border-radius: 8px;
+            background: #f7fafc;
+            color: #62778d;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .application-note strong {
+            color: #163d63;
+        }
+
+        .application-sidebar {
+            max-width: 1180px;
+            margin: 35px auto 0;
+            padding: 0 20px;
+        }
+
+        .application-info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .info-card {
+            background: white;
+            border: 1px solid #dce5ef;
+            border-radius: 18px;
+            padding: 25px;
+        }
+
+        .info-number {
+            color: #43cf26;
+            font-size: 14px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-card h3 {
+            margin: 9px 0;
+            color: #082f5c;
+            font-size: 20px;
+        }
+
+        .info-card p {
+            margin: 0;
+            color: #667c92;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 800px) {
+            .form-grid,
+            .choice-grid,
+            .application-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: auto;
+            }
+
+            .application-card {
+                padding: 25px;
+            }
+
+            .application-hero {
+                padding: 60px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topbar">
+        <div class="container">
+            <span>Empowering Financial Professionals Through Technology</span>
+            <span>info.sifaglobal@yahoo.com</span>
+        </div>
+    </div>
+
+    <header>
+        <div class="container nav">
+            <a class="brand" href="index.html">
+                <img
+                    src="assets/sifa-logo.png"
+                    alt="SIFA Global Institute logo"
+                >
+                <span>
+                    <strong>SIFA Global Institute</strong>
+                    <small>Software Institute for Financial Accountants</small>
+                </span>
+            </a>
+
+            <button class="menu" type="button" aria-label="Open menu">
+                ☰
+            </button>
+
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="founder.html">Founder</a></li>
+                    <li><a href="courses.html">Courses</a></li>
+                    <li><a href="learning.html">Learning</a></li>
+                    <li><a href="certifications.html">Certification</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li>
+                        <a class="nav-cta" href="apply.html">Apply Now</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="application-page">
+
+        <section class="application-hero">
+            <div class="container">
+
+                <span class="application-badge">
+                    SIFA Program Application
+                </span>
+
+                <h1>
+                    Start Your Practical Learning Journey.
+                </h1>
+
+                <p>
+                    Tell us about yourself, your professional interests,
+                    your current experience, and the skills you want to
+                    develop through SIFA Global Institute.
+                </p>
+
+            </div>
+        </section>
+
+        <section class="application-layout">
+
+            <div class="application-card">
+
+                <div class="application-intro">
+                    <h2>Application Form</h2>
+
+                    <p>
+                        Please provide accurate information so SIFA Global
+                        Institute can better understand your learning needs
+                        and the program you are interested in.
+                    </p>
+                </div>
+
+                <form id="applicationForm">
+
+                    <!-- PERSONAL INFORMATION -->
+
+                    <div class="form-section" style="margin-top: 0; padding-top: 0; border-top: 0;">
+
+                        <h3>1. Personal Information</h3>
+
+                        <p>
+                            Basic information we need to identify and contact you.
+                        </p>
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="fullName">
+                                    Full Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="fullName"
+                                    name="fullName"
+                                    required
+                                    placeholder="Enter your full name"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">
+                                    Email Address
+                                </label>
+
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    required
+                                    placeholder="example@email.com"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phone">
+                                    WhatsApp / Phone Number
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    placeholder="+250 ..."
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="country">
+                                    Country
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="country"
+                                    name="country"
+                                    required
+                                    placeholder="Enter your country"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="city">
+                                    City
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="city"
+                                    name="city"
+                                    placeholder="Enter your city"
+                                >
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- EDUCATION AND PROFESSIONAL BACKGROUND -->
+
+                    <div class="form-section">
+
+                        <h3>2. Education and Professional Background</h3>
+
+                        <p>
+                            This helps us understand your current level and
+                            learning background.
+                        </p>
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="education">
+                                    Highest Education Level
+                                </label>
+
+                                <select id="education" name="education" required>
+                                    <option value="">Select an option</option>
+                                    <option>Secondary School</option>
+                                    <option>Certificate</option>
+                                    <option>Diploma</option>
+                                    <option>Bachelor's Degree</option>
+                                    <option>Master's Degree</option>
+                                    <option>Doctorate</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="occupation">
+                                    Current Occupation
+                                </label>
+
+                                <select id="occupation" name="occupation">
+                                    <option value="">Select an option</option>
+                                    <option>Student</option>
+                                    <option>Accountant</option>
+                                    <option>Bookkeeper</option>
+                                    <option>Finance Professional</option>
+                                    <option>Business Owner</option>
+                                    <option>Entrepreneur</option>
+                                    <option>Manager</option>
+                                    <option>Job Seeker</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="background">
+                                    Educational / Professional Background
+                                </label>
+
+                                <textarea
+                                    id="background"
+                                    name="background"
+                                    placeholder="Briefly describe your education, work experience, or professional background."
+                                ></textarea>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- PROGRAM -->
+
+                    <div class="form-section">
+
+                        <h3>3. Program Selection</h3>
+
+                        <p>
+                            Choose the learning area that best matches your
+                            current goal.
+                        </p>
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="program">
+                                    Program of Interest
+                                </label>
+
+                                <select id="program" name="program" required>
+
+                                    <option value="">
+                                        Select a program
+                                    </option>
+
+                                    <option>
+                                        QuickBooks Practical Training
+                                    </option>
+
+                                    <option>
+                                        Sage Accounting Training
+                                    </option>
+
+                                    <option>
+                                        Tally Practical Accounting
+                                    </option>
+
+                                    <option>
+                                        Excel for Accounting and Finance
+                                    </option>
+
+                                    <option>
+                                        Intermediate Excel
+                                    </option>
+
+                                    <option>
+                                        Advanced Excel and Financial Models
+                                    </option>
+
+                                    <option>
+                                        Excel Dashboards
+                                    </option>
+
+                                    <option>
+                                        Power Query for Finance
+                                    </option>
+
+                                    <option>
+                                        Power BI for Financial Reporting
+                                    </option>
+
+                                    <option>
+                                        Xero Accounting
+                                    </option>
+
+                                    <option>
+                                        Zoho Books
+                                    </option>
+
+                                    <option>
+                                        Odoo Accounting
+                                    </option>
+
+                                    <option>
+                                        Türkiye Accounting and Business Software
+                                    </option>
+
+                                    <option>
+                                        Enterprise Systems and ERP
+                                    </option>
+
+                                    <option>
+                                        Other / Not Sure Yet
+                                    </option>
+
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="experienceLevel">
+                                    Current Experience Level
+                                </label>
+
+                                <select
+                                    id="experienceLevel"
+                                    name="experienceLevel"
+                                >
+                                    <option value="">Select an option</option>
+                                    <option>Complete Beginner</option>
+                                    <option>Basic Knowledge</option>
+                                    <option>Some Practical Experience</option>
+                                    <option>Intermediate</option>
+                                    <option>Advanced</option>
+                                    <option>Professional</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full-width">
+
+                                <label>
+                                    Preferred Learning Format
+                                </label>
+
+                                <div class="choice-grid">
+
+                                    <label class="choice">
+                                        <input
+                                            type="radio"
+                                            name="format"
+                                            value="Live Online"
+                                        >
+                                        Live Online
+                                    </label>
+
+                                    <label class="choice">
+                                        <input
+                                            type="radio"
+                                            name="format"
+                                            value="Self-Paced"
+                                        >
+                                        Self-Paced
+                                    </label>
+
+                                    <label class="choice">
+                                        <input
+                                            type="radio"
+                                            name="format"
+                                            value="Blended"
+                                        >
+                                        Blended Learning
+                                    </label>
+
+                                    <label class="choice">
+                                        <input
+                                            type="radio"
+                                            name="format"
+                                            value="Not Sure"
+                                        >
+                                        Not Sure Yet
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- LEARNING GOALS -->
+
+                    <div class="form-section">
+
+                        <h3>4. Learning Goals</h3>
+
+                        <p>
+                            Tell us what you want to achieve through your training.
+                        </p>
+
+                        <div class="form-grid">
+
+                            <div class="form-group full-width">
+
+                                <label for="goals">
+                                    What Do You Want to Achieve?
+                                </label>
+
+                                <textarea
+                                    id="goals"
+                                    name="goals"
+                                    required
+                                    placeholder="For example: I want to learn QuickBooks so I can manage accounting records for a small business."
+                                ></textarea>
+
+                            </div>
+
+                            <div class="form-group full-width">
+
+                                <label for="softwareExperience">
+                                    Software Experience
+                                </label>
+
+                                <textarea
+                                    id="softwareExperience"
+                                    name="softwareExperience"
+                                    placeholder="Tell us which accounting, finance, Excel, ERP, or business software you have used before."
+                                ></textarea>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="language">
+                                    Preferred Learning Language
+                                </label>
+
+                                <select id="language" name="language">
+
+                                    <option value="">
+                                        Select a language
+                                    </option>
+
+                                    <option>English</option>
+                                    <option>Kinyarwanda</option>
+                                    <option>French</option>
+                                    <option>Turkish</option>
+                                    <option>Other</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="howFound">
+                                    How Did You Hear About SIFA?
+                                </label>
+
+                                <select id="howFound" name="howFound">
+
+                                    <option value="">
+                                        Select an option
+                                    </option>
+
+                                    <option>Website</option>
+                                    <option>YouTube</option>
+                                    <option>Instagram</option>
+                                    <option>Facebook</option>
+                                    <option>TikTok</option>
+                                    <option>LinkedIn</option>
+                                    <option>WhatsApp</option>
+                                    <option>Friend or Colleague</option>
+                                    <option>Other</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ADDITIONAL INFORMATION -->
+
+                    <div class="form-section">
+
+                        <h3>5. Additional Information</h3>
+
+                        <p>
+                            Optional information that may help us understand
+                            your situation and learning needs.
+                        </p>
+
+                        <div class="form-grid">
+
+                            <div class="form-group full-width">
+
+                                <label for="additional">
+                                    Additional Message
+                                </label>
+
+                                <textarea
+                                    id="additional"
+                                    name="additional"
+                                    placeholder="Is there anything else you would like SIFA Global Institute to know?"
+                                ></textarea>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- CONSENT -->
+
+                    <div class="consent-box">
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                id="consent"
+                                name="consent"
+                                required
+                            >
+
+                            <span>
+                                I confirm that the information I have provided
+                                is accurate to the best of my knowledge. I
+                                understand that submitting this application does
+                                not automatically guarantee admission or
+                                enrollment in a SIFA program.
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                    <div class="application-actions">
+
+                        <button
+                            type="submit"
+                            class="submit-button"
+                        >
+                            Prepare Application Email
+                        </button>
+
+                        <button
+                            type="reset"
+                            class="reset-button"
+                        >
+                            Clear Form
+                        </button>
+
+                    </div>
+
+                    <div class="application-note">
+
+                        <strong>Important:</strong>
+                        This website version prepares an application email using
+                        your email application. A future SIFA application system
+                        can provide online submission, application tracking,
+                        document uploads, applicant notifications, and
+                        administrative management.
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+        <section class="application-sidebar">
+
+            <div class="application-info-grid">
+
+                <div class="info-card">
+                    <div class="info-number">01 — Apply</div>
+                    <h3>Tell Us About You</h3>
+                    <p>
+                        Provide your background, interests, and the learning
+                        area you want to develop.
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-number">02 — Review</div>
+                    <h3>SIFA Reviews</h3>
+                    <p>
+                        Your application information can be reviewed according
+                        to the relevant program and available training options.
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-number">03 — Learn</div>
+                    <h3>Begin Your Journey</h3>
+                    <p>
+                        Once enrollment arrangements are confirmed, you can
+                        begin your practical learning journey with SIFA.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+
+        <div class="container footer-grid">
+
+            <div>
+                <img
+                    src="assets/sifa-logo.png"
+                    alt="SIFA Global Institute logo"
+                    style="width:100px;background:#fff;border-radius:12px;padding:8px;"
+                >
+            </div>
+
+            <div>
+                <h3>Explore</h3>
+                <p><a href="about.html">About SIFA</a></p>
+                <p><a href="founder.html">Founder</a></p>
+                <p><a href="courses.html">Courses</a></p>
+            </div>
+
+            <div>
+                <h3>Credentials</h3>
+                <p><a href="certifications.html">SIFA Certifications</a></p>
+                <p><a href="verify.html">Verify Certificate</a></p>
+            </div>
+
+            <div>
+                <h3>Contact</h3>
+                <p>
+                    <a href="mailto:info.sifaglobal@yahoo.com">
+                        info.sifaglobal@yahoo.com
+                    </a>
+                </p>
+            </div>
+
+        </div>
+
+        <div class="container copyright">
+            © <span data-year></span> SIFA Global Institute. All rights reserved.
+        </div>
+
+    </footer>
+
+    <script src="script.js"></script>
+
+    <script>
+        const applicationForm =
+            document.getElementById("applicationForm");
+
+        applicationForm.addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            const formData = new FormData(applicationForm);
+
+            const fullName =
+                formData.get("fullName") || "";
+
+            const email =
+                formData.get("email") || "";
+
+            const phone =
+                formData.get("phone") || "";
+
+            const country =
+                formData.get("country") || "";
+
+            const city =
+                formData.get("city") || "";
+
+            const education =
+                formData.get("education") || "";
+
+            const occupation =
+                formData.get("occupation") || "";
+
+            const background =
+                formData.get("background") || "";
+
+            const program =
+                formData.get("program") || "";
+
+            const experienceLevel =
+                formData.get("experienceLevel") || "";
+
+            const format =
+                formData.get("format") || "";
+
+            const goals =
+                formData.get("goals") || "";
+
+            const softwareExperience =
+                formData.get("softwareExperience") || "";
+
+            const language =
+                formData.get("language") || "";
+
+            const howFound =
+                formData.get("howFound") || "";
+
+            const additional =
+                formData.get("additional") || "";
+
+            const subject =
+                "SIFA Program Application - " + fullName;
+
+            const body =
+`SIFA GLOBAL INSTITUTE
+PROGRAM APPLICATION
+
+PERSONAL INFORMATION
+--------------------
+Full Name: ${fullName}
+Email: ${email}
+WhatsApp / Phone: ${phone}
+Country: ${country}
+City: ${city}
+
+EDUCATION AND PROFESSIONAL BACKGROUND
+-------------------------------------
+Highest Education Level: ${education}
+Current Occupation: ${occupation}
+
+Background:
+${background}
+
+PROGRAM SELECTION
+-----------------
+Program of Interest: ${program}
+Current Experience Level: ${experienceLevel}
+Preferred Learning Format: ${format}
+
+LEARNING GOALS
+--------------
+Learning Goals:
+${goals}
+
+Software Experience:
+${softwareExperience}
+
+Preferred Learning Language: ${language}
+How Applicant Heard About SIFA: ${howFound}
+
+ADDITIONAL INFORMATION
+----------------------
+${additional}
+
+APPLICANT CONFIRMATION
+----------------------
+The applicant confirmed that the information provided is accurate
+to the best of their knowledge and understands that submitting
+the application does not automatically guarantee admission.
+`;
+
+            const mailto =
+                "mailto:info.sifaglobal@yahoo.com" +
+                "?subject=" + encodeURIComponent(subject) +
+                "&body=" + encodeURIComponent(body);
+
+            window.location.href = mailto;
+
+        });
+    </script>
+
+</body>
+</html>
