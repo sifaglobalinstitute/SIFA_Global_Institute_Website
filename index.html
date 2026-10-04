@@ -95,6 +95,39 @@
 @media (max-width:600px) {
     .home-model-grid { grid-template-columns:1fr; }
 }
+
+/* Home visual upgrade */
+.home-photo-card{overflow:hidden;padding:0;display:flex;flex-direction:column;height:100%;}
+.home-photo-card img{display:block;width:100%;height:210px;object-fit:cover;}
+.home-photo-card .photo-copy{padding:24px;}
+.home-photo-card .photo-copy h3{margin-top:0;}
+.home-photo-strip{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;margin-top:46px;}
+.home-photo-feature,.home-photo-side{overflow:hidden;border-radius:24px;box-shadow:0 14px 40px rgba(7,26,51,.12);background:#fff;}
+.home-photo-feature img{width:100%;height:390px;object-fit:cover;display:block;}
+.home-photo-side img{width:100%;height:390px;object-fit:cover;display:block;}
+.home-photo-caption{padding:22px 24px;}
+.home-photo-caption .kicker{margin-bottom:7px;}
+.home-photo-caption h3{margin:0 0 8px;}
+.home-photo-caption p{margin:0;color:#62748a;}
+.home-learning-visual{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:stretch;margin-top:44px;}
+.home-learning-visual .visual-image{overflow:hidden;border-radius:24px;min-height:430px;box-shadow:0 14px 40px rgba(7,26,51,.12);}
+.home-learning-visual .visual-image img{width:100%;height:100%;object-fit:cover;display:block;}
+.home-learning-visual .visual-content{display:flex;flex-direction:column;justify-content:center;}
+.home-software-visual{display:grid;grid-template-columns:1fr 1.1fr;gap:32px;align-items:center;margin-top:46px;}
+.home-software-visual .software-image{overflow:hidden;border-radius:24px;box-shadow:0 14px 40px rgba(7,26,51,.12);}
+.home-software-visual .software-image img{width:100%;height:390px;object-fit:cover;display:block;}
+.home-global-visual{display:grid;grid-template-columns:1.05fr .95fr;gap:32px;align-items:stretch;margin-top:42px;}
+.home-global-visual .global-image{overflow:hidden;border-radius:24px;box-shadow:0 14px 40px rgba(7,26,51,.12);min-height:370px;}
+.home-global-visual .global-image img{width:100%;height:100%;object-fit:cover;display:block;}
+.home-image-note{font-size:12px;color:#7b8997;margin-top:12px;}
+@media(max-width:900px){
+ .home-photo-strip,.home-learning-visual,.home-software-visual,.home-global-visual{grid-template-columns:1fr;}
+ .home-photo-feature img,.home-photo-side img{height:300px;}
+ .home-learning-visual .visual-image{min-height:320px;}
+ .home-software-visual .software-image{order:-1;}
+ .home-software-visual .software-image img{height:320px;}
+ .home-global-visual .global-image{min-height:300px;}
+}
 </style>
 </head>
 
@@ -137,7 +170,7 @@
 <section class="hero">
     <div class="container hero-grid">
         <div>
-           <span class="eyebrow hero-eyebrow">Practical • Technology-driven • Global</span>
+            <span class="eyebrow">Practical • Technology-driven • Global</span>
             <h1>Master the Technology Behind <span>Modern Accounting.</span></h1>
             <p>
                 SIFA Global Institute connects accounting and finance knowledge with the
@@ -151,20 +184,12 @@
         </div>
 
         <div class="hero-card">
-            <div class="hero-card-icon">SIFA</div>
-
-<h3>Learn. Practice. Apply. Build Your Future.</h3>
-
-<p>
-    Connect accounting knowledge with modern technology,
-    practical software skills, and professional learning.
-</p>
-
-<div class="hero-card-points">
-    <span>Accounting</span>
-    <span>Technology</span>
-    <span>Practical Learning</span>
-</div>
+            <img src="assets/sifa-logo.png" alt="SIFA Global Institute">
+            <h3>Learn. Practice. Apply.</h3>
+            <p>
+                Understand the concept. Practice with realistic exercises.
+                Apply the skill in professional scenarios.
+            </p>
         </div>
     </div>
 </section>
@@ -197,6 +222,25 @@
                 <div class="icon">03</div>
                 <h3>Apply</h3>
                 <p>Demonstrate what you have learned through tasks, projects, assessments, and practical applications.</p>
+            </div>
+        </div>
+
+        <div class="home-photo-strip">
+            <div class="home-photo-feature">
+                <img src="assets/home-photos/home-learning.jpg" alt="Diverse learners collaborating with laptops in a modern learning environment">
+                <div class="home-photo-caption">
+                    <span class="kicker">Practical Learning</span>
+                    <h3>Learning should be active, collaborative, and useful.</h3>
+                    <p>Illustrative imagery showing the kind of technology-enabled learning environment SIFA promotes.</p>
+                </div>
+            </div>
+            <div class="home-photo-side">
+                <img src="assets/home-photos/home-rwanda-team.jpg" alt="African professionals collaborating around financial reports and a laptop">
+                <div class="home-photo-caption">
+                    <span class="kicker">African Perspective</span>
+                    <h3>Skills that connect local realities with global opportunities.</h3>
+                    <p>SIFA's roots are connected to Rwanda and East Africa, with an international outlook.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -235,6 +279,21 @@
                 <div class="icon">04</div>
                 <h3>Demonstrate</h3>
                 <p>Show practical ability through assignments, projects, or assessments.</p>
+            </div>
+        </div>
+
+        <div class="home-learning-visual">
+            <div class="visual-image">
+                <img src="assets/home-photos/home-practice.jpg" alt="Professionals practicing accounting and digital skills together in a modern classroom">
+            </div>
+            <div class="visual-content">
+                <span class="kicker">From Learning to Practice</span>
+                <h2>See the concept. Work with the tool. Build the skill.</h2>
+                <p class="lead">SIFA's learning approach is designed to move learners beyond passive demonstrations toward guided practice, realistic exercises, and measurable competence.</p>
+                <div class="home-trust" style="grid-template-columns:1fr 1fr;margin-top:28px;">
+                    <div class="card"><h3>Realistic Tasks</h3><p>Practice workflows that reflect business and accounting situations.</p></div>
+                    <div class="card"><h3>Practical Confidence</h3><p>Develop the ability to perform tasks, not simply watch them.</p></div>
+                </div>
             </div>
         </div>
     </div>
@@ -284,8 +343,21 @@
             <span class="pill">SAP</span>
             <span class="pill">Oracle NetSuite</span>
             <span class="pill">Microsoft Dynamics 365</span>
-           <span class="pill">Other technologies</span>
+            <span class="pill">And others</span>
         </div>
+
+        <div class="home-software-visual">
+            <div>
+                <span class="kicker">Technology in Practice</span>
+                <h2>Understand what the numbers mean—and how the technology handles them.</h2>
+                <p class="lead">SIFA connects accounting concepts with software workflows, reports, spreadsheets, and digital systems so learners understand both the process and the result.</p>
+                <a class="btn btn-secondary" href="courses.html">Explore Training Areas</a>
+            </div>
+            <div class="software-image">
+                <img src="assets/home-photos/home-software.jpg" alt="Laptop displaying an illustrative financial dashboard in a modern accounting workspace">
+            </div>
+        </div>
+        <p class="home-image-note">The dashboard shown is illustrative and is not a representation of a specific software vendor interface.</p>
     </div>
 </section>
 
@@ -297,20 +369,19 @@
             </div>
 
             <div>
-               <span class="kicker">Founder & CEO</span>
-<h2>Jean Bosco NKURIKIYUMUKIZA</h2>
+                <span class="kicker">Founder & CEO</span>
+                <h2>Jean Bosco NKURIKIYUMUKIZA</h2>
 
-<p class="lead">
-    Jean Bosco NKURIKIYUMUKIZA is the Founder and Chief Executive Officer
-    of SIFA Global Institute, with practical experience in accounting
-    software, financial technology, and digital professional tools.
-</p>
+                <p class="lead">
+                    SIFA was created from a practical vision: to make accounting technology
+                    education more accessible and connected to real professional needs.
+                </p>
 
-<p>
-    His vision is to make practical, technology-driven financial education
-    more accessible and relevant to learners preparing for the modern
-    professional environment.
-</p>
+                <p>
+                    Explore the founder's journey, practical experience, and vision for
+                    developing SIFA Global Institute.
+                </p>
+
                 <a class="btn btn-primary" href="founder.html">Meet the Founder</a>
             </div>
         </div>
@@ -360,11 +431,23 @@
 
         <div class="banner">
             <div>
-             <span class="kicker global-kicker">FROM AFRICAN ROOTS TO A GLOBAL LEARNING COMMUNITY</span>
+                <span class="kicker" style="color:#9af45f">Rwanda → Türkiye → Africa → Global</span>
                 <h2>Building practical skills and creating opportunities through technology-driven education.</h2>
             </div>
 
             <a class="btn btn-primary" href="about.html">Discover SIFA</a>
+        </div>
+
+        <div class="home-global-visual">
+            <div class="global-image">
+                <img src="assets/home-photos/home-global-team.jpg" alt="International professionals discussing financial and business data around a laptop">
+            </div>
+            <div class="visual-content">
+                <span class="kicker">Global Learning Community</span>
+                <h2>Different countries. Different backgrounds. Shared professional goals.</h2>
+                <p class="lead">SIFA's long-term direction is to connect learners from Rwanda, Africa, Türkiye, and the wider world through practical, technology-driven education.</p>
+                <p>These photographs are illustrative. They are not presented as SIFA students, staff, or official classroom participants.</p>
+            </div>
         </div>
     </div>
 </section>
@@ -374,7 +457,7 @@
         <div class="home-cta-box">
             <div>
                 <span class="kicker" style="color:#9af45f">Start Your Learning Journey</span>
-                <h2>Learn. Practice. Apply. Build Your Future.</h2>
+                <h2>Learn. Practice. Apply.</h2>
                 <p>
                     Explore SIFA's programs, learning resources, and practical approach to
                     accounting technology education.
