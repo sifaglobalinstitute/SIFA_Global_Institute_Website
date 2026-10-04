@@ -4,20 +4,34 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Apply to SIFA | SIFA Global Institute</title>
-<meta name="description" content="Apply to SIFA Global Institute for practical training in accounting software, financial systems and digital professional tools. Explore program options, learning preferences and scholarship or fee-waiver requests.">
+<meta name="description" content="Apply to SIFA Global Institute through a structured application process for practical accounting technology, financial systems and digital professional training.">
 <link rel="stylesheet" href="styles.css">
 <style>
-.form-section{margin-top:30px;padding-top:28px;border-top:1px solid #dfe7ef}
-.form-section:first-of-type{margin-top:0;padding-top:0;border-top:0}
-.form-section h2{margin:0 0 8px}
-.form-section>p{margin:0 0 20px;color:#62748a}
-.form-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.form-grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-.choice{display:flex;align-items:flex-start;gap:10px;padding:13px 15px;background:#f7fafc;border:1px solid #dce6ef;border-radius:8px;margin:10px 0}
-.choice input{margin-top:4px}
-.apply-note{margin-top:18px;padding:18px 20px;border-left:4px solid #35c93d;background:#f4f8fc;border-radius:8px}
-.required-note{font-size:14px;color:#718096;margin-bottom:20px}
-@media(max-width:800px){.form-grid-3,.form-grid-2{grid-template-columns:1fr}}
+/* SIFA Application Wizard v3 */
+.apply-shell{max-width:980px;margin:0 auto}
+.apply-intro{display:grid;grid-template-columns:1.45fr .8fr;gap:24px;align-items:stretch;margin-bottom:26px}
+.apply-intro-card,.apply-side-card{background:#fff;border:1px solid #dfe7ef;border-radius:16px;padding:24px;box-shadow:0 10px 28px rgba(7,26,51,.06)}
+.apply-intro-card h2,.apply-side-card h3{margin-top:0}.apply-side-card{background:#071a33;color:#fff;border-color:#071a33}.apply-side-card p{color:rgba(255,255,255,.82)}.apply-side-card strong{color:#62c78a}
+.progress-wrap{background:#fff;border:1px solid #dfe7ef;border-radius:16px;padding:20px 22px;margin-bottom:22px;box-shadow:0 8px 24px rgba(7,26,51,.05)}
+.progress-top{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:14px}.progress-top strong{color:#071a33}.progress-bar{height:8px;background:#e9eef3;border-radius:999px;overflow:hidden}.progress-fill{height:100%;width:16.666%;background:#2fa866;border-radius:999px;transition:width .25s ease}
+.steps{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:16px}.step-dot{font-size:12px;color:#718096;text-align:center;line-height:1.25}.step-dot span{display:flex;width:30px;height:30px;border-radius:50%;align-items:center;justify-content:center;margin:0 auto 7px;border:1px solid #ccd7e2;background:#f7fafc;font-weight:700}.step-dot.active,.step-dot.done{color:#071a33;font-weight:700}.step-dot.active span,.step-dot.done span{background:#2fa866;border-color:#2fa866;color:#fff}
+.wizard-card{background:#fff;border:1px solid #dfe7ef;border-radius:18px;box-shadow:0 12px 34px rgba(7,26,51,.07);overflow:hidden}.wizard-step{display:none;padding:32px}.wizard-step.active{display:block}.step-heading{display:flex;gap:16px;align-items:flex-start;margin-bottom:26px}.step-number{flex:0 0 42px;width:42px;height:42px;border-radius:12px;background:#071a33;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}.step-heading h2{margin:0 0 6px}.step-heading p{margin:0;color:#62748a}
+.form-grid-2,.form-grid-3{display:grid;gap:18px}.form-grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}.form-grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}.form label{display:block;font-weight:700;color:#25364a;margin-bottom:18px}.form label>input:not([type="radio"]):not([type="checkbox"]),.form label>select,.form label>textarea{margin-top:8px;width:100%;box-sizing:border-box}.form textarea{min-height:120px;resize:vertical}
+.form select,.form input[type="text"],.form input[type="email"],.form input[type="tel"],.form input[type="file"],.form textarea{border:1px solid #d7e1ea;border-radius:10px;background:#fff;color:#25364a;padding:13px 14px;font:inherit}.form select{min-height:48px}.form input:focus,.form select:focus,.form textarea:focus{outline:2px solid rgba(47,168,102,.18);border-color:#2fa866}
+.choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:16px 0 22px}.choice-card{position:relative;display:block;margin:0;padding:18px 18px 18px 56px;border:1px solid #d7e1ea;border-radius:14px;background:#f8fafc;cursor:pointer;transition:.2s ease;min-height:84px;box-sizing:border-box}.choice-card:hover{border-color:#9fb2c5;transform:translateY(-1px)}.choice-card input[type="radio"]{position:absolute;left:20px;top:22px;margin:0;width:18px;height:18px;accent-color:#2fa866}.choice-card strong{display:block;color:#071a33;margin-bottom:5px}.choice-card span{display:block;color:#62748a;font-weight:400;font-size:14px;line-height:1.5}.choice-card:has(input:checked){border-color:#2fa866;background:#f1faf5;box-shadow:0 0 0 2px rgba(47,168,102,.10)}
+.conditional{display:none;padding:20px;background:#f7fafc;border:1px solid #dfe7ef;border-radius:14px;margin-top:10px}.conditional.show{display:block}.info-box{padding:17px 19px;border-left:4px solid #2fa866;background:#f4f8fc;border-radius:10px;margin:18px 0;color:#4f6277}.info-box strong{color:#071a33}
+.intake-box{padding:18px 20px;border:1px solid #dfe7ef;border-radius:14px;background:#f8fafc;margin:8px 0 20px}.intake-box h3{margin:0 0 6px;color:#071a33}.intake-box p{margin:0;color:#62748a}.policy-list{margin:12px 0 0;padding-left:20px;color:#62748a}.policy-list li{margin:5px 0}
+#coreDocs{display:none}#coreDocs.show{display:block}.document-group{border:1px solid #dfe7ef;border-radius:14px;padding:20px;margin:18px 0;background:#fff}.document-group h3{margin:0 0 6px}.document-group>p{margin:0 0 16px;color:#62748a;font-size:14px}.doc-row{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;align-items:center;padding:16px 0;border-top:1px solid #e7edf2}.doc-row:first-of-type{border-top:0}.doc-name strong{display:block;color:#25364a}.doc-name span{display:block;color:#718096;font-size:13px;margin-top:4px}.doc-upload input{font-size:13px;width:100%;box-sizing:border-box}.badge-required,.badge-optional{display:inline-block;border-radius:999px;padding:4px 9px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-left:6px}.badge-required{background:#eaf7ef;color:#19733f}.badge-optional{background:#eef2f6;color:#607184}.file-note{font-size:13px;color:#718096;margin-top:12px}.document-choice{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.document-choice label{margin:0;padding:15px 16px;border:1px solid #d7e1ea;border-radius:12px;background:#f8fafc;display:flex;gap:10px;align-items:flex-start;cursor:pointer}.document-choice input{margin-top:4px;accent-color:#2fa866}.document-choice strong{display:block;color:#25364a}.document-choice span{display:block;color:#718096;font-size:13px;font-weight:400;margin-top:3px}
+.review-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.review-card{border:1px solid #dfe7ef;border-radius:12px;padding:16px;background:#f9fbfc}.review-card h3{font-size:15px;margin:0 0 8px}.review-card p{margin:5px 0;color:#62748a;font-size:14px;word-break:break-word}.review-card strong{color:#25364a}.review-edit{display:inline-block;margin-top:8px;color:#19733f;font-weight:700;font-size:13px;text-decoration:none}.review-edit:hover{text-decoration:underline}
+.consent{border-top:1px solid #dfe7ef;margin-top:24px;padding-top:22px}.check-row{display:flex;gap:11px;align-items:flex-start;padding:14px 16px;border:1px solid #dfe7ef;border-radius:12px;background:#f8fafc;margin:10px 0;cursor:pointer}.check-row input[type="checkbox"]{margin-top:4px;flex:0 0 auto;width:18px;height:18px;accent-color:#2fa866}.check-row span{color:#42566b;font-size:14px;line-height:1.5}
+.wizard-actions{display:flex;justify-content:space-between;gap:12px;padding:20px 32px;background:#f7fafc;border-top:1px solid #dfe7ef}.wizard-actions .right-actions{display:flex;gap:10px;margin-left:auto}.btn-secondary{background:#fff;border:1px solid #cbd6e1;color:#25364a}.btn-secondary:hover{background:#f1f5f8}.hidden{display:none!important}.status-message{display:none;margin:0 32px 24px;padding:16px 18px;border-radius:12px;background:#fff6e6;border:1px solid #f1d7a3;color:#75531a}.status-message.show{display:block}
+.validation-note{display:none;margin:0 0 18px;padding:12px 14px;border-radius:10px;background:#fff6e6;border:1px solid #f1d7a3;color:#75531a;font-size:14px}.validation-note.show{display:block}.muted{color:#718096;font-size:13px;font-weight:400}
+@media(max-width:850px){.apply-intro,.choice-grid,.document-choice{grid-template-columns:1fr}.form-grid-3{grid-template-columns:1fr 1fr}.doc-row{grid-template-columns:1fr}.doc-upload input{max-width:100%}}
+@media(max-width:650px){.wizard-step{padding:24px 18px}.wizard-actions{padding:16px 18px}.form-grid-2,.form-grid-3,.review-grid{grid-template-columns:1fr}.steps{gap:3px}.step-dot{font-size:10px}.step-dot span{width:26px;height:26px}.progress-top{align-items:flex-start;flex-direction:column;gap:5px}.choice-card{padding-left:52px}}
+</style>
+
+<style>
+.program-status-box,.schedule-box{border:1px solid #d9e5ef;background:#f8fbfd;border-radius:14px;padding:18px 20px;margin:0 0 22px}.program-status-box strong,.schedule-box h3{color:#071a33}.program-status-box p,.schedule-box p{margin:6px 0 0;color:#62748a;line-height:1.6}.intake-box select{margin-top:12px;width:100%;box-sizing:border-box;min-height:48px;border:1px solid #d7e1ea;border-radius:10px;background:#fff;color:#25364a;padding:13px 14px;font:inherit}.schedule-grid{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px}.schedule-grid .choice-card{min-height:96px}.document-choice label{display:flex;align-items:flex-start;gap:12px;position:relative;padding:16px 18px;margin-bottom:12px;border:1px solid #d7e1ea;border-radius:14px;background:#f8fafc;cursor:pointer}.document-choice input[type=radio]{flex:0 0 auto;width:18px;height:18px;margin:2px 0 0;accent-color:#2fa866}.document-choice span{display:block;line-height:1.5}.document-choice strong{color:#071a33}.check-row{display:flex!important;align-items:flex-start;gap:12px}.check-row input[type=checkbox]{flex:0 0 auto;width:18px;height:18px;margin:2px 0 0;accent-color:#2fa866}.form label>input[type=radio],.form label>input[type=checkbox]{width:auto}.doc-upload input[type=file]{max-width:100%}@media(max-width:650px){.schedule-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -29,26 +43,53 @@
 <li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="founder.html">Founder</a></li><li><a href="courses.html">Courses</a></li><li><a href="learning.html">Learning</a></li><li><a href="certifications.html">Certification</a></li><li><a href="resources.html">Resources</a></li><li><a href="contact.html">Contact</a></li><li><a class="nav-cta" href="apply.html">Apply Now</a></li>
 </ul></nav></div></header>
 
+
 <main>
 <section class="page-hero"><div class="container">
 <span class="eyebrow">SIFA Application</span>
 <h1>Apply to learn, practice, and grow with SIFA.</h1>
-<p>Tell us about your background, goals, preferred learning path, and any scholarship or fee-waiver support you may need.</p>
+<p>A structured application process designed to understand your background, learning goals, preferred program, and any financial assistance you may wish to request.</p>
 </div></section>
 
-<section><div class="container" style="max-width:920px"><div class="card">
-<form id="applicationForm" class="form">
-<p class="required-note">Fields marked with * are required. Completing this form does not guarantee admission, enrollment, a scholarship, or a fee waiver.</p>
-
-<div class="form-section">
-<h2>1. Applicant Information</h2><p>Basic information so SIFA can identify and contact you.</p>
-<div class="form-grid-2">
-<label>Full name *<input name="name" required autocomplete="name"></label>
-<label>Email address *<input name="email" type="email" required autocomplete="email"></label>
+<section><div class="container apply-shell">
+<div class="apply-intro">
+  <div class="apply-intro-card">
+    <h2>Start your SIFA application</h2>
+    <p>Complete the application step by step. SIFA determines program availability, cohort dates, and final timetables. You can review and edit your information before submission.</p>
+    <p><strong>* Required field</strong></p>
+  </div>
+  <div class="apply-side-card">
+    <h3>Before you begin</h3>
+    <p>Have your basic identification and education information available. Supporting documents can be added where applicable.</p>
+    <p><strong>Important:</strong> Submitting an application does not guarantee admission, enrollment, a scholarship, or a fee waiver.</p>
+  </div>
 </div>
-<div class="form-grid-3">
-<label>Phone / WhatsApp<input name="phone" autocomplete="tel"></label>
-<label>Country *<select name="country" required><option value="">Select your country</option><option value="Afghanistan">Afghanistan</option>
+
+<div class="progress-wrap" aria-label="Application progress">
+  <div class="progress-top"><strong id="stepTitle">Step 1 of 6 — Personal Information</strong><span id="stepPercent">17%</span></div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="steps">
+    <div class="step-dot active" data-step="1"><span>1</span>Personal</div>
+    <div class="step-dot" data-step="2"><span>2</span>Background</div>
+    <div class="step-dot" data-step="3"><span>3</span>Program</div>
+    <div class="step-dot" data-step="4"><span>4</span>Financial</div>
+    <div class="step-dot" data-step="5"><span>5</span>Documents</div>
+    <div class="step-dot" data-step="6"><span>6</span>Review</div>
+  </div>
+</div>
+
+<div class="wizard-card">
+<form id="applicationForm" class="form" enctype="multipart/form-data" novalidate>
+
+<section class="wizard-step active" data-step="1">
+  <div class="step-heading"><div class="step-number">1</div><div><h2>Personal Information</h2><p>Tell us how SIFA can identify and contact you.</p></div></div>
+  <div class="form-grid-2">
+    <label>Full name *<input name="name" required autocomplete="name"></label>
+    <label>Email address *<input name="email" type="email" required autocomplete="email"></label>
+  </div>
+  <div class="form-grid-3">
+    <label>Phone / WhatsApp *<input name="phone" type="tel" required autocomplete="tel"></label>
+    <label>Country *<select name="country" required><option value="">Select your country</option><option value="Afghanistan">Afghanistan</option>
 <option value="Albania">Albania</option>
 <option value="Algeria">Algeria</option>
 <option value="Andorra">Andorra</option>
@@ -244,75 +285,122 @@
 <option value="Yemen">Yemen</option>
 <option value="Zambia">Zambia</option>
 <option value="Zimbabwe">Zimbabwe</option></select></label>
-<label>City / Location<input name="city" autocomplete="address-level2"></label>
-</div>
-<div class="form-grid-2">
-<label>Nationality<input name="nationality"></label>
-<label>Preferred language<select name="language"><option value="">Select</option><option>English</option><option>French</option><option>Kinyarwanda</option><option>Turkish</option><option>Other</option></select></label>
-</div>
-</div>
+    <label>City / Location<input name="city" autocomplete="address-level2"></label>
+  </div>
+  <div class="form-grid-2">
+    <label>Nationality *<input name="nationality" required></label>
+    <label>Preferred language<select name="language"><option value="">Select</option><option>English</option><option>French</option><option>Kinyarwanda</option><option>Turkish</option><option>Other</option></select></label>
+  </div>
+</section>
 
-<div class="form-section">
-<h2>2. Education & Professional Background</h2><p>Help us understand your current level and learning needs.</p>
-<div class="form-grid-2">
-<label>Highest education level *<select name="education" required><option value="">Select</option><option>Secondary School</option><option>Certificate / Diploma</option><option>Bachelor's Degree</option><option>Master's Degree</option><option>Doctorate</option><option>Professional Qualification</option><option>Other</option></select></label>
-<label>Current status<select name="status"><option value="">Select</option><option>Student</option><option>Job seeker</option><option>Employed</option><option>Self-employed</option><option>Business owner</option><option>Accounting / finance professional</option><option>Other</option></select></label>
-</div>
-<label>Accounting, finance or business background<textarea name="background" placeholder="Briefly describe your studies, work, business or other relevant experience."></textarea></label>
-<label>Accounting software experience<textarea name="softwareExperience" placeholder="Tell us which software or digital tools you have used, if any."></textarea></label>
-</div>
+<section class="wizard-step" data-step="2">
+  <div class="step-heading"><div class="step-number">2</div><div><h2>Education & Background</h2><p>Help us understand your current level and relevant experience.</p></div></div>
+  <div class="form-grid-2">
+    <label>Highest education level *<select name="education" required><option value="">Select</option><option>Secondary School</option><option>Certificate / Diploma</option><option>Bachelor's Degree</option><option>Master's Degree</option><option>Doctorate</option><option>Professional Qualification</option><option>Other</option></select></label>
+    <label>Current status<select name="status"><option value="">Select</option><option>Student</option><option>Job seeker</option><option>Employed</option><option>Self-employed</option><option>Business owner</option><option>Accounting / finance professional</option><option>Other</option></select></label>
+  </div>
+  <label>Accounting, finance or business background<textarea name="background" placeholder="Briefly describe your studies, work, business or other relevant experience."></textarea></label>
+  <label>Accounting software and digital tools experience<textarea name="softwareExperience" placeholder="Tell us which accounting software, Excel, ERP systems or other digital tools you have used, if any."></textarea></label>
+</section>
 
-<div class="form-section">
-<h2>3. Program & Learning Preferences</h2><p>Select the area that best matches your current goal.</p>
-<div class="form-grid-2">
-<label>Program / course of interest *<select name="course" required><option value="">Select a program</option>
-<option>QuickBooks Practical Training</option><option>Sage Accounting Training</option><option>Tally Practical Accounting</option><option>Excel for Accounting & Finance</option><option>Xero Accounting Training</option><option>Zoho Books Training</option><option>Odoo Accounting & Business Systems</option><option>Accounting Software Foundations</option><option>Financial Technology & Digital Tools</option><option>Other / Custom Learning Path</option>
-</select></label>
-<label>Preferred learning mode<select name="mode"><option value="">Select</option><option>Live online</option><option>Self-paced / digital resources</option><option>Blended / guided learning</option><option>Not sure yet</option></select></label>
-</div>
-<div class="form-grid-2">
-<label>Preferred schedule<select name="schedule"><option value="">Select</option><option>Weekday daytime</option><option>Weekday evening</option><option>Weekend</option><option>Flexible</option><option>Not sure yet</option></select></label>
-<label>Preferred start period<select name="start"><option value="">Select</option><option>As soon as possible</option><option>Within 1 month</option><option>Within 3 months</option><option>Later</option><option>Not sure yet</option></select></label>
-</div>
-<label>What do you want to achieve through SIFA? *<textarea name="goals" required placeholder="Tell us what you want to achieve through the training."></textarea></label>
-</div>
+<section class="wizard-step" data-step="3">
+  <div class="step-heading"><div class="step-number">3</div><div><h2>Program & Cohort</h2><p>Select a program that is currently open for application and tell us your preferred learning arrangement.</p></div></div>
+  <div class="program-status-box">
+    <strong>Program availability is controlled by SIFA.</strong>
+    <p>Only programs currently open for application can be selected. Other courses may be introduced in future cohorts. The selected program and final placement remain subject to SIFA review and availability.</p>
+  </div>
+  <div class="form-grid-2">
+    <label>Program currently open for application *<select name="course" id="programSelect" required><option value="">Select an available program</option><option value="QuickBooks Practical Training">QuickBooks Practical Training</option></select></label>
+    <label>Learning mode *<select name="mode" required><option value="">Select</option><option>Live online</option><option>Blended / guided learning</option><option>Self-paced / digital resources</option></select></label>
+  </div>
+  <div class="intake-box">
+    <h3>Next Available Cohort</h3>
+    <p>Applicants do not choose an exact start date. SIFA will confirm the next available cohort and official start date for the selected program.</p>
+    <select name="cohort" required aria-label="Cohort"><option value="">Select cohort</option><option>Next available cohort</option></select>
+  </div>
+  <div class="schedule-box">
+    <h3>Schedule Preference</h3>
+    <p>Choose the type of schedule that suits you best. This is a preference only; SIFA will confirm the final timetable according to the selected program and cohort.</p>
+    <div class="choice-grid schedule-grid">
+      <label class="choice-card"><input type="radio" name="schedule" value="Weekday evenings" required><strong>Weekday evenings</strong><span>Evening sessions during the week.</span></label>
+      <label class="choice-card"><input type="radio" name="schedule" value="Weekend evenings" required><strong>Weekend evenings</strong><span>Evening sessions on the weekend.</span></label>
+      <label class="choice-card"><input type="radio" name="schedule" value="Weekend daytime" required><strong>Weekend daytime</strong><span>Daytime sessions on the weekend.</span></label>
+      <label class="choice-card"><input type="radio" name="schedule" value="No preference" required><strong>No preference</strong><span>I am flexible with the available timetable.</span></label>
+    </div>
+  </div>
+  <label>What do you want to achieve through SIFA? *<textarea name="goals" required placeholder="For example: gain practical accounting software skills, prepare for work, improve financial technology knowledge, or strengthen professional skills."></textarea></label>
+</section>
 
-<div class="form-section">
-<h2>4. Scholarship & Financial Assistance</h2>
-<p>SIFA may provide scholarships, discounts or fee waivers when opportunities and resources are available. Requests are reviewed separately and are not guaranteed.</p>
-<label class="choice"><input type="radio" name="financialSupport" value="No financial assistance requested" checked><span>I do not need financial assistance.</span></label>
-<label class="choice"><input type="radio" name="financialSupport" value="Scholarship or fee-waiver request"><span>I would like to be considered for a scholarship or fee waiver.</span></label>
-<label>If requesting support, explain your circumstances and why this opportunity would be valuable to you.<textarea name="scholarshipReason" placeholder="Please provide relevant information. Do not include passwords or highly sensitive information."></textarea></label>
-<div class="apply-note"><strong>Scholarship note:</strong> Financial assistance depends on SIFA's available programs, funding and eligibility requirements. Submitting a request does not guarantee an award.</div>
-</div>
+<section class="wizard-step" data-step="4">
+  <div class="step-heading"><div class="step-number">4</div><div><h2>Scholarship & Financial Assistance</h2><p>Tell us whether you want to be considered for financial assistance.</p></div></div>
+  <div class="info-box"><strong>Important:</strong> SIFA may provide scholarships, discounts, or fee waivers when opportunities, funding, and eligibility conditions allow. A request is reviewed separately and does not guarantee an award.</div>
+  <label style="margin-top:20px">Do you require financial assistance? *</label>
+  <div class="choice-grid">
+    <label class="choice-card"><input type="radio" name="financialSupport" value="No financial assistance requested" checked required><strong>No, I do not require financial assistance.</strong><span>I am applying without requesting a scholarship or fee waiver.</span></label>
+    <label class="choice-card"><input type="radio" name="financialSupport" value="Scholarship or fee-waiver request" required><strong>Yes, I would like to be considered.</strong><span>I would like to request consideration for a scholarship or fee waiver.</span></label>
+  </div>
+  <div id="supportDetails" class="conditional">
+    <label>Why are you requesting financial assistance? *<textarea name="scholarshipReason" placeholder="Explain why financial assistance would help you access the selected learning opportunity."></textarea></label>
+    <label>Relevant financial circumstances<textarea name="financialCircumstances" placeholder="Provide only information relevant to your request. Do not include passwords, bank PINs, full card numbers, or other highly sensitive security information."></textarea></label>
+    <label>Why is this opportunity important to you?<textarea name="scholarshipValue" placeholder="Tell SIFA how the training could support your education, career, work, or professional development."></textarea></label>
+  </div>
+</section>
 
-<div class="form-section">
-<h2>5. Documents & Additional Information</h2>
-<p>After initial review, SIFA may request supporting documents relevant to the selected program or scholarship request.</p>
-<label>Relevant documents or qualifications<textarea name="documents" placeholder="List certificates, transcripts, professional experience or other documents you may be able to provide if requested."></textarea></label>
-<label>Additional message<textarea name="additional" placeholder="Is there anything else you would like SIFA Global Institute to know?"></textarea></label>
-</div>
+<section class="wizard-step" data-step="5">
+  <div class="step-heading"><div class="step-number">5</div><div><h2>Documents</h2><p>Provide the core documents needed for application review and add supporting documents where useful.</p></div></div>
+  <div class="info-box"><strong>Document policy:</strong> SIFA will request only documents relevant to the selected program or support request. The requirements below are designed for this application and may be adjusted when SIFA publishes program-specific admission requirements.</div>
+  <label style="margin-top:20px">Core document status *</label>
+  <div class="document-choice">
+    <label><input type="radio" name="documentStatus" value="I have the core documents" required><span><strong>I have the core documents.</strong> I will upload the required identification and education/qualification documents below.</span></label>
+    <label><input type="radio" name="documentStatus" value="I need guidance about a core document" required><span><strong>I need guidance.</strong> I do not currently have one or more core documents and would like SIFA to advise me.</span></label>
+  </div>
+  <div id="coreDocs" class="document-group show">
+    <h3>Core application documents <span class="badge-required">Required</span></h3>
+    <p>These documents support identity and education/qualification review. If you select the guidance option above, SIFA can advise you about an unavailable document.</p>
+    <div class="doc-row"><div class="doc-name"><strong>Identification document / passport</strong><span>Passport or another accepted identification document.</span></div><div class="doc-upload"><input type="file" name="identityDocument" accept=".pdf,.jpg,.jpeg,.png"></div></div>
+    <div class="doc-row"><div class="doc-name"><strong>Highest education or professional qualification</strong><span>Certificate, diploma, degree, professional qualification, or equivalent record.</span></div><div class="doc-upload"><input type="file" name="educationCertificate" accept=".pdf,.jpg,.jpeg,.png"></div></div>
+  </div>
+  <div id="documentGuidance" class="conditional">
+    <label>Which document do you currently need help with? *<textarea name="documentIssue" placeholder="Tell SIFA which core document you do not currently have and briefly explain the situation."></textarea></label>
+  </div>
+  <div class="document-group">
+    <h3>Optional / Supporting Documents <span class="badge-optional">Optional</span></h3>
+    <p>These documents may strengthen your application or help SIFA understand your background. They are not required unless SIFA specifically requests them.</p>
+    <div class="doc-row"><div class="doc-name"><strong>Academic transcript / record</strong><span>Useful where academic background is relevant.</span></div><div class="doc-upload"><input type="file" name="transcript" accept=".pdf,.jpg,.jpeg,.png"></div></div>
+    <div class="doc-row"><div class="doc-name"><strong>Passport-size photograph</strong><span>Recent professional or identification-style photo.</span></div><div class="doc-upload"><input type="file" name="photo" accept=".jpg,.jpeg,.png"></div></div>
+    <div class="doc-row"><div class="doc-name"><strong>CV / Résumé</strong><span>Useful for applicants with professional, volunteer, or business experience.</span></div><div class="doc-upload"><input type="file" name="cv" accept=".pdf,.doc,.docx"></div></div>
+    <div class="doc-row"><div class="doc-name"><strong>Professional or training certificates</strong><span>Relevant accounting, finance, software, or technology certificates.</span></div><div class="doc-upload"><input type="file" name="certificates" accept=".pdf,.jpg,.jpeg,.png" multiple></div></div>
+    <div class="doc-row"><div class="doc-name"><strong>Work experience documents</strong><span>Relevant employment or experience evidence, if available.</span></div><div class="doc-upload"><input type="file" name="workDocuments" accept=".pdf,.jpg,.jpeg,.png" multiple></div></div>
+    <div class="doc-row"><div class="doc-name"><strong>Other supporting documents</strong><span>Any other relevant document you want SIFA to consider.</span></div><div class="doc-upload"><input type="file" name="otherDocument" accept=".pdf,.jpg,.jpeg,.png" multiple></div></div>
+  </div>
+  <p class="file-note"><strong>Accepted formats:</strong> PDF, JPG, JPEG, and PNG for most documents; PDF, DOC, or DOCX for CVs. Final file-size limits and secure storage rules will be applied when the online submission service is connected.</p>
+</section>
 
-<div class="form-section">
-<h2>6. Declaration & Consent</h2>
-<label class="choice"><input type="checkbox" name="accuracy" required><span>I confirm that the information I have provided is accurate to the best of my knowledge. I understand that submitting an application does not automatically guarantee admission, enrollment, a scholarship, or a fee waiver. *</span></label>
-<label class="choice"><input type="checkbox" name="contactConsent" required><span>I agree that SIFA may contact me regarding this application and relevant learning opportunities. *</span></label>
-</div>
+<section class="wizard-step" data-step="6">
+  <div class="step-heading"><div class="step-number">6</div><div><h2>Review & Submit</h2><p>Review the information you entered before the final submission stage.</p></div></div>
+  <div id="reviewGrid" class="review-grid"></div>
+  <div class="consent">
+    <h3>Declaration & Consent</h3>
+    <label class="check-row"><input type="checkbox" name="accuracy" required><span>I confirm that the information I have provided is accurate to the best of my knowledge. I understand that submitting an application does not automatically guarantee admission, enrollment, a scholarship, or a fee waiver. *</span></label>
+    <label class="check-row"><input type="checkbox" name="contactConsent" required><span>I agree that SIFA Global Institute may contact me regarding this application and relevant learning opportunities. *</span></label>
+  </div>
+</section>
 
-<div style="margin-top:28px">
-<button class="btn btn-primary" type="submit">Submit Application</button>
-<button class="btn" type="reset" style="margin-left:10px">Clear Form</button>
-<p class="muted" style="margin-top:14px">This current website version sends the completed application through the applicant's email client to <a href="mailto:info.sifaglobal@yahoo.com">info.sifaglobal@yahoo.com</a>. A secure online application system with document upload, application tracking and applicant notifications can be introduced in a future phase.</p>
+<div id="submissionNotice" class="status-message">The application interface is ready, but the secure online submission and document-upload service has not yet been connected. We will connect the submission system before this page is used for real applications.</div>
+<div class="wizard-actions">
+  <button type="button" class="btn btn-secondary" id="backBtn">Back</button>
+  <div class="right-actions">
+    <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
+    <button type="submit" class="btn btn-primary hidden" id="submitBtn">Submit Application</button>
+  </div>
 </div>
 </form>
-
-<div class="apply-note" style="margin-top:24px">
-<strong>Application process:</strong> Submit your information → SIFA reviews it → SIFA may contact you for clarification or supporting documents → enrollment arrangements are confirmed where applicable.
 </div>
-<p style="margin-top:18px">Before applying, you can also review <a href="scholarships.html">Scholarships & Fee Waivers</a>, <a href="courses.html">Courses</a>, or <a href="contact.html">Contact SIFA</a>.</p>
-</div></div></section>
-</main>
 
+<div class="apply-note" style="margin-top:24px"><strong>Application process:</strong> Complete the application → SIFA reviews the information → SIFA may contact you for clarification or supporting documents → enrollment arrangements are confirmed where applicable.</div>
+<p style="margin-top:18px">Before applying, you can also review <a href="scholarships.html">Scholarships & Fee Waivers</a>, <a href="courses.html">Courses</a>, or <a href="contact.html">Contact SIFA</a>.</p>
+</div></section>
+</main>
 <footer><div class="container footer-grid">
 <div><img src="assets/sifa-logo.png" alt="SIFA logo" style="width:100px;background:#fff;border-radius:50%;padding:4px"><h3>SIFA Global Institute</h3><p>Practical education in accounting technology, financial systems and digital professional tools.</p></div>
 <div><h3>Explore</h3><p><a href="about.html">About SIFA</a></p><p><a href="founder.html">Founder</a></p><p><a href="courses.html">Courses</a></p><p><a href="learning.html">Learning</a></p></div>
@@ -320,19 +408,135 @@
 <div><h3>Contact</h3><p><a href="mailto:info.sifaglobal@yahoo.com">info.sifaglobal@yahoo.com</a></p><p>Türkiye: <a href="tel:+905372746944">+90 537 274 6944</a></p><p>Rwanda: <a href="tel:+250782817643">+250 782 817 643</a></p><p><a href="contact.html">Contact SIFA</a></p></div>
 </div><div class="container copyright">© <span data-year></span> SIFA Global Institute. All rights reserved.</div></footer>
 
+
 <script>
-document.getElementById('applicationForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const data = new FormData(this);
-  const lines = [];
-  for (const [key, value] of data.entries()) {
-    if (value === 'on') continue;
-    lines.push(key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase()) + ': ' + value);
+(function() {
+  const form = document.getElementById('applicationForm');
+  const steps = Array.from(document.querySelectorAll('.wizard-step'));
+  const dots = Array.from(document.querySelectorAll('.step-dot'));
+  const backBtn = document.getElementById('backBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const submitBtn = document.getElementById('submitBtn');
+  const progressFill = document.getElementById('progressFill');
+  const stepTitle = document.getElementById('stepTitle');
+  const stepPercent = document.getElementById('stepPercent');
+  const supportDetails = document.getElementById('supportDetails');
+  const coreDocs = document.getElementById('coreDocs');
+  const documentGuidance = document.getElementById('documentGuidance');
+  const reviewGrid = document.getElementById('reviewGrid');
+  const notice = document.getElementById('submissionNotice');
+  const titles = ['Personal Information','Education & Background','Program & Cohort','Scholarship & Financial Assistance','Documents','Review & Submit'];
+  let current = 1;
+
+  function showStep(n) {
+    current = n;
+    steps.forEach((s,i)=>s.classList.toggle('active', i===n-1));
+    dots.forEach((d,i)=>{ d.classList.toggle('active', i===n-1); d.classList.toggle('done', i<n-1); });
+    const pct = Math.round((n/steps.length)*100);
+    progressFill.style.width = pct + '%';
+    stepPercent.textContent = pct + '%';
+    stepTitle.textContent = 'Step ' + n + ' of ' + steps.length + ' — ' + titles[n-1];
+    backBtn.disabled = n===1;
+    backBtn.style.opacity = n===1 ? '.55' : '1';
+    nextBtn.classList.toggle('hidden', n===steps.length);
+    submitBtn.classList.toggle('hidden', n!==steps.length);
+    if(n===steps.length) buildReview();
+    window.scrollTo({top: document.querySelector('.progress-wrap').offsetTop - 20, behavior:'smooth'});
   }
-  const subject = 'SIFA Application - ' + (data.get('name') || 'Applicant');
-  const body = 'SIFA Global Institute Application\n\n' + lines.join('\n');
-  window.location.href = 'mailto:info.sifaglobal@yahoo.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-});
+
+  function validateCurrent() {
+    const fields = steps[current-1].querySelectorAll('input, select, textarea');
+    for(const field of fields) {
+      if(field.disabled || field.type==='file' || field.type==='radio' || field.type==='checkbox') continue;
+      if(!field.checkValidity()) { field.reportValidity(); return false; }
+    }
+    if(current===3) {
+      const schedule = form.querySelector('input[name="schedule"]:checked');
+      if(!schedule) { alert('Please select a schedule preference.'); return false; }
+      const cohort = form.elements.cohort;
+      if(!cohort.value) { cohort.reportValidity(); return false; }
+    }
+    if(current===4) {
+      const selected = form.querySelector('input[name="financialSupport"]:checked');
+      if(!selected) { alert('Please select whether you require financial assistance.'); return false; }
+      if(selected.value === 'Scholarship or fee-waiver request') {
+        const r = form.querySelector('[name="scholarshipReason"]');
+        if(!r.value.trim()) { r.setCustomValidity('Please explain why you are requesting financial assistance.'); r.reportValidity(); r.setCustomValidity(''); return false; }
+      }
+    }
+    if(current===5) {
+      const status = form.querySelector('input[name="documentStatus"]:checked');
+      if(!status) { alert('Please select your core document status.'); return false; }
+      if(status.value === 'I have the core documents') {
+        const id = form.elements.identityDocument;
+        const edu = form.elements.educationCertificate;
+        if(!id.files.length) { alert('Please upload your identification document / passport.'); id.focus(); return false; }
+        if(!edu.files.length) { alert('Please upload your highest education or professional qualification.'); edu.focus(); return false; }
+      } else {
+        const issue = form.elements.documentIssue;
+        if(!issue.value.trim()) { issue.setCustomValidity('Please explain which core document you need help with.'); issue.reportValidity(); issue.setCustomValidity(''); return false; }
+      }
+    }
+    return true;
+  }
+
+  function filesFor(name) {
+    const el = form.elements[name];
+    if(!el || !el.files.length) return 'Not uploaded';
+    return Array.from(el.files).map(f=>f.name).join(', ');
+  }
+  function value(name) { const el=form.elements[name]; return el ? (el.value || 'Not provided') : 'Not provided'; }
+  function financialLabel() { return form.querySelector('input[name="financialSupport"]:checked')?.value || 'Not selected'; }
+
+  function buildReview() {
+    const items = [
+      ['Personal Information', [['Full name',value('name')],['Email',value('email')],['Phone / WhatsApp',value('phone')],['Country',value('country')],['City / Location',value('city')],['Nationality',value('nationality')],['Preferred language',value('language')]],1],
+      ['Education & Background', [['Highest education',value('education')],['Current status',value('status')],['Background',value('background')],['Software experience',value('softwareExperience')]],2],
+      ['Program & Cohort', [['Program',value('course')],['Learning mode',value('mode')],['Cohort',value('cohort')],['Schedule preference',value('schedule')],['Learning goal',value('goals')]],3],
+      ['Financial Assistance', [['Request',financialLabel()],['Reason',value('scholarshipReason')],['Financial circumstances',value('financialCircumstances')],['Why this opportunity matters',value('scholarshipValue')]],4],
+      ['Documents', [['Core document status', form.querySelector('input[name="documentStatus"]:checked')?.value || 'Not selected'],['Identification',filesFor('identityDocument')],['Education / qualification',filesFor('educationCertificate')],['Supporting documents',[filesFor('transcript'),filesFor('photo'),filesFor('cv'),filesFor('certificates'),filesFor('workDocuments'),filesFor('otherDocument')].filter(x=>x!=='Not uploaded').join(', ') || 'None uploaded']],5]
+    ];
+    reviewGrid.innerHTML = items.map(([title,fields,step])=>`<div class="review-card"><h3>${escapeHtml(title)}</h3>${fields.map(([k,v])=>`<p><strong>${escapeHtml(k)}:</strong> ${escapeHtml(v)}</p>`).join('')}<a href="#" class="review-edit" data-edit="${step}">Edit this section</a></div>`).join('');
+    reviewGrid.querySelectorAll('.review-edit').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();showStep(Number(a.dataset.edit));}));
+  }
+  function escapeHtml(v) { return String(v ?? '').replace(/[&<>'"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
+
+  form.querySelectorAll('input[name="financialSupport"]').forEach(r=>r.addEventListener('change',()=>{
+    const yes = form.querySelector('input[name="financialSupport"][value="Scholarship or fee-waiver request"]:checked');
+    supportDetails.classList.toggle('show', !!yes);
+    form.querySelector('[name="scholarshipReason"]').required = !!yes;
+  }));
+
+  form.querySelectorAll('input[name="documentStatus"]').forEach(r=>r.addEventListener('change',()=>{
+    const hasDocs = form.querySelector('input[name="documentStatus"][value="I have the core documents"]:checked');
+    coreDocs.classList.toggle('show', !!hasDocs);
+    documentGuidance.classList.toggle('show', !hasDocs);
+    form.elements.documentIssue.required = !hasDocs;
+  }));
+
+  nextBtn.addEventListener('click',()=>{ if(validateCurrent()) showStep(current+1); });
+  backBtn.addEventListener('click',()=>{ if(current>1) showStep(current-1); });
+  dots.forEach((dot,i)=>dot.addEventListener('click',()=>{ if(i+1<=current) showStep(i+1); }));
+
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    if(!validateCurrent()) return;
+    const accuracy = form.elements.accuracy;
+    const contact = form.elements.contactConsent;
+    if(!accuracy.checked || !contact.checked) { alert('Please confirm both declarations before submitting.'); return; }
+    notice.classList.add('show');
+    notice.scrollIntoView({behavior:'smooth',block:'center'});
+  });
+  const params = new URLSearchParams(window.location.search);
+  const requestedProgram = params.get('program');
+  if(requestedProgram) {
+    const program = form.elements.course;
+    const option = Array.from(program.options).find(o => o.value.toLowerCase() === requestedProgram.toLowerCase());
+    if(option) { program.value = option.value; }
+  }
+
+  showStep(1);
+})();
 </script>
 <script src="script.js"></script>
 </body>
