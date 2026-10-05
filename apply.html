@@ -25,7 +25,8 @@
 .review-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.review-card{border:1px solid #dfe7ef;border-radius:12px;padding:16px;background:#f9fbfc}.review-card h3{font-size:15px;margin:0 0 8px}.review-card p{margin:5px 0;color:#62748a;font-size:14px;word-break:break-word}.review-card strong{color:#25364a}.review-edit{display:inline-block;margin-top:8px;color:#19733f;font-weight:700;font-size:13px;text-decoration:none}.review-edit:hover{text-decoration:underline}
 .consent{border-top:1px solid #dfe7ef;margin-top:24px;padding-top:22px}.check-row{display:flex;gap:11px;align-items:flex-start;padding:14px 16px;border:1px solid #dfe7ef;border-radius:12px;background:#f8fafc;margin:10px 0;cursor:pointer}.check-row input[type="checkbox"]{margin-top:4px;flex:0 0 auto;width:18px;height:18px;accent-color:#2fa866}.check-row span{color:#42566b;font-size:14px;line-height:1.5}
 .wizard-actions{display:flex;justify-content:space-between;gap:12px;padding:20px 32px;background:#f7fafc;border-top:1px solid #dfe7ef}.wizard-actions .right-actions{display:flex;gap:10px;margin-left:auto}.btn-secondary{background:#fff;border:1px solid #cbd6e1;color:#25364a}.btn-secondary:hover{background:#f1f5f8}.hidden{display:none!important}.status-message{display:none;margin:0 32px 24px;padding:16px 18px;border-radius:12px;background:#fff6e6;border:1px solid #f1d7a3;color:#75531a}.status-message.show{display:block}
-.validation-note{display:none;margin:0 0 18px;padding:12px 14px;border-radius:10px;background:#fff6e6;border:1px solid #f1d7a3;color:#75531a;font-size:14px}.validation-note.show{display:block}.muted{color:#718096;font-size:13px;font-weight:400}
+ .validation-note{display:none;margin:0 0 18px;padding:12px 14px;border-radius:10px;background:#fff6e6;border:1px solid #f1d7a3;color:#75531a;font-size:14px}.validation-note.show{display:block}.muted{color:#718096;font-size:13px;font-weight:400}
+.application-closed-banner{display:flex;gap:15px;align-items:flex-start;margin:0 0 24px;padding:20px 22px;border:1px solid #e8c98e;border-left:5px solid #c68a18;border-radius:14px;background:#fffaf0;color:#5f4a20}.application-closed-banner strong{display:block;color:#071a33;font-size:17px;margin-bottom:5px}.application-closed-banner p{margin:0;line-height:1.6;color:#6d5b36}.application-closed-icon{flex:0 0 32px;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#c68a18;color:#fff;font-weight:800}.closed-control{opacity:.72;cursor:not-allowed!important}.application-closed-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
 @media(max-width:850px){.apply-intro,.choice-grid,.document-choice{grid-template-columns:1fr}.form-grid-3{grid-template-columns:1fr 1fr}.doc-row{grid-template-columns:1fr}.doc-upload input{max-width:100%}}
 @media(max-width:650px){.wizard-step{padding:24px 18px}.wizard-actions{padding:16px 18px}.form-grid-2,.form-grid-3,.review-grid{grid-template-columns:1fr}.steps{gap:3px}.step-dot{font-size:10px}.step-dot span{width:26px;height:26px}.progress-top{align-items:flex-start;flex-direction:column;gap:5px}.choice-card{padding-left:52px}}
 </style>
@@ -65,6 +66,14 @@
   </div>
 </div>
 
+<div class="application-closed-banner" role="status" aria-live="polite">
+  <div class="application-closed-icon">i</div>
+  <div>
+    <strong>Applications are currently closed.</strong>
+    <p>SIFA Global Institute is not accepting applications for any program at this time. The application form below is retained for information and preparation only. No application or document will be submitted while admissions are closed.</p>
+  </div>
+</div>
+
 <div class="progress-wrap" aria-label="Application progress">
   <div class="progress-top"><strong id="stepTitle">Step 1 of 6 — Personal Information</strong><span id="stepPercent">17%</span></div>
   <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
@@ -79,7 +88,8 @@
 </div>
 
 <div class="wizard-card">
-<form id="applicationForm" class="form" enctype="multipart/form-data" novalidate>
+<form id="applicationForm" class="form" action="https://formspree.io/f/mgaoeqva" method="POST" enctype="multipart/form-data" novalidate>
+<input type="hidden" name="_subject" value="SIFA Global Institute — Application Submission">
 
 <section class="wizard-step active" data-step="1">
   <div class="step-heading"><div class="step-number">1</div><div><h2>Personal Information</h2><p>Tell us how SIFA can identify and contact you.</p></div></div>
@@ -307,10 +317,10 @@
   <div class="step-heading"><div class="step-number">3</div><div><h2>Program & Cohort</h2><p>Select a program that is currently open for application and tell us your preferred learning arrangement.</p></div></div>
   <div class="program-status-box">
     <strong>Program availability is controlled by SIFA.</strong>
-    <p>Only programs currently open for application can be selected. Other courses may be introduced in future cohorts. The selected program and final placement remain subject to SIFA review and availability.</p>
+    <p>Applications are currently closed for all SIFA programs. The program list remains visible so applicants can review the training portfolio, but no program can be selected or submitted at this time.</p>
   </div>
   <div class="form-grid-2">
-    <label>Program currently open for application *<select name="course" id="programSelect" required><option value="">Select a program</option><option value="QuickBooks Practical Training">QuickBooks Practical Training — Open Now</option><option value="Sage Accounting Training" disabled>Sage Accounting Training — Not Open Yet</option><option value="Tally Practical Accounting" disabled>Tally Practical Accounting — Not Open Yet</option><option value="Microsoft Excel for Accounting & Finance" disabled>Microsoft Excel for Accounting & Finance — Not Open Yet</option><option value="Xero Accounting" disabled>Xero Accounting — Not Open Yet</option><option value="Zoho Books" disabled>Zoho Books — Not Open Yet</option><option value="Odoo Accounting & Business Systems" disabled>Odoo Accounting & Business Systems — Not Open Yet</option><option value="SAP Financial & Business Systems" disabled>SAP Financial & Business Systems — Not Open Yet</option><option value="Oracle NetSuite" disabled>Oracle NetSuite — Not Open Yet</option><option value="Microsoft Dynamics 365" disabled>Microsoft Dynamics 365 — Not Open Yet</option><option value="ETA Accounting" disabled>ETA Accounting — Not Open Yet</option><option value="Logo Accounting & ERP" disabled>Logo Accounting & ERP — Not Open Yet</option><option value="Mikro Accounting & ERP" disabled>Mikro Accounting & ERP — Not Open Yet</option><option value="LUCA Accounting" disabled>LUCA Accounting — Not Open Yet</option><option value="Zirve Accounting" disabled>Zirve Accounting — Not Open Yet</option><option value="DİA Business Software" disabled>DİA Business Software — Not Open Yet</option><option value="Paraşüt Accounting" disabled>Paraşüt Accounting — Not Open Yet</option><option value="AKINSOFT Wolvox" disabled>AKINSOFT Wolvox — Not Open Yet</option><option value="Nebim" disabled>Nebim — Not Open Yet</option><option value="Accounting Fundamentals" disabled>Accounting Fundamentals — Not Open Yet</option><option value="Financial Reporting & Analysis" disabled>Financial Reporting & Analysis — Not Open Yet</option><option value="Digital Finance & Professional Tools" disabled>Digital Finance & Professional Tools — Not Open Yet</option><option value="Power BI for Financial Analysis" disabled>Power BI for Financial Analysis — Not Open Yet</option><option value="Advanced Excel & Financial Modeling" disabled>Advanced Excel & Financial Modeling — Not Open Yet</option></select></label>
+    <label>Program requested *<select name="course" id="programSelect" required><option value="">Select a program</option><option value="QuickBooks Practical Training" disabled>QuickBooks Practical Training — Closed</option><option value="Sage Accounting Training" disabled>Sage Accounting Training — Not Open Yet</option><option value="Tally Practical Accounting" disabled>Tally Practical Accounting — Not Open Yet</option><option value="Microsoft Excel for Accounting & Finance" disabled>Microsoft Excel for Accounting & Finance — Not Open Yet</option><option value="Xero Accounting" disabled>Xero Accounting — Not Open Yet</option><option value="Zoho Books" disabled>Zoho Books — Not Open Yet</option><option value="Odoo Accounting & Business Systems" disabled>Odoo Accounting & Business Systems — Not Open Yet</option><option value="SAP Financial & Business Systems" disabled>SAP Financial & Business Systems — Not Open Yet</option><option value="Oracle NetSuite" disabled>Oracle NetSuite — Not Open Yet</option><option value="Microsoft Dynamics 365" disabled>Microsoft Dynamics 365 — Not Open Yet</option><option value="ETA Accounting" disabled>ETA Accounting — Not Open Yet</option><option value="Logo Accounting & ERP" disabled>Logo Accounting & ERP — Not Open Yet</option><option value="Mikro Accounting & ERP" disabled>Mikro Accounting & ERP — Not Open Yet</option><option value="LUCA Accounting" disabled>LUCA Accounting — Not Open Yet</option><option value="Zirve Accounting" disabled>Zirve Accounting — Not Open Yet</option><option value="DİA Business Software" disabled>DİA Business Software — Not Open Yet</option><option value="Paraşüt Accounting" disabled>Paraşüt Accounting — Not Open Yet</option><option value="AKINSOFT Wolvox" disabled>AKINSOFT Wolvox — Not Open Yet</option><option value="Nebim" disabled>Nebim — Not Open Yet</option><option value="Accounting Fundamentals" disabled>Accounting Fundamentals — Not Open Yet</option><option value="Financial Reporting & Analysis" disabled>Financial Reporting & Analysis — Not Open Yet</option><option value="Digital Finance & Professional Tools" disabled>Digital Finance & Professional Tools — Not Open Yet</option><option value="Power BI for Financial Analysis" disabled>Power BI for Financial Analysis — Not Open Yet</option><option value="Advanced Excel & Financial Modeling" disabled>Advanced Excel & Financial Modeling — Not Open Yet</option></select></label>
     <label>Learning mode *<select name="mode" required><option value="">Select</option><option>Live online</option><option>Blended / guided learning</option><option>Self-paced / digital resources</option></select></label>
   </div>
   <div class="intake-box">
@@ -386,7 +396,7 @@
   </div>
 </section>
 
-<div id="submissionNotice" class="status-message">The application interface is ready, but the secure online submission and document-upload service has not yet been connected. We will connect the submission system before this page is used for real applications.</div>
+<div id="submissionNotice" class="status-message">Applications are currently closed. Your information and documents will not be submitted while admissions are closed. When SIFA officially opens applications, this page can be reactivated after the program availability and submission settings are updated.</div>
 <div class="wizard-actions">
   <button type="button" class="btn btn-secondary" id="backBtn">Back</button>
   <div class="right-actions">
@@ -397,6 +407,7 @@
 </form>
 </div>
 
+<div class="apply-note" style="margin-top:24px"><strong>Current admissions status:</strong> Applications are closed for all programs. Please use the Courses page to review the current training portfolio or Contact SIFA for official opening updates.</div>
 <div class="apply-note" style="margin-top:24px"><strong>Application process:</strong> Complete the application → SIFA reviews the information → SIFA may contact you for clarification or supporting documents → enrollment arrangements are confirmed where applicable.</div>
 <p style="margin-top:18px">Before applying, you can also review <a href="scholarships.html">Scholarships & Fee Waivers</a>, <a href="courses.html">Courses</a>, or <a href="contact.html">Contact SIFA</a>.</p>
 </div></section>
@@ -426,6 +437,7 @@
   const reviewGrid = document.getElementById('reviewGrid');
   const notice = document.getElementById('submissionNotice');
   const titles = ['Personal Information','Education & Background','Program & Cohort','Scholarship & Financial Assistance','Documents','Review & Submit'];
+  const APPLICATIONS_OPEN = false;
   let current = 1;
 
   function showStep(n) {
@@ -519,13 +531,18 @@
   dots.forEach((dot,i)=>dot.addEventListener('click',()=>{ if(i+1<=current) showStep(i+1); }));
 
   form.addEventListener('submit',e=>{
-    e.preventDefault();
-    if(!validateCurrent()) return;
+    if(!APPLICATIONS_OPEN){
+      e.preventDefault();
+      notice.classList.add('show');
+      notice.scrollIntoView({behavior:'smooth',block:'center'});
+      return;
+    }
+    if(!validateCurrent()){ e.preventDefault(); return; }
     const accuracy = form.elements.accuracy;
     const contact = form.elements.contactConsent;
-    if(!accuracy.checked || !contact.checked) { alert('Please confirm both declarations before submitting.'); return; }
-    notice.classList.add('show');
-    notice.scrollIntoView({behavior:'smooth',block:'center'});
+    if(!accuracy.checked || !contact.checked) { e.preventDefault(); alert('Please confirm both declarations before submitting.'); return; }
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
   });
   const params = new URLSearchParams(window.location.search);
   const requestedProgram = params.get('program');
@@ -535,6 +552,12 @@
     if(option) { program.value = option.value; }
   }
 
+  if(!APPLICATIONS_OPEN){
+    submitBtn.disabled = true;
+    submitBtn.classList.add('hidden');
+    nextBtn.textContent = 'Next';
+    notice.classList.remove('show');
+  }
   showStep(1);
 })();
 </script>
