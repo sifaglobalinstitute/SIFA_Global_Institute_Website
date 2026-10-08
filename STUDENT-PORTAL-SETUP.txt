@@ -1,0 +1,35 @@
+SIFA GLOBAL INSTITUTE — STUDENT PORTAL SETUP
+
+CURRENT STATUS
+- Supabase Student Portal is connected.
+- Student accounts use Supabase Auth.
+- Profiles and applications use PostgreSQL + Row Level Security.
+- Student documents use the private student-documents storage bucket.
+- QuickBooks Practical Training is currently the only program open for application.
+
+FILES
+- supabase-config.js — browser-safe Supabase URL + publishable key and admissions switch.
+- student-portal.html / student-portal.js — login, signup, My Account, application dashboard and security actions.
+- apply.html / student-application.js — authenticated application workflow and private document uploads.
+- student-portal-schema.sql — core database schema.
+- ADMISSIONS-SETUP.sql — server-side admissions control and QuickBooks-only guard.
+
+IMPORTANT SECURITY
+- Never place a Supabase secret/service_role key in browser code.
+- The publishable key is intended for the browser when RLS is correctly configured.
+- Run ADMISSIONS-SETUP.sql in Supabase SQL Editor to add server-side protection for admissions.
+
+CURRENT ADMISSIONS
+- Browser setting: applicationsOpen = true
+- Open program: QuickBooks Practical Training
+- Other programs: closed
+
+TO CLOSE ALL APPLICATIONS LATER
+1. In supabase-config.js change applicationsOpen: true to applicationsOpen: false.
+2. In Supabase SQL Editor run:
+   update public.admission_settings set applications_open = false, updated_at = now() where id = true;
+
+TO REOPEN QUICKBOOKS LATER
+1. Set applicationsOpen: true in supabase-config.js.
+2. In Supabase SQL Editor run:
+   update public.admission_settings set applications_open = true, open_programs = array['QuickBooks Practical Training'], updated_at = now() where id = true;

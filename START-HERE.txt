@@ -1,0 +1,21 @@
+SIFA GLOBAL INSTITUTE — START HERE
+
+1. Extract the ZIP completely. Do not open index.html from inside the ZIP.
+2. Open this folder in VS Code.
+3. In VS Code, install the extension called "Live Server" (by Ritwick Dey).
+4. Open index.html.
+5. Right-click inside index.html -> "Open with Live Server".
+6. Chrome should open an address similar to http://127.0.0.1:5500/ .
+7. Now click Home, About, Founder, Courses, Learning, Certification, Resources, Contact and Apply Now.
+
+If a link does not work:
+- Make sure you opened the extracted folder in VS Code.
+- Make sure all HTML files are in the same main folder.
+- Make sure the assets folder is still inside the main folder.
+- Use Live Server rather than double-clicking index.html.
+
+IMPORTANT:
+- Do not rename the HTML files unless you update the links.
+- Do not move the assets folder.
+- The first application form opens the visitor's email client. A real online application database is a later development stage.
+- Certificate verification is currently a planned system, not a live database.

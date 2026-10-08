@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Apply to SIFA | SIFA Global Institute</title>
+<title>Apply for QuickBooks | SIFA Global Institute</title>
 <meta name="description" content="Apply to SIFA Global Institute through a structured application process for practical accounting technology, financial systems and digital professional training.">
 <link rel="stylesheet" href="styles.css">
 <style>
@@ -34,6 +34,9 @@
 <style>
 .program-status-box,.schedule-box{border:1px solid #d9e5ef;background:#f8fbfd;border-radius:14px;padding:18px 20px;margin:0 0 22px}.program-status-box strong,.schedule-box h3{color:#071a33}.program-status-box p,.schedule-box p{margin:6px 0 0;color:#62748a;line-height:1.6}.intake-box select{margin-top:12px;width:100%;box-sizing:border-box;min-height:48px;border:1px solid #d7e1ea;border-radius:10px;background:#fff;color:#25364a;padding:13px 14px;font:inherit}.schedule-grid{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:14px}.schedule-grid .choice-card{min-height:96px}.document-choice label{display:flex;align-items:flex-start;gap:12px;position:relative;padding:16px 18px;margin-bottom:12px;border:1px solid #d7e1ea;border-radius:14px;background:#f8fafc;cursor:pointer}.document-choice input[type=radio]{flex:0 0 auto;width:18px;height:18px;margin:2px 0 0;accent-color:#2fa866}.document-choice span{display:block;line-height:1.5}.document-choice strong{color:#071a33}.check-row{display:flex!important;align-items:flex-start;gap:12px}.check-row input[type=checkbox]{flex:0 0 auto;width:18px;height:18px;margin:2px 0 0;accent-color:#2fa866}.form label>input[type=radio],.form label>input[type=checkbox]{width:auto}.doc-upload input[type=file]{max-width:100%}@media(max-width:650px){.schedule-grid{grid-template-columns:1fr}}
 </style>
+<style>
+.application-open-banner{background:#f1faf5!important;border-color:#bfe2cc!important;color:#1d6a3d!important}.application-open-banner .application-closed-icon{background:#dff5e7!important;color:#19733f!important}.application-account-note{font-size:.93rem;color:#62748a}.application-account-note a{color:#19733f;font-weight:800}
+</style>
 </head>
 <body>
 <div class="topbar"><div class="container"><span>Empowering Financial Professionals Through Technology</span><span>info.sifaglobal@yahoo.com</span></div></div>
@@ -41,7 +44,7 @@
 <a class="brand" href="index.html"><img src="assets/sifa-logo.png" alt="SIFA Global Institute logo"><span>SIFA Global Institute<small>Software Institute for Financial Accountants</small></span></a>
 <button class="menu" aria-label="Open menu">☰</button>
 <nav><ul>
-<li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="founder.html">Founder</a></li><li><a href="courses.html">Courses</a></li><li><a href="learning.html">Learning</a></li><li><a href="certifications.html">Certification</a></li><li><a href="resources.html">Resources</a></li><li><a href="contact.html">Contact</a></li><li><a class="nav-cta" href="apply.html">Apply Now</a></li>
+<li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="founder.html">Founder</a></li><li><a href="courses.html">Courses</a></li><li><a href="learning.html">Learning</a></li><li><a href="certifications.html">Certification</a></li><li><a href="resources.html">Resources</a></li><li><a href="ai-support.html">SIFA AI</a></li><li><a href="contact.html">Contact</a></li><li><a class="nav-cta" href="student-portal.html">Student Portal</a></li>
 </ul></nav></div></header>
 
 
@@ -57,7 +60,7 @@
   <div class="apply-intro-card">
     <h2>Start your SIFA application</h2>
     <p>Complete the application step by step. SIFA determines program availability, cohort dates, and final timetables. You can review and edit your information before submission.</p>
-    <p><strong>* Required field</strong></p>
+    <p><strong>* Required field</strong></p><p class="application-account-note">Your name and email are linked to your Student Portal account. You can update your contact details from <a href="student-portal.html">My Account</a>.</p>
   </div>
   <div class="apply-side-card">
     <h3>Before you begin</h3>
@@ -66,13 +69,15 @@
   </div>
 </div>
 
-<div class="application-closed-banner" role="status" aria-live="polite">
-  <div class="application-closed-icon">i</div>
+<div id="admissionsStatusBanner" class="application-closed-banner" role="status" aria-live="polite">
+  <div class="application-closed-icon">✓</div>
   <div>
-    <strong>Applications are currently closed.</strong>
-    <p>SIFA Global Institute is not accepting applications for any program at this time. The application form below is retained for information and preparation only. No application or document will be submitted while admissions are closed.</p>
+    <strong id="admissionsStatusTitle">Applications are currently closed.</strong>
+    <p id="admissionsStatusText">SIFA Global Institute is not accepting applications at this time. Your Student Portal account remains active, and you can apply when admissions reopen.</p>
   </div>
 </div>
+
+<div id="studentPortalRequirement" class="info-box" style="margin-bottom:22px"><strong>Student account required:</strong> Create or sign in to your SIFA Student Portal account before submitting this application. Your application will be securely linked to your student account. <a href="student-portal.html?next=apply.html" style="color:#19733f;font-weight:800">Open Student Portal</a>.</div>
 
 <div class="progress-wrap" aria-label="Application progress">
   <div class="progress-top"><strong id="stepTitle">Step 1 of 6 — Personal Information</strong><span id="stepPercent">17%</span></div>
@@ -88,7 +93,7 @@
 </div>
 
 <div class="wizard-card">
-<form id="applicationForm" class="form" action="https://formspree.io/f/mgaoeqva" method="POST" enctype="multipart/form-data" novalidate>
+<form id="applicationForm" class="form" action="#" method="POST" enctype="multipart/form-data" novalidate>
 <input type="hidden" name="_subject" value="SIFA Global Institute — Application Submission">
 
 <section class="wizard-step active" data-step="1">
@@ -317,10 +322,10 @@
   <div class="step-heading"><div class="step-number">3</div><div><h2>Program & Cohort</h2><p>Select a program that is currently open for application and tell us your preferred learning arrangement.</p></div></div>
   <div class="program-status-box">
     <strong>Program availability is controlled by SIFA.</strong>
-    <p>Applications are currently closed for all SIFA programs. The program list remains visible so applicants can review the training portfolio, but no program can be selected or submitted at this time.</p>
+    <p>All SIFA programs are currently closed for application. Admissions will reopen when SIFA announces the next intake.</p>
   </div>
   <div class="form-grid-2">
-    <label>Program requested *<select name="course" id="programSelect" required><option value="">Select a program</option><option value="QuickBooks Practical Training" disabled>QuickBooks Practical Training — Closed</option><option value="Sage Accounting Training" disabled>Sage Accounting Training — Not Open Yet</option><option value="Tally Practical Accounting" disabled>Tally Practical Accounting — Not Open Yet</option><option value="Microsoft Excel for Accounting & Finance" disabled>Microsoft Excel for Accounting & Finance — Not Open Yet</option><option value="Xero Accounting" disabled>Xero Accounting — Not Open Yet</option><option value="Zoho Books" disabled>Zoho Books — Not Open Yet</option><option value="Odoo Accounting & Business Systems" disabled>Odoo Accounting & Business Systems — Not Open Yet</option><option value="SAP Financial & Business Systems" disabled>SAP Financial & Business Systems — Not Open Yet</option><option value="Oracle NetSuite" disabled>Oracle NetSuite — Not Open Yet</option><option value="Microsoft Dynamics 365" disabled>Microsoft Dynamics 365 — Not Open Yet</option><option value="ETA Accounting" disabled>ETA Accounting — Not Open Yet</option><option value="Logo Accounting & ERP" disabled>Logo Accounting & ERP — Not Open Yet</option><option value="Mikro Accounting & ERP" disabled>Mikro Accounting & ERP — Not Open Yet</option><option value="LUCA Accounting" disabled>LUCA Accounting — Not Open Yet</option><option value="Zirve Accounting" disabled>Zirve Accounting — Not Open Yet</option><option value="DİA Business Software" disabled>DİA Business Software — Not Open Yet</option><option value="Paraşüt Accounting" disabled>Paraşüt Accounting — Not Open Yet</option><option value="AKINSOFT Wolvox" disabled>AKINSOFT Wolvox — Not Open Yet</option><option value="Nebim" disabled>Nebim — Not Open Yet</option><option value="Accounting Fundamentals" disabled>Accounting Fundamentals — Not Open Yet</option><option value="Financial Reporting & Analysis" disabled>Financial Reporting & Analysis — Not Open Yet</option><option value="Digital Finance & Professional Tools" disabled>Digital Finance & Professional Tools — Not Open Yet</option><option value="Power BI for Financial Analysis" disabled>Power BI for Financial Analysis — Not Open Yet</option><option value="Advanced Excel & Financial Modeling" disabled>Advanced Excel & Financial Modeling — Not Open Yet</option></select></label>
+    <label>Program requested *<select name="course" id="programSelect" required><option value="QuickBooks Practical Training" disabled>QuickBooks Practical Training — Not Open Yet</option><option value="Sage Accounting Training" disabled>Sage Accounting Training — Not Open Yet</option><option value="Tally Practical Accounting" disabled>Tally Practical Accounting — Not Open Yet</option><option value="Microsoft Excel for Accounting & Finance" disabled>Microsoft Excel for Accounting & Finance — Not Open Yet</option><option value="Xero Accounting" disabled>Xero Accounting — Not Open Yet</option><option value="Zoho Books" disabled>Zoho Books — Not Open Yet</option><option value="Odoo Accounting & Business Systems" disabled>Odoo Accounting & Business Systems — Not Open Yet</option><option value="SAP Financial & Business Systems" disabled>SAP Financial & Business Systems — Not Open Yet</option><option value="Oracle NetSuite" disabled>Oracle NetSuite — Not Open Yet</option><option value="Microsoft Dynamics 365" disabled>Microsoft Dynamics 365 — Not Open Yet</option><option value="ETA Accounting" disabled>ETA Accounting — Not Open Yet</option><option value="Logo Accounting & ERP" disabled>Logo Accounting & ERP — Not Open Yet</option><option value="Mikro Accounting & ERP" disabled>Mikro Accounting & ERP — Not Open Yet</option><option value="LUCA Accounting" disabled>LUCA Accounting — Not Open Yet</option><option value="Zirve Accounting" disabled>Zirve Accounting — Not Open Yet</option><option value="DİA Business Software" disabled>DİA Business Software — Not Open Yet</option><option value="Paraşüt Accounting" disabled>Paraşüt Accounting — Not Open Yet</option><option value="AKINSOFT Wolvox" disabled>AKINSOFT Wolvox — Not Open Yet</option><option value="Nebim" disabled>Nebim — Not Open Yet</option><option value="Accounting Fundamentals" disabled>Accounting Fundamentals — Not Open Yet</option><option value="Financial Reporting & Analysis" disabled>Financial Reporting & Analysis — Not Open Yet</option><option value="Digital Finance & Professional Tools" disabled>Digital Finance & Professional Tools — Not Open Yet</option><option value="Power BI for Financial Analysis" disabled>Power BI for Financial Analysis — Not Open Yet</option><option value="Advanced Excel & Financial Modeling" disabled>Advanced Excel & Financial Modeling — Not Open Yet</option></select></label>
     <label>Learning mode *<select name="mode" required><option value="">Select</option><option>Live online</option><option>Blended / guided learning</option><option>Self-paced / digital resources</option></select></label>
   </div>
   <div class="intake-box">
@@ -396,7 +401,7 @@
   </div>
 </section>
 
-<div id="submissionNotice" class="status-message">Applications are currently closed. Your information and documents will not be submitted while admissions are closed. When SIFA officially opens applications, this page can be reactivated after the program availability and submission settings are updated.</div>
+<div id="submissionNotice" class="status-message">QuickBooks Practical Training applications are currently open. Other programs remain closed. Your application will be securely linked to your SIFA Student Portal account.</div>
 <div class="wizard-actions">
   <button type="button" class="btn btn-secondary" id="backBtn">Back</button>
   <div class="right-actions">
@@ -407,7 +412,7 @@
 </form>
 </div>
 
-<div class="apply-note" style="margin-top:24px"><strong>Current admissions status:</strong> Applications are closed for all programs. Please use the Courses page to review the current training portfolio or Contact SIFA for official opening updates.</div>
+<div class="apply-note" style="margin-top:24px"><strong>Current admissions status:</strong> Applications are currently open for <strong>QuickBooks Practical Training only</strong>. Other programs remain closed until SIFA announces future cohorts.</div>
 <div class="apply-note" style="margin-top:24px"><strong>Application process:</strong> Complete the application → SIFA reviews the information → SIFA may contact you for clarification or supporting documents → enrollment arrangements are confirmed where applicable.</div>
 <p style="margin-top:18px">Before applying, you can also review <a href="scholarships.html">Scholarships & Fee Waivers</a>, <a href="courses.html">Courses</a>, or <a href="contact.html">Contact SIFA</a>.</p>
 </div></section>
@@ -416,10 +421,36 @@
 <div><img src="assets/sifa-logo.png" alt="SIFA logo" style="width:100px;background:#fff;border-radius:50%;padding:4px"><h3>SIFA Global Institute</h3><p>Practical education in accounting technology, financial systems and digital professional tools.</p></div>
 <div><h3>Explore</h3><p><a href="about.html">About SIFA</a></p><p><a href="founder.html">Founder</a></p><p><a href="courses.html">Courses</a></p><p><a href="learning.html">Learning</a></p></div>
 <div><h3>Credentials</h3><p><a href="certifications.html">SIFA Certifications</a></p><p><a href="verify.html">Verify a Certificate</a></p><p><a href="scholarships.html">Scholarships & Fee Waivers</a></p></div>
-<div><h3>Contact</h3><p><a href="mailto:info.sifaglobal@yahoo.com">info.sifaglobal@yahoo.com</a></p><p>Türkiye: <a href="tel:+905372746944">+90 537 274 6944</a></p><p>Rwanda: <a href="tel:+250782817643">+250 782 817 643</a></p><p><a href="contact.html">Contact SIFA</a></p></div>
+<div><h3>Contact</h3><p><a href="mailto:info.sifaglobal@yahoo.com">info.sifaglobal@yahoo.com</a></p><p>Türkiye: <a href="tel:+905372746944">+90 537 274 6944</a></p><p>Rwanda: <a href="tel:+250782817643">+250 782 817 643</a></p><p><a href="contact.html">Contact SIFA</a></p>
+            <div class="sifa-social-links" aria-label="SIFA Global Institute social media" style="display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;gap:12px!important;width:max-content!important;height:40px!important;margin:16px 0 0!important;padding:0!important;line-height:1!important;">
+                <a  style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;box-sizing:border-box!important;line-height:1!important;color:#E4405F!important;text-decoration:none!important;"href="https://instagram.com/sifaglobalinstitute" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><svg style="display:block!important;width:21px!important;height:21px!important;min-width:21px!important;max-width:21px!important;min-height:21px!important;max-height:21px!important;flex:0 0 21px!important;margin:0!important;" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg></a>
+                <a  style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;box-sizing:border-box!important;line-height:1!important;color:#1877F2!important;text-decoration:none!important;"href="https://facebook.com/SIFAGlobalInstitute" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook"><svg style="display:block!important;width:21px!important;height:21px!important;min-width:21px!important;max-width:21px!important;min-height:21px!important;max-height:21px!important;flex:0 0 21px!important;margin:0!important;" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 8h3V4h-3c-3.3 0-5 2-5 5v3H6v4h3v4h4v-4h3.2l.8-4H13V9c0-.7.3-1 1-1z"/></svg></a>
+                <a  style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;box-sizing:border-box!important;line-height:1!important;color:#0A66C2!important;text-decoration:none!important;"href="https://linkedin.com/in/sifa-global-institute-24a360288" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn"><svg style="display:block!important;width:21px!important;height:21px!important;min-width:21px!important;max-width:21px!important;min-height:21px!important;max-height:21px!important;flex:0 0 21px!important;margin:0!important;" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="9" width="4" height="11" fill="currentColor"/><circle cx="6" cy="5.5" r="2" fill="currentColor"/><path fill="currentColor" d="M11 9h4v1.5c1-1.2 2.2-2 4.2-2 3.3 0 4.8 2.1 4.8 6v5.5h-4v-5c0-1.8-.6-3-2.1-3-1.5 0-2.1 1.1-2.1 3v5h-4V9z"/></svg></a>
+                <a  style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;box-sizing:border-box!important;line-height:1!important;color:#FF0000!important;text-decoration:none!important;"href="https://youtube.com/@sifaglobalinstitute" target="_blank" rel="noopener noreferrer" aria-label="YouTube" title="YouTube"><svg style="display:block!important;width:21px!important;height:21px!important;min-width:21px!important;max-width:21px!important;min-height:21px!important;max-height:21px!important;flex:0 0 21px!important;margin:0!important;" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6" width="19" height="12" rx="4" fill="currentColor"/><path d="M10 9l5 3-5 3V9z" fill="#041d39"/></svg></a>
+                <a  style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;box-sizing:border-box!important;line-height:1!important;color:#00F2EA!important;text-decoration:none!important;"href="https://vm.tiktok.com/ZS9Dqdpa9k61u-7HzPe/" target="_blank" rel="noopener noreferrer" aria-label="TikTok" title="TikTok"><svg style="display:block!important;width:21px!important;height:21px!important;min-width:21px!important;max-width:21px!important;min-height:21px!important;max-height:21px!important;flex:0 0 21px!important;margin:0!important;" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 4h3c.3 1.8 1.3 3.1 3 3.7v3.1c-1.1-.1-2.1-.4-3-1v5.5c0 3.5-2.5 5.7-5.6 5.7-3 0-5.4-2.2-5.4-5.2 0-3.2 2.7-5.4 6-5.1v3.2c-1.4-.3-2.7.5-2.7 1.9 0 1.1.9 2 2 2 1.3 0 2.7-.8 2.7-2.8V4z"/></svg></a>
+                <a  style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;box-sizing:border-box!important;line-height:1!important;color:#FFFFFF!important;text-decoration:none!important;"href="https://x.com/sifaglobal12" target="_blank" rel="noopener noreferrer" aria-label="X" title="X"><svg style="display:block!important;width:21px!important;height:21px!important;min-width:21px!important;max-width:21px!important;min-height:21px!important;max-height:21px!important;flex:0 0 21px!important;margin:0!important;" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 4h4.5l3.3 4.5L16.6 4H19l-5.1 5.8L20 20h-4.5l-3.8-5.1L7.2 20H4.8l5.5-6.3L5 4zm3.8 1.8H7.2l8.9 12.4h1.6L8.8 5.8z"/></svg></a>
+            </div>
+</div>
 </div><div class="container copyright">© <span data-year></span> SIFA Global Institute. All rights reserved.</div></footer>
 
 
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  const config=window.SIFA_SUPABASE_CONFIG||{};
+  const open=window.SIFA_SETTINGS?.applicationsOpen===true && Array.isArray(window.SIFA_SETTINGS?.openPrograms) && window.SIFA_SETTINGS.openPrograms.includes('QuickBooks Practical Training');
+  if(!open) return;
+  if(!config.url || !config.anonKey || !window.supabase?.createClient) return;
+  const sb=window.supabase.createClient(config.url,config.anonKey);
+  sb.auth.getSession().then(({data})=>{
+    if(!data?.session?.user){
+      const next=encodeURIComponent('apply.html');
+      window.location.replace('student-portal.html?next='+next);
+    }
+  });
+})();
+</script>
 <script>
 (function() {
   const form = document.getElementById('applicationForm');
@@ -437,7 +468,23 @@
   const reviewGrid = document.getElementById('reviewGrid');
   const notice = document.getElementById('submissionNotice');
   const titles = ['Personal Information','Education & Background','Program & Cohort','Scholarship & Financial Assistance','Documents','Review & Submit'];
-  const APPLICATIONS_OPEN = false;
+  const APPLICATIONS_OPEN = window.SIFA_SETTINGS?.applicationsOpen === true;
+  const openPrograms = Array.isArray(window.SIFA_SETTINGS?.openPrograms) ? window.SIFA_SETTINGS.openPrograms : [];
+  const statusBanner = document.getElementById('admissionsStatusBanner');
+  const statusTitle = document.getElementById('admissionsStatusTitle');
+  const statusText = document.getElementById('admissionsStatusText');
+  if (statusBanner && statusTitle && statusText) {
+    const quickbooksOpen = APPLICATIONS_OPEN && openPrograms.includes('QuickBooks Practical Training');
+    if (quickbooksOpen) {
+      statusBanner.classList.add('application-open-banner');
+      statusTitle.textContent = 'QuickBooks applications are currently open.';
+      statusText.textContent = 'SIFA Global Institute is currently accepting applications for QuickBooks Practical Training. Other programs remain closed until future cohorts are announced.';
+    } else {
+      statusBanner.classList.remove('application-open-banner');
+      statusTitle.textContent = 'Applications are currently closed.';
+      statusText.textContent = 'SIFA Global Institute is not accepting applications at this time. Your Student Portal account remains active, and you can apply when admissions reopen.';
+    }
+  }
   let current = 1;
 
   function showStep(n) {
@@ -530,20 +577,229 @@
   backBtn.addEventListener('click',()=>{ if(current>1) showStep(current-1); });
   dots.forEach((dot,i)=>dot.addEventListener('click',()=>{ if(i+1<=current) showStep(i+1); }));
 
-  form.addEventListener('submit',e=>{
-    if(!APPLICATIONS_OPEN){
-      e.preventDefault();
-      notice.classList.add('show');
-      notice.scrollIntoView({behavior:'smooth',block:'center'});
-      return;
+  form.addEventListener('submit', async e => {
+  e.preventDefault();
+
+  if (!APPLICATIONS_OPEN) {
+    notice.classList.add('show');
+    notice.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+    return;
+  }
+
+  if (!validateCurrent()) {
+    return;
+  }
+
+  const accuracy = form.elements.accuracy;
+  const contact = form.elements.contactConsent;
+
+  if (!accuracy.checked || !contact.checked) {
+    alert('Please confirm both declarations before submitting.');
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting...';
+
+  const submitUrl =
+    'https://script.google.com/macros/s/AKfycbyBD2oQSwzQgx0jJ3LrKwkREOFE2ZOi3BSY_UGSIyyfpRG_wAhBtT207VueByhLD4SsbQ/exec';
+
+  try {
+    const fields = {};
+
+    form.querySelectorAll('input, select, textarea').forEach(field => {
+      if (!field.name || field.type === 'file') return;
+
+      if (field.type === 'checkbox') {
+        fields[field.name] = field.checked;
+      } else if (field.type === 'radio') {
+        if (field.checked) {
+          fields[field.name] = field.value;
+        }
+      } else {
+        fields[field.name] = field.value;
+      }
+    });
+
+    const documents = [];
+
+    const fileInputs = form.querySelectorAll('input[type="file"]');
+
+    for (const input of fileInputs) {
+      if (!input.files || !input.files.length) continue;
+
+      for (const file of input.files) {
+        const base64 = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+
+          reader.onload = () => {
+            const result = reader.result;
+            resolve(result.split(',')[1]);
+          };
+
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+
+        documents.push({
+          name: file.name,
+          type: file.type,
+          base64: base64
+        });
+      }
     }
-    if(!validateCurrent()){ e.preventDefault(); return; }
-    const accuracy = form.elements.accuracy;
-    const contact = form.elements.contactConsent;
-    if(!accuracy.checked || !contact.checked) { e.preventDefault(); alert('Please confirm both declarations before submitting.'); return; }
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Submitting...';
-  });
+const applicationId =
+  'SIFA-' +
+  new Date().toISOString().slice(0,10).replace(/-/g,'') +
+  '-' +
+  crypto.randomUUID().replace(/-/g,'').substring(0,6).toUpperCase();
+   const payload = {
+  applicationId: applicationId,
+  fullName: fields.name || '',
+  email: fields.email || '',
+  phone: fields.phone || '',
+  country: fields.country || '',
+  city: fields.city || '',
+  nationality: fields.nationality || '',
+  language: fields.language || '',
+  education: fields.education || '',
+  status: fields.status || '',
+  background: fields.background || '',
+  softwareExperience: fields.softwareExperience || '',
+
+  program: fields.course || '',
+  mode: fields.mode || '',
+  cohort: fields.cohort || '',
+  schedule: fields.schedule || '',
+  goals: fields.goals || '',
+
+  financialSupport: fields.financialSupport || '',
+  scholarshipReason: fields.scholarshipReason || '',
+  financialCircumstances: fields.financialCircumstances || '',
+  scholarshipValue: fields.scholarshipValue || '',
+
+  documentStatus: fields.documentStatus || '',
+  documentIssue: fields.documentIssue || '',
+
+  documents: documents
+};
+
+    await fetch(submitUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    submitBtn.textContent = 'Application Submitted';
+
+    form.style.display = 'none';
+
+const confirmation = document.createElement('div');
+
+confirmation.style.maxWidth = '760px';
+confirmation.style.margin = '40px auto';
+confirmation.style.padding = '45px 35px';
+confirmation.style.background = '#ffffff';
+confirmation.style.border = '1px solid #dbe5ee';
+confirmation.style.borderRadius = '18px';
+confirmation.style.boxShadow = '0 10px 35px rgba(0,0,0,0.08)';
+confirmation.style.textAlign = 'center';
+
+confirmation.innerHTML = `
+  <img
+    src="assets/sifa-logo.png"
+    alt="SIFA Global Institute Logo"
+    style="
+      display:block;
+      width:110px;
+      height:110px;
+      object-fit:contain;
+      margin:0 auto 20px auto;
+    "
+  >
+
+  <div style="
+    font-size:52px;
+    line-height:1;
+    margin-bottom:18px;
+    color:#071a33;
+    font-weight:700;
+  ">✓</div>
+
+  <h2 style="
+    color:#071a33;
+    margin-bottom:14px;
+    font-size:34px;
+  ">
+    Application Submitted Successfully
+  </h2>
+
+  <p style="
+    color:#526579;
+    font-size:16px;
+    line-height:1.7;
+    margin-bottom:10px;
+  ">
+    Thank you for applying to SIFA Global Institute.
+  </p>
+
+  <p style="
+    color:#526579;
+    font-size:16px;
+    line-height:1.7;
+  ">
+    Your application and supporting documents have been received.
+SIFA will review your information and contact you regarding the next steps.
+</p>
+
+<div style="
+    margin:25px auto 10px auto;
+    padding:16px 22px;
+    background:#f3f7fb;
+    border:1px solid #dbe5ee;
+    border-radius:12px;
+    max-width:420px;
+  ">
+    <div style="
+      color:#526579;
+      font-size:13px;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.5px;
+      margin-bottom:6px;
+    ">
+      Application Reference
+    </div>
+
+    <div style="
+      color:#071a33;
+      font-size:20px;
+      font-weight:800;
+      letter-spacing:1px;
+    ">
+      ${applicationId}
+    </div>
+</div>
+`;
+
+form.parentElement.insertBefore(confirmation, form);
+  } catch (error) {
+    console.error(error);
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit Application';
+
+    alert(
+      'We could not submit your application. Please try again.'
+    );
+  }
+});
   const params = new URLSearchParams(window.location.search);
   const requestedProgram = params.get('program');
   if(requestedProgram) {
@@ -561,6 +817,8 @@
   showStep(1);
 })();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="student-application.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

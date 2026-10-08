@@ -17,14 +17,4 @@ const year=document.querySelector('[data-year]');
 if(year) year.textContent=new Date().getFullYear();
 
 const apply=document.querySelector('#applicationForm');
-if(apply){
-  apply.addEventListener('submit',e=>{
-    e.preventDefault();
-    const data=new FormData(apply);
-    const subject=encodeURIComponent('SIFA Course Application — '+(data.get('course')||''));
-    const body=encodeURIComponent(
-      `Name: ${data.get('name')}\nEmail: ${data.get('email')}\nCountry: ${data.get('country')}\nCourse: ${data.get('course')}\nExperience: ${data.get('experience')}\nGoals: ${data.get('goals')}`
-    );
-    window.location.href=`mailto:info.sifaglobal@yahoo.com?subject=${subject}&body=${body}`;
-  });
-}
+

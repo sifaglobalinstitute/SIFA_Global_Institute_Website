@@ -1,0 +1,26 @@
+SIFA Global Institute — Final Student Portal Setup (V2)
+
+IMPORTANT: The error “Could not find the function public.withdraw_my_application...” means the website is calling a Supabase RPC that has not been created (or PostgREST has not refreshed its schema cache).
+
+1. Keep your existing website backup.
+2. Open Supabase → SQL Editor → New query.
+3. Open SIFA-FINAL-STUDENT-PORTAL-SETUP.sql from this folder.
+4. Copy ALL of the SQL into the new query.
+5. Click Run once.
+6. Confirm the result says Success. No rows returned.
+7. Refresh the Student Portal with Ctrl+F5.
+
+The SQL:
+- closes admissions in the database;
+- creates withdraw_my_application(uuid);
+- creates delete_my_account();
+- grants the RPCs only to authenticated users;
+- refreshes the PostgREST schema cache.
+
+Student Portal security UX:
+- Withdraw Application uses a professional confirmation dialog.
+- Delete Account uses a confirmation dialog and requires typing DELETE.
+- Change Password opens an inline secure password form instead of sending the student to the top of the page.
+- Forgot Password still uses Supabase email recovery; clicking the recovery link opens the same secure password form.
+
+Never put a Supabase secret/service_role key in browser files.

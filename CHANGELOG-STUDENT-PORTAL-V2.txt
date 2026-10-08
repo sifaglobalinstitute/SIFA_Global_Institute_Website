@@ -1,0 +1,19 @@
+SIFA Global Institute — Student Portal Professional v2
+
+Changes in this version:
+1. Student dashboard is explicitly hidden before authentication.
+2. Logged-out users see only sign-in/create-account controls.
+3. Logged-in dashboard remains connected to Supabase and shows account/application information.
+4. My Account labels were shortened and clarified; required vs optional profile fields are explicit.
+5. QuickBooks button changes to “View My Application” when an active QuickBooks application already exists.
+6. Application submission now stays on the application page and displays a professional confirmation card with the application reference and a Student Portal button.
+7. Student Portal can show a confirmation message after returning from a successful application.
+8. Admissions banner now correctly says QuickBooks applications are open; it becomes a closed message automatically when applicationsOpen is changed to false in supabase-config.js.
+9. Founder navigation markup was corrected so SIFA AI and Student Portal remain on one line.
+10. Navigation links use nowrap and tighter spacing to reduce unwanted wrapping on desktop.
+11. Existing Supabase authentication, RLS, private documents, application records and QuickBooks-only admissions logic are preserved.
+12. No secret/service-role key is added to the browser code.
+
+Current admissions setting:
+- Applications open: TRUE
+- Open program: QuickBooks Practical Training only

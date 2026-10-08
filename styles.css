@@ -14,6 +14,7 @@
   --max:1180px;
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth}
 body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink);background:#fff;line-height:1.65}
 a{color:inherit;text-decoration:none}
@@ -27,8 +28,8 @@ header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.96);backdro
 .brand img{width:54px;height:54px;object-fit:contain}
 .brand span{font-size:1rem;line-height:1.15}
 .brand small{display:block;font-size:.68rem;color:var(--muted);font-weight:600;margin-top:3px}
-nav ul{display:flex;list-style:none;margin:0;padding:0;gap:22px;align-items:center}
-nav a{font-weight:700;font-size:.92rem;color:#27405b}
+nav ul{display:flex;list-style:none;margin:0;padding:0;gap:18px;align-items:center;flex-wrap:nowrap}
+nav a{font-weight:700;font-size:.9rem;color:#27405b;white-space:nowrap}
 nav a:hover,nav a.active{color:var(--blue)}
 .nav-cta{background:var(--green);color:#062a1a!important;padding:11px 17px;border-radius:999px}
 .menu{display:none;border:0;background:none;font-size:1.7rem}
@@ -754,4 +755,444 @@ footer a:hover{color:#9af45f}
     letter-spacing: 0.8px;
     color: #62c78a;
     text-transform: uppercase;
+
+
+.site-header,
+header.site-header,
+body > header {
+    background: #ffffff;
 }
+
+.site-header .container,
+header.site-header .container,
+header > .container.nav {
+    min-height: 78px;
+    display: flex;
+    align-items: center;
+}
+
+.site-header .nav-container,
+header.site-header .nav-container,
+header > .container.nav {
+    width: 100%;
+}
+
+.site-header .brand,
+header.site-header .brand,
+header > .container.nav > .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.site-header .brand img,
+header.site-header .brand img,
+header > .container.nav > .brand img {
+    width: 78px;
+    height: auto;
+    display: block;
+}
+
+.site-header .brand-text,
+header.site-header .brand-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1.15;
+}
+
+.site-header .brand-text strong,
+header.site-header .brand-text strong {
+    color: #0b2d55;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.site-header .brand-text span,
+header.site-header .brand-text span {
+    color: #64748b;
+    font-size: 13px;
+    margin-top: 3px;
+}
+
+header > .container.nav > .brand > span {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1.15;
+    color: #0b2d55;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+header > .container.nav > .brand > span small {
+    display: block;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 3px;
+}
+
+.site-header .main-nav,
+header.site-header .main-nav,
+header > .container.nav > nav {
+    margin-left: auto;
+}
+
+.site-header .main-nav a,
+header.site-header .main-nav a,
+header > .container.nav > nav a {
+    white-space: nowrap;
+}
+
+.site-header .nav-cta,
+header.site-header .nav-cta,
+header > .container.nav > nav .nav-cta {
+    background: #4bc82f;
+    color: #071a33;
+    font-weight: 800;
+    border-radius: 30px;
+    padding: 13px 22px;
+    text-decoration: none;
+}
+
+.site-header .nav-cta:hover,
+header.site-header .nav-cta:hover,
+header > .container.nav > nav .nav-cta:hover {
+    background: #3fb326;
+    color: #071a33;
+}
+
+/* Keep the mobile header clean and usable */
+@media (max-width: 700px) {
+    .site-header .brand img,
+    header.site-header .brand img,
+    header > .container.nav > .brand img {
+        width: 68px;
+    }
+
+    header > .container.nav > .brand > span,
+    .site-header .brand-text strong,
+    header.site-header .brand-text strong {
+        font-size: 16px;
+    }
+
+    header > .container.nav > .brand > span small,
+    .site-header .brand-text span,
+    header.site-header .brand-text span {
+        font-size: 11px;
+    }
+}/* =========================================================
+   CONTACT HEADER ALIGNMENT
+   Match Contact page to the Home header
+   ========================================================= */
+
+.topbar {
+    background: #071a33;
+    color: rgba(255, 255, 255, 0.88);
+    padding: 9px 0;
+    font-size: 14px;
+}
+
+.topbar .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.topbar .container span:last-child {
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+header {
+    background: #ffffff;
+}
+
+header .container.nav {
+    min-height: 78px;
+    display: flex;
+    align-items: center;
+}
+
+header .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+}
+
+header .brand img {
+    width: 78px;
+    height: auto;
+    display: block;
+}
+
+header .brand > span {
+    color: #0b2d55;
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1.15;
+}
+
+header .brand > span small {
+    display: block;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 3px;
+}
+
+header nav {
+    margin-left: auto;
+}
+
+header nav ul {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+header nav a {
+    white-space: nowrap;
+}
+
+header nav a.nav-cta {
+    background: #4bc82f;
+    color: #071a33;
+    padding: 13px 22px;
+    border-radius: 30px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+header nav a.nav-cta:hover {
+    background: #3fb326;
+    color: #071a33;
+}
+
+@media (max-width: 700px) {
+    .topbar .container {
+        flex-direction: column;
+        justify-content: center;
+        gap: 4px;
+        text-align: center;
+    }
+
+    header .brand img {
+        width: 68px;
+    }
+
+    header .brand > span {
+        font-size: 16px;
+    }
+
+    header .brand > span small {
+        font-size: 11px;
+    }
+
+.top-bar > .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    width: 100%;
+}
+
+.top-bar > .container a {
+    color: #62c78a;
+    text-decoration: none;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.main-nav .nav-apply {
+    margin-left: 6px;
+    padding: 13px 22px;
+    border-radius: 30px;
+    background: #4bc82f;
+    color: #071a33;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.main-nav .nav-apply:hover {
+    background: #3fb326;
+    color: #071a33;
+}/* SIFA GLOBAL HEADER — FINAL STANDARD */
+.site-header {
+    background: #ffffff;
+}
+
+.site-header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.site-header .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+}
+
+.site-header .brand-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.site-header .brand-text strong {
+    display: block;
+    font-size: 20px;
+    line-height: 1.2;
+}
+
+.site-header .brand-text span {
+    display: block;
+    margin-top: 5px;
+    font-size: 13px;
+    line-height: 1.2;
+    font-weight: 600;
+    color: #62748a;
+}
+
+.top-bar .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.top-bar a {
+    color: #62c78a;
+    text-decoration: none;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 22px;
+    flex-wrap: wrap;
+}
+
+.main-nav a {
+    white-space: nowrap;
+}
+
+.main-nav .nav-apply {
+    margin-left: 6px;
+    padding: 13px 22px;
+    border-radius: 30px;
+    background: #4bcf2f;
+    color: #071a33;
+    font-weight: 800;
+}
+
+@media (max-width: 900px) {
+    .site-header .container {
+        gap: 18px;
+    }
+
+    .main-nav {
+        gap: 14px;
+    }
+}
+
+@media (max-width: 700px) {
+    .top-bar .container {
+        flex-direction: column;
+        justify-content: center;
+        gap: 4px;
+        text-align: center;
+    }
+
+    .site-header .container {
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .main-nav {
+        justify-content: center;
+    }
+}.home-eyebrow {
+    color: #ffffff !important;
+}/* Home hero eyebrow visibility fix */
+.hero .eyebrow,
+.hero-eyebrow,
+.home-eyebrow {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}.home-hero-eyebrow {
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+.sifa-social-links{display:flex;align-items:center;gap:9px;margin-top:16px}
+.sifa-social-links a{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;margin:0!important;border:1px solid rgba(255,255,255,.22);border-radius:50%;color:#fff!important;text-decoration:none!important;transition:opacity .2s ease,transform .2s ease}
+.sifa-social-links a:hover{color:#9af45f!important;transform:translateY(-1px);opacity:1}
+.sifa-social-links svg{width:15px;height:15px;display:block}
+
+/* SIFA SOCIAL MEDIA - PROFESSIONAL COLORED HORIZONTAL ICONS */
+footer .sifa-social-links, .site-footer .sifa-social-links {
+    display:flex !important;
+    flex-direction:row !important;
+    flex-wrap:nowrap !important;
+    align-items:center !important;
+    justify-content:flex-start !important;
+    gap:12px !important;
+    width:max-content !important;
+    height:40px !important;
+    margin:16px 0 0 !important;
+    padding:0 !important;
+    line-height:1 !important;
+}
+footer .sifa-social-links a, .site-footer .sifa-social-links a {
+    display:inline-flex !important;
+    flex:0 0 38px !important;
+    width:38px !important;
+    min-width:38px !important;
+    max-width:38px !important;
+    height:38px !important;
+    min-height:38px !important;
+    max-height:38px !important;
+    align-items:center !important;
+    justify-content:center !important;
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+    border-radius:50% !important;
+    background:transparent !important;
+    box-sizing:border-box !important;
+    line-height:1 !important;
+    text-decoration:none !important;
+}
+footer .sifa-social-links a svg, .site-footer .sifa-social-links a svg {
+    display:block !important;
+    width:21px !important;
+    min-width:21px !important;
+    max-width:21px !important;
+    height:21px !important;
+    min-height:21px !important;
+    max-height:21px !important;
+    flex:0 0 21px !important;
+    margin:0 !important;
+}
+.sifa-social-links a:nth-child(1){color:#E4405F !important}
+.sifa-social-links a:nth-child(2){color:#1877F2 !important}
+.sifa-social-links a:nth-child(3){color:#0A66C2 !important}
+.sifa-social-links a:nth-child(4){color:#FF0000 !important}
+.sifa-social-links a:nth-child(5){color:#00F2EA !important}
+.sifa-social-links a:nth-child(6){color:#FFFFFF !important}
+.sifa-social-links a:hover{transform:translateY(-2px) scale(1.08) !important;opacity:.9 !important}
+
+/* Final Student Portal security UX */
+.field-required,.field-optional{display:inline-block;margin-left:7px;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;vertical-align:middle}.field-required{background:#eaf7ef;color:#19733f}.field-optional{background:#eef2f6;color:#607184}.password-panel{margin-top:16px;padding:20px;border:1px solid #cfe1ef;border-radius:14px;background:#f8fbfd}.password-panel-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:14px}.password-panel h4{margin:0 0 5px;color:#071a33;font-size:18px}.password-panel p{margin:0;color:#62748a;font-size:13px}.danger-zone{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;padding:18px 0 0;margin-top:18px;border-top:1px solid #f0d7d7}.danger-zone strong{color:#8a2d2d}.danger-zone p{margin:5px 0 0;color:#62748a;font-size:13px;max-width:560px}.danger-btn{background:#fff5f5!important;border:1px solid #e8bcbc!important;color:#8a2d2d!important}.danger-btn:hover{background:#ffe9e9!important}.action-modal{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(7,26,51,.58);backdrop-filter:blur(3px)}.action-modal[hidden]{display:none}.action-modal-card{position:relative;width:min(520px,100%);padding:30px;border-radius:18px;background:#fff;box-shadow:0 24px 70px rgba(7,26,51,.28)}.action-modal-card h3{margin:12px 0 10px;color:#071a33;font-size:25px}.action-modal-card p{margin:0;color:#62748a;line-height:1.7}.modal-close{border:0;background:#eef2f6;color:#4d5e70;width:34px;height:34px;border-radius:50%;font-size:22px;line-height:1;cursor:pointer}.action-modal-card>.modal-close{position:absolute;right:20px;top:20px}.modal-input-wrap{margin-top:18px}.modal-input-wrap label{display:block;font-weight:700;color:#25364a}.modal-input-wrap input{display:block;width:100%;box-sizing:border-box;margin-top:7px;padding:13px 14px;border:1px solid #d7e1ea;border-radius:10px;font:inherit}.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px;flex-wrap:wrap}@media(max-width:560px){.action-modal-card{padding:24px}.modal-actions .btn{width:100%}}
