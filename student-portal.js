@@ -265,7 +265,7 @@ if (error) {
     password,
     options: {
       data: { full_name: name },
-      emailRedirectTo: 'https://sifaglobalinstitutewebsite.vercel.app/student-portal.html?confirmed=true'
+      emailRedirectTo: `${location.origin}/student-portal.html?confirmed=true`
     }
   });
 
