@@ -2,7 +2,7 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sifa-global-institute-website.pages.dev/sitemap.xml
+Sitemap: https://sifaglobalinstitute.pages.dev/sitemap.xml
 
 User-agent: OAI-SearchBot
 Allow: /

@@ -1,6 +1,8 @@
+
 const allowedOrigins = [
+  "https://sifaglobalinstitute.pages.dev",
+  "https://sifa-global-institute-website.pages.dev",
   "https://sifaglobalinstitute.github.io",
-  "https://sifaglobalinstitutewebsite.vercel.app",
   "https://sifaglobalinstitute.com",
   "http://127.0.0.1:5500",
   "http://localhost:5500",
@@ -29,7 +31,9 @@ SIFA PROFILE
 - Official email: sifaglobalinstitute12@gmail.com.
 - Türkiye contact: +90 537 274 6944.
 - Rwanda contacts shown on the website: +250 782 817 643 and +250 796 965 639. WhatsApp contact link shown for SIFA is https://wa.me/250782817643.
-- Current public website: https://sifaglobalinstitutewebsite.vercel.app/.
+
+- Current public website: https://sifaglobalinstitute.pages.dev/.
+
 - Website/domain also associated with SIFA: https://sifaglobalinstitute.com. Do not imply that a domain or service is operational beyond what is confirmed.
 - Website pages include Home, About, Founder, Courses, Learning, Certification, Certificate Verification, Resources, SIFA AI, Fees & Scholarships, Student Portal, Apply, Contact, and Privacy Policy.
 
