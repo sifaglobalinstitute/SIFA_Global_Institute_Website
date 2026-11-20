@@ -1,6 +1,8 @@
+
 User-agent: *
 Allow: /
 
-Sitemap: https://sifaglobalinstitutewebsite.vercel.app/sitemap.xml
+Sitemap: https://sifa-global-institute-website.pages.dev/sitemap.xml
+
 User-agent: OAI-SearchBot
 Allow: /
