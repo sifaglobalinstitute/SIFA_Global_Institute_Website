@@ -8,7 +8,18 @@
 <link rel="stylesheet" href="styles.css">
 <style>
 [hidden]{display:none!important}
-.portal-shell{max-width:1120px;margin:0 auto}.portal-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}.portal-card{background:#fff;border:1px solid #dfe7ef;border-radius:18px;padding:28px;box-shadow:0 12px 34px rgba(7,26,51,.07)}.portal-card h2{margin-top:0}.portal-card p{color:#62748a}.portal-form{display:grid;gap:14px}.portal-form label{font-weight:700;color:#25364a}.portal-form input,.portal-form select{width:100%;box-sizing:border-box;margin-top:7px;padding:13px 14px;border:1px solid #d7e1ea;border-radius:10px;font:inherit}.portal-form input:focus,.portal-form select:focus{outline:2px solid rgba(47,168,102,.18);border-color:#2fa866}.portal-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:4px}.portal-link{border:0;background:none;color:#19733f;font-weight:700;cursor:pointer;padding:6px}.portal-message{margin-bottom:18px;padding:14px 16px;border-radius:12px;border:1px solid #d7e1ea;background:#f7fafc;color:#42566b}.portal-message.error{background:#fff5f5;border-color:#efcaca;color:#8a2d2d}.portal-message.success{background:#f1faf5;border-color:#bfe2cc;color:#1d6a3d}.portal-message.warning{background:#fff9ed;border-color:#ecd59e;color:#70551a}.portal-dashboard{display:grid;gap:22px}.student-summary{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:28px;border-radius:18px;background:#071a33;color:#fff;box-shadow:0 16px 36px rgba(7,26,51,.12)}.student-summary h2{color:#fff;margin:0 0 5px;font-size:clamp(28px,4vw,42px)}.student-summary p{margin:0;color:rgba(255,255,255,.76)}.status-pill{display:inline-flex;padding:8px 13px;border-radius:999px;background:#dff5e7;color:#19733f;font-weight:800;font-size:13px}.summary-meta{text-align:right}.summary-meta small{display:block;color:rgba(255,255,255,.62);margin-top:8px}.dashboard-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:22px}.account-card,.application-card,.quickbooks-card,.dashboard-action{background:#fff;border:1px solid #dfe7ef;border-radius:18px;padding:24px;box-shadow:0 10px 28px rgba(7,26,51,.05)}.account-card h3,.application-card h3,.quickbooks-card h3,.dashboard-action h3{margin:0 0 15px;color:#071a33}.account-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.account-item{padding:14px;background:#f7fafc;border:1px solid #e7edf2;border-radius:12px}.account-item span{display:block;font-size:12px;color:#6a7b8c;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}.account-item strong{display:block;color:#203247;word-break:break-word}.application-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.application-item{padding:14px;background:#f7fafc;border:1px solid #e7edf2;border-radius:12px}.application-item span{display:block;font-size:12px;color:#6a7b8c;font-weight:700;margin-bottom:5px}.application-item strong{color:#203247}.application-full{grid-column:1/-1}.quickbooks-card{background:linear-gradient(135deg,#f5fbf7,#ffffff);border-color:#cfe7d8}.quickbooks-card .course-badge{display:inline-flex;padding:6px 10px;border-radius:999px;background:#dff5e7;color:#19733f;font-size:12px;font-weight:800;margin-bottom:10px}.dashboard-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.dashboard-action{box-shadow:none}.dashboard-action p{font-size:14px;line-height:1.65}.dashboard-action .btn{margin-top:10px}.security-row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-top:16px;margin-top:16px;border-top:1px solid #e5ebf0}.empty-state{padding:20px;background:#f7fafc;border:1px dashed #ccd8e2;border-radius:14px;color:#62748a}.history-list{display:grid;gap:10px;margin-top:14px}.history-item{padding:14px;border:1px solid #e5ebf0;border-radius:12px;background:#fff}.history-item strong{color:#071a33}.setup-warning{opacity:.95}.hidden{display:none!important}@media(max-width:850px){.portal-grid,.dashboard-grid,.dashboard-actions{grid-template-columns:1fr}.account-grid,.application-grid{grid-template-columns:1fr}.application-full{grid-column:auto}.student-summary{align-items:flex-start;flex-direction:column}.summary-meta{text-align:left}}
+.portal-shell{max-width:1120px;margin:0 auto}.portal-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}.portal-card{background:#fff;border:1px solid #dfe7ef;border-radius:18px;padding:28px;box-shadow:0 12px 34px rgba(7,26,51,.07)}.portal-card h2{margin-top:0}.portal-card p{color:#62748a}.portal-form{display:grid;gap:14px}.portal-form label{font-weight:700;color:#25364a}.portal-form input,.portal-form select{width:100%;box-sizing:border-box;margin-top:7px;padding:13px 14px;border:1px solid #d7e1ea;border-radius:10px;font:inherit}.portal-form input:focus,.portal-form select:focus{outline:2px solid rgba(47,168,102,.18);border-color:#2fa866}.portal-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:4px}.portal-link{border:0;background:none;color:#19733f;font-weight:700;cursor:pointer;padding:6px}.portal-message{margin-bottom:18px;padding:14px 16px;border-radius:12px;border:1px solid #d7e1ea;background:#f7fafc;color:#42566b}.portal-message.error{background:#fff5f5;border-color:#efcaca;color:#8a2d2d}.portal-message.success{background:#f1faf5;border-color:#bfe2cc;color:#1d6a3d}.portal-message.warning{background:#fff9ed;border-color:#ecd59e;color:#70551a}.portal-dashboard{display:grid;gap:22px}.student-summary{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:28px;border-radius:18px;background:#071a33;color:#fff;box-shadow:0 16px 36px rgba(7,26,51,.12)}.student-summary h2{color:#fff;margin:0 0 5px;font-size:clamp(28px,4vw,42px)}.student-summary p{margin:0;color:rgba(255,255,255,.76)}.status-pill{display:inline-flex;padding:8px 13px;border-radius:999px;background:#dff5e7;color:#19733f;font-weight:800;font-size:13px}.summary-meta{text-align:right}.summary-meta small{display:block;color:rgba(255,255,255,.62);margin-top:8px}.dashboard-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:22px}.account-card,.application-card,.quickbooks-card,.dashboard-action{background:#fff;border:1px solid #dfe7ef;border-radius:18px;padding:24px;box-shadow:0 10px 28px rgba(7,26,51,.05)}.account-card h3,.application-card h3,.quickbooks-card h3,.dashboard-action h3{margin:0 0 15px;color:#071a33}.account-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.account-item{padding:14px;background:#f7fafc;border:1px solid #e7edf2;border-radius:12px}.account-item span{display:block;font-size:12px;color:#6a7b8c;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}.account-item strong{display:block;color:#203247;word-break:break-word}.application-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.application-item{padding:14px;background:#f7fafc;border:1px solid #e7edf2;border-radius:12px}.application-item span{display:block;font-size:12px;color:#6a7b8c;font-weight:700;margin-bottom:5px}.application-item strong{color:#203247}.application-full{grid-column:1/-1}.quickbooks-card{background:linear-gradient(135deg,#f5fbf7,#ffffff);border-color:#cfe7d8}.quickbooks-card .course-badge{display:inline-flex;padding:6px 10px;border-radius:999px;background:#dff5e7;color:#19733f;font-size:12px;font-weight:800;margin-bottom:10px}
+
+.dashboard-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.dashboard-action {
+  box-shadow: none;
+}
+.dashboard-action p{font-size:14px;line-height:1.65}.dashboard-action .btn{margin-top:10px}.security-row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-top:16px;margin-top:16px;border-top:1px solid #e5ebf0}.empty-state{padding:20px;background:#f7fafc;border:1px dashed #ccd8e2;border-radius:14px;color:#62748a}.history-list{display:grid;gap:10px;margin-top:14px}.history-item{padding:14px;border:1px solid #e5ebf0;border-radius:12px;background:#fff}.history-item strong{color:#071a33}.setup-warning{opacity:.95}.hidden{display:none!important}@media(max-width:850px){.portal-grid,.dashboard-grid,.dashboard-actions{grid-template-columns:1fr}.account-grid,.application-grid{grid-template-columns:1fr}.application-full{grid-column:auto}.student-summary{align-items:flex-start;flex-direction:column}.summary-meta{text-align:left}}
 .account-hint{display:block;margin-top:4px;font-size:11px;color:#6a7b8c}.profile-help{margin:0;color:#6a7b8c;font-size:13px}.field-required,.field-optional{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-left:5px}.field-required{color:#b24a2d}.field-optional{color:#6a7b8c}.dashboard-footer-actions{display:flex;justify-content:flex-end}.portal-intro{max-width:720px}.quickbooks-card h3{font-size:1.45rem}.application-card h3{font-size:1.45rem}@media(max-width:560px){.student-summary h2{font-size:30px}.summary-meta{width:100%}.dashboard-footer-actions{justify-content:stretch}.dashboard-footer-actions .btn{width:100%}}
 
 .danger-zone{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:18px;padding:16px;border:1px solid #f0cccc;background:#fff8f8;border-radius:12px}.danger-zone strong{color:#8a2d2d}.danger-zone p{margin:4px 0 0;font-size:13px;color:#7b5b5b}.danger-btn{background:#fff!important;color:#8a2d2d!important;border:1px solid #d9aaaa!important}.closed-badge{background:#eef1f4!important;color:#5f6f7e!important}.application-subsection{margin-top:20px;padding-top:20px;border-top:1px solid #e5ebf0}.application-subsection h4{margin:0 0 12px;color:#071a33}.application-actions{display:flex;justify-content:flex-end;margin-top:18px}
@@ -133,7 +144,16 @@
 <div><a class="btn btn-primary" href="student-learning.html" id="openMyClassroomBtn">Enter My Classroom <span aria-hidden="true">→</span></a></div>
 </section>
 
-<div class="dashboard-actions"><div class="dashboard-action"><h3>Courses</h3><p>See SIFA programs and current admission availability.</p><a class="btn btn-secondary" href="courses.html">Explore Courses</a></div><div class="dashboard-action"><h3>SIFA AI</h3><p>Get guidance on accounting, finance, Excel, software and professional skills.</p><a class="btn btn-secondary" href="ai-support.html">Ask SIFA AI</a></div><div class="dashboard-action"><h3>Need Help?</h3><p>Get help with applications, courses, accounts or learning.</p><a class="btn btn-secondary" href="contact.html">Contact SIFA</a></div></div>
+<div class="dashboard-actions"><div class="dashboard-action">
+  <h3>Fees &amp; Payments</h3>
+  <p>
+    View your invoices, check payment status,
+    and submit receipts for SIFA staff verification.
+  </p>
+  <a class="btn btn-secondary" href="student-payments.html">
+    View My Payments
+  </a>
+</div><div class="dashboard-action"><h3>Courses</h3><p>See SIFA programs and current admission availability.</p><a class="btn btn-secondary" href="courses.html">Explore Courses</a></div><div class="dashboard-action"><h3>SIFA AI</h3><p>Get guidance on accounting, finance, Excel, software and professional skills.</p><a class="btn btn-secondary" href="ai-support.html">Ask SIFA AI</a></div><div class="dashboard-action"><h3>Need Help?</h3><p>Get help with applications, courses, accounts or learning.</p><a class="btn btn-secondary" href="contact.html">Contact SIFA</a></div></div>
 <div class="dashboard-footer-actions"><button id="logoutBtn" class="btn btn-secondary">Sign Out</button></div></div>
 <div id="actionModal" class="action-modal" hidden role="dialog" aria-modal="true" aria-labelledby="actionModalTitle">
   <div class="action-modal-card">
@@ -210,16 +230,15 @@
   $('sifaOpenAccount')?.addEventListener('click', showAccount);
   $('sifaCloseApplication')?.addEventListener('click', showHome);
   $('sifaCloseAccount')?.addEventListener('click', showHome);
-  $('sifaOpenClassroom')?.addEventListener('click', () => {
-    const state = $('sifaClassroomAccessState');
-    if (state) {
-      state.hidden = false;
-      state.className = 'sifa-state';
-      state.textContent = 'Checking your signed-in account and course access…';
-    }
-    // The classroom page and server-side API remain responsible for access authorization.
-    window.location.href = 'student-learning.html';
-  });
+
+$('sifaOpenClassroom')?.addEventListener('click', () => {
+  window.open(
+    'student-learning.html',
+    '_blank',
+    'noopener,noreferrer'
+  );
+});
+
 })();
 </script>
 
