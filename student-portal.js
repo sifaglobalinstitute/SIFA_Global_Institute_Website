@@ -157,6 +157,53 @@ const target = activePanel === loginPanel && loginMessage
     renderProfile(user, profile); renderApplication(latestApplication(applications), applications || []);
   }
 
+  async function checkStaffRole() {
+    try {
+      const { data, error } = await supabase.auth.getSession();
+
+      if (error || !data.session?.access_token) {
+        return null;
+      }
+
+      const response = await fetch(
+        `${config.url}/functions/v1/sifa-admin-api`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${data.session.access_token}`,
+            'apikey': config.anonKey
+          },
+          body: JSON.stringify({ action: 'whoami' })
+        }
+      );
+
+      // Ordinary students do not have a staff role.
+      if (response.status === 403) {
+        return null;
+      }
+
+      if (!response.ok) {
+        console.warn('SIFA staff-role check is unavailable.');
+        return null;
+      }
+
+      const result = await response.json();
+
+      if (
+        result.active === true &&
+        ['administrator', 'coordinator', 'finance_reviewer'].includes(result.role)
+      ) {
+        return result.role;
+      }
+
+      return null;
+    } catch (error) {
+      console.warn('SIFA staff-role check failed:', error);
+      return null;
+    }
+  }
+
   async function loadUser(user, noticeText) {
     if (!user) return showLogin();
     currentUser=user;
@@ -169,7 +216,34 @@ const target = activePanel === loginPanel && loginMessage
     if(publicAppError) console.warn('Public application load skipped (backend migration may not yet be deployed):',publicAppError.message);
     const mappedPublic=(publicApplications||[]).map(a=>({...a,source:'public',created_at:a.submitted_at,payload:{...(a.payload||{}),course:a.program}}));
     const merged=[...(applications||[]),...mappedPublic].sort((a,b)=>new Date(b.created_at||b.submitted_at||0)-new Date(a.created_at||a.submitted_at||0));
-    showDashboard(user,profile||{},merged);
+    
+    showDashboard(user, profile || {}, merged);
+
+    // Remove any staff link left from a previous account.
+    document.getElementById('sifaStaffConsoleLink')?.remove();
+
+    // Ask the protected backend whether this user is SIFA staff.
+    const staffRole = await checkStaffRole();
+
+    if (staffRole && currentUser?.id === user.id) {
+      const staffLink = document.createElement('a');
+
+      staffLink.id = 'sifaStaffConsoleLink';
+      staffLink.href = 'sifa-admin.html';
+      staffLink.textContent = 'Open SIFA Staff Console';
+
+      staffLink.style.display = 'inline-block';
+      staffLink.style.margin = '16px 0';
+      staffLink.style.padding = '12px 20px';
+      staffLink.style.backgroundColor = '#071a33';
+      staffLink.style.color = '#ffffff';
+      staffLink.style.borderRadius = '8px';
+      staffLink.style.textDecoration = 'none';
+      staffLink.style.fontWeight = 'bold';
+
+      dashboard.prepend(staffLink);
+    }
+
     if(noticeText) showMessage(noticeText,'success');
     const params = new URLSearchParams(location.search);
     if(params.get('submitted')==='1') {
