@@ -261,6 +261,30 @@ height: 430px;
   color: #ffffff;
   background: #116b41;
 }
+
+/* Official SIFA YouTube feature — scoped to homepage */
+/* Compact SIFA introduction: video and information side by side. */
+.sifa-video-section{padding:58px 0 64px;background:linear-gradient(150deg,#eef6fa 0%,#f9fcfe 55%,#eef8f2 100%)}
+.sifa-video-layout{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:36px;align-items:center;max-width:1100px;margin:auto}
+.sifa-video-frame{width:100%;overflow:hidden;border-radius:17px;background:#071a33;border:4px solid #fff;box-shadow:0 15px 38px rgba(6,42,82,.14)}
+.sifa-video-ratio{aspect-ratio:16/9;position:relative;width:100%}
+.sifa-video-ratio iframe{position:absolute;inset:0;width:100%;height:100%;display:block;border:0}
+.sifa-video-copy{min-width:0}
+.sifa-video-kicker{display:inline-block;color:#167649;font-size:.76rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;margin-bottom:9px}
+.sifa-video-copy h2{font-size:clamp(1.8rem,3vw,2.65rem);line-height:1.15;color:#062a52;margin:3px 0 16px}
+.sifa-video-copy p{color:#51697e;line-height:1.75;margin:0 0 17px;font-size:1rem}
+.sifa-video-highlights{list-style:none;margin:0 0 22px;padding:0;display:grid;gap:10px}
+.sifa-video-highlights li{display:flex;gap:10px;align-items:flex-start;font-size:.95rem;color:#243e54;font-weight:650}
+.sifa-video-highlights li:before{content:'✓';color:#16834c;font-weight:900;flex:none}
+.sifa-video-actions{display:flex;gap:10px;flex-wrap:wrap}
+.sifa-video-youtube,.sifa-video-explore{display:inline-flex;align-items:center;justify-content:center;padding:11px 16px;border-radius:10px;font-weight:800;text-decoration:none;font-size:.93rem}
+.sifa-video-youtube{background:#0a345a;color:#fff}
+.sifa-video-youtube:hover{background:#126b57;color:#fff}
+.sifa-video-explore{background:#fff;border:1px solid #c6d9e4;color:#0a345a}
+.sifa-video-explore:hover{background:#e8f5ed;color:#0a345a}
+.sifa-video-youtube:focus-visible,.sifa-video-explore:focus-visible{outline:3px solid #16834c;outline-offset:3px}
+@media(max-width:800px){.sifa-video-layout{grid-template-columns:1fr;gap:24px;max-width:620px}.sifa-video-section{padding:44px 0 52px}.sifa-video-copy{order:-1}.sifa-video-copy h2{font-size:clamp(1.8rem,6vw,2.35rem)}}
+@media(max-width:480px){.sifa-video-frame{border-width:3px;border-radius:12px}.sifa-video-actions a{flex:1 1 auto}.sifa-video-section{padding:34px 0 44px}}
 </style>
 </head>
 <body>
@@ -600,6 +624,32 @@ height: 430px;
 </div>
 </div>
 </div>
+</section>
+
+<section class="sifa-video-section" id="sifa-video" aria-labelledby="sifa-video-title">
+  <div class="container">
+    <div class="sifa-video-layout">
+      <div class="sifa-video-frame">
+        <div class="sifa-video-ratio">
+          <iframe src="https://www.youtube-nocookie.com/embed/5Vdn_AVGRA4" title="Welcome to SIFA Global Institute — Official introduction video" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div class="sifa-video-copy">
+        <span class="sifa-video-kicker">Official SIFA introduction</span>
+        <h2 id="sifa-video-title">Get to know SIFA Global Institute</h2>
+        <p>Discover our vision for practical learning in accounting technology, financial systems, and modern digital tools.</p>
+        <ul class="sifa-video-highlights">
+          <li>Learn concepts through real-world examples</li>
+          <li>Practice with professional software and tools</li>
+          <li>Apply skills with confidence</li>
+        </ul>
+        <div class="sifa-video-actions">
+          <a class="sifa-video-youtube" href="https://www.youtube.com/watch?v=5Vdn_AVGRA4" target="_blank" rel="noopener noreferrer">▶ Watch on YouTube</a>
+          <a class="sifa-video-explore" href="about.html">Explore SIFA</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 </main>
 <footer>
