@@ -357,64 +357,69 @@
   }
 </style>
 
-<div class="container pay-shell fee-form-wrap" id="my-payments">
-<div id="payMessage" class="pay-message" role="status">Private payment tools load after account verification. All fee and scholarship information above is available without signing in.</div><section id="invoiceCard" class="pay-card" hidden><h2>Your invoices</h2><p>These invoices are private to your account.</p><div id="invoiceList" class="pay-list"></div></section><section id="receiptCard" class="pay-card" hidden><h2>Submit a payment receipt</h2><p class="muted">Submit only a receipt for a payment you actually made. Your receipt is sent for manual review and does not automatically activate course access.</p><form id="receiptForm" class="pay-form"><label>Invoice<select name="invoice_id" id="invoiceSelect" required></select></label><label>Payment method<select name="payment_method" required><option value="">Choose a method</option><option>Rwanda Mobile Money</option><option>Ziraat Bank Transfer</option></select></label><label>Amount paid<input name="claimed_amount" type="number" min="0.01" step="0.01" required></label><label>Currency<select name="claimed_currency" required><option value="">Choose currency</option><option>RWF</option><option>TRY</option></select></label><label>Transaction reference (if available)<input name="transaction_reference" maxlength="160"></label><label>Receipt file (PDF, JPG or PNG; max 5 MB)<input name="receipt" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required></label><button id="receiptSubmit" class="btn btn-primary" type="submit">Submit receipt for review</button></form><p class="muted">Never send your bank password, PIN, card number or one-time password.</p></section></div>
-
+<section class="fee-section" id="my-payments"><div class="container"><div class="fee-notice"><h2>Looking for your personal invoices?</h2><p>Invoices, balances, and payment receipts are private to each student account. Sign in through the Student Portal to view your records.</p><div class="fee-actions"><a class="fee-btn fee-btn-primary" href="my-payments.html">Open My Fees &amp; Payments</a><a class="fee-btn" href="student-portal.html">Student Portal</a></div></div></div></section>
 </main>
 
-<footer class="site-footer">
+<footer>
 <div class="container footer-grid">
-  <div>
-    <img alt="SIFA Global Institute Logo" class="footer-logo" src="assets/sifa-logo.webp"/>
-    <h3>SIFA Global Institute</h3>
-    <p>Software Institute for Financial Accountants. Practical education in accounting technology, financial systems and digital professional tools.</p>
-  </div>
-  <div>
-    <h3>Explore</h3>
-    <a href="about.html">About SIFA</a>
-    <a href="courses.html">Courses</a>
-    <a href="apply.html">Applications</a>
-    <a href="learning.html">Learning</a>
-  </div>
-  <div>
-    <h3>Fees &amp; credentials</h3>
-    <a href="student-payments.html">Fees, Payments &amp; Scholarships</a>
-    <a href="certifications.html">Certification</a>
-    <a href="verify.html">Verify a Certificate</a>
-    <a href="privacy.html">Privacy Policy</a>
-  </div>
-  <div>
-    <h3>Contact</h3>
-    <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=sifaglobalinstitute12@gmail.com">sifaglobalinstitute12@gmail.com</a>
-    <p>Türkiye:<br/>+90 537 274 6944</p>
-    <p>Rwanda:<br/>+250 782 817 643</p>
-    <a href="contact.html">Contact page</a>
-    <div class="sifa-social-links" aria-label="SIFA Global Institute social media" style="display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;gap:12px!important;width:max-content!important;height:40px!important;margin:16px 0 0!important;padding:0!important;line-height:1!important;">
-                <a  style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;box-sizing:border-box!important;line-height:1!important;color:#E4405F!important;text-decoration:none!important;"href="https://instagram.com/sifaglobalinstitute" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><svg style="display:block!important;width:21px!important;height:21px!important;min-width:21px!important;max-width:21px!important;min-height:21px!important;max-height:21px!important;flex:0 0 21px!important;margin:0!important;" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg></a>
-                <a  style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;box-sizing:border-box!important;line-height:1!important;color:#1877F2!important;text-decoration:none!important;"href="https://facebook.com/SIFAGlobalInstitute" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook"><svg style="display:block!important;width:21px!important;height:21px!important;min-width:21px!important;max-width:21px!important;min-height:21px!important;max-height:21px!important;flex:0 0 21px!important;margin:0!important;" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 8h3V4h-3c-3.3 0-5 2-5 5v3H6v4h3v4h4v-4h3.2l.8-4H13V9c0-.7.3-1 1-1z"/></svg></a>
-                <a  style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;box-sizing:border-box!important;line-height:1!important;color:#0A66C2!important;text-decoration:none!important;"href="https://linkedin.com/in/sifa-global-institute-24a360288" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn"><svg style="display:block!important;width:21px!important;height:21px!important;min-width:21px!important;max-width:21px!important;min-height:21px!important;max-height:21px!important;flex:0 0 21px!important;margin:0!important;" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="9" width="4" height="11" fill="currentColor"/><circle cx="6" cy="5.5" r="2" fill="currentColor"/><path fill="currentColor" d="M11 9h4v1.5c1-1.2 2.2-2 4.2-2 3.3 0 4.8 2.1 4.8 6v5.5h-4v-5c0-1.8-.6-3-2.1-3-1.5 0-2.1 1.1-2.1 3v5h-4V9z"/></svg></a>
-                <a  style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;box-sizing:border-box!important;line-height:1!important;color:#FF0000!important;text-decoration:none!important;"href="https://youtube.com/@sifaglobalinstitute" target="_blank" rel="noopener noreferrer" aria-label="YouTube" title="YouTube"><svg style="display:block!important;width:21px!important;height:21px!important;min-width:21px!important;max-width:21px!important;min-height:21px!important;max-height:21px!important;flex:0 0 21px!important;margin:0!important;" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6" width="19" height="12" rx="4" fill="currentColor"/><path d="M10 9l5 3-5 3V9z" fill="#041d39"/></svg></a>
-                <a  style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;box-sizing:border-box!important;line-height:1!important;color:#00F2EA!important;text-decoration:none!important;"href="https://vm.tiktok.com/ZS9Dqdpa9k61u-7HzPe/" target="_blank" rel="noopener noreferrer" aria-label="TikTok" title="TikTok"><svg style="display:block!important;width:21px!important;height:21px!important;min-width:21px!important;max-width:21px!important;min-height:21px!important;max-height:21px!important;flex:0 0 21px!important;margin:0!important;" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 4h3c.3 1.8 1.3 3.1 3 3.7v3.1c-1.1-.1-2.1-.4-3-1v5.5c0 3.5-2.5 5.7-5.6 5.7-3 0-5.4-2.2-5.4-5.2 0-3.2 2.7-5.4 6-5.1v3.2c-1.4-.3-2.7.5-2.7 1.9 0 1.1.9 2 2 2 1.3 0 2.7-.8 2.7-2.8V4z"/></svg></a>
-                <a  style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;box-sizing:border-box!important;line-height:1!important;color:#FFFFFF!important;text-decoration:none!important;"href="https://x.com/sifaglobal12" target="_blank" rel="noopener noreferrer" aria-label="X" title="X"><svg style="display:block!important;width:21px!important;height:21px!important;min-width:21px!important;max-width:21px!important;min-height:21px!important;max-height:21px!important;flex:0 0 21px!important;margin:0!important;" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 4h4.5l3.3 4.5L16.6 4H19l-5.1 5.8L20 20h-4.5l-3.8-5.1L7.2 20H4.8l5.5-6.3L5 4zm3.8 1.8H7.2l8.9 12.4h1.6L8.8 5.8z"/></svg></a>
-            
-                <a style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;box-sizing:border-box!important;line-height:1!important;color:#25D366!important;text-decoration:none!important;" href="https://wa.me/250782817643" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp — Rwanda contact" title="WhatsApp — Rwanda contact">
-                    <svg style="display:block!important;width:21px!important;height:21px!important;min-width:21px!important;max-width:21px!important;min-height:21px!important;max-height:21px!important;flex:0 0 21px!important;margin:0!important;" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.52 3.48A11.8 11.8 0 0 0 12.1 0C5.55 0 .22 5.33.22 11.88c0 2.1.55 4.15 1.6 5.96L.12 24l6.32-1.66a11.87 11.87 0 0 0 5.66 1.44h.01c6.55 0 11.88-5.33 11.88-11.88 0-3.17-1.23-6.15-3.47-8.42ZM12.1 21.75a9.86 9.86 0 0 1-5.02-1.37l-.36-.21-3.75.98 1-3.65-.24-.38a9.84 9.84 0 0 1-1.51-5.24c0-5.45 4.44-9.89 9.9-9.89a9.82 9.82 0 0 1 7 2.9 9.82 9.82 0 0 1 2.9 7c0 5.45-4.44 9.89-9.9 9.89Zm5.43-7.41c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.78.97-.95 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.47-.89-.79-1.49-1.77-1.67-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.08-.15-.68-1.64-.93-2.24-.24-.58-.49-.5-.68-.51h-.58c-.2 0-.52.07-.8.37-.28.3-1.05 1.02-1.05 2.49s1.08 2.89 1.23 3.09c.15.2 2.12 3.24 5.13 4.54.72.31 1.28.5 1.72.64.72.23 1.37.2 1.89.12.58-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35Z"/></svg>
-                </a>
-            </div>
-  </div>
+<div>
+<img alt="SIFA Global Institute logo" src="assets/sifa-logo.webp" style="width:100px;background:#fff;border-radius:50%;padding:4px"/>
+<h3>SIFA Global Institute</h3>
+<p>Practical education in accounting technology, financial systems and digital professional tools.</p>
 </div>
-<div class="footer-bottom">
-  <div class="container">
-    <p>© <span data-year></span> SIFA Global Institute. All rights reserved.</p>
-    <p>Software Institute for Financial Accountants</p>
-  </div>
+<div>
+<h3>Explore</h3>
+<p><a href="about.html">About SIFA</a></p>
+<p><a href="founder.html">Founder</a></p>
+<p><a href="courses.html">Courses</a></p>
+<p><a href="learning.html">Learning</a></p>
 </div>
+<div>
+<h3>Credentials</h3>
+<p><a href="certifications.html">SIFA Certifications</a></p>
+<p><a href="verify.html">Verify a Certificate</a></p>
+<p><a href="scholarships.html">Scholarships &amp; Fee Waivers</a><a href="privacy.html">Privacy Policy</a></p>
+</div>
+<div>
+<h3>Contact</h3>
+<p><a href="https://mail.google.com/mail/?view=cm&fs=1&to=sifaglobalinstitute12@gmail.com">sifaglobalinstitute12@gmail.com</a></p>
+<p>Türkiye: <a href="tel:+905372746944">+90 537 274 6944</a></p>
+<p>Rwanda: <a href="tel:+250782817643">+250 782 817 643</a></p><p>Rwanda:<br/>+250 796 965 639</p>
+<p><a href="contact.html">Contact SIFA</a></p>
+<div aria-label="SIFA Global Institute social media" class="sifa-social-links" style="display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;gap:12px!important;width:max-content!important;height:40px!important;margin:16px 0 0!important;padding:0!important;line-height:1!important;">
+<a aria-label="Instagram" href="https://instagram.com/sifaglobalinstitute" rel="noopener noreferrer" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;box-sizing:border-box!important;line-height:1!important;color:#E4405F!important;text-decoration:none!important;" target="_blank" title="Instagram">
+<svg aria-hidden="true" style="display:block!important;width:21px!important;height:21px!important;min-width:21px!important;max-width:21px!important;min-height:21px!important;max-height:21px!important;flex:0 0 21px!important;margin:0!important;" viewbox="0 0 24 24"><rect fill="none" height="18" rx="5" stroke="currentColor" stroke-width="2" width="18" x="3" y="3"></rect><circle cx="12" cy="12" fill="none" r="4" stroke="currentColor" stroke-width="2"></circle><circle cx="17.5" cy="6.5" fill="currentColor" r="1.2"></circle></svg>
+</a>
+<a aria-label="Facebook" href="https://facebook.com/SIFAGlobalInstitute" rel="noopener noreferrer" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;box-sizing:border-box!important;line-height:1!important;color:#1877F2!important;text-decoration:none!important;" target="_blank" title="Facebook">
+<svg aria-hidden="true" style="display:block!important;width:21px!important;height:21px!important;min-width:21px!important;max-width:21px!important;min-height:21px!important;max-height:21px!important;flex:0 0 21px!important;margin:0!important;" viewbox="0 0 24 24"><path d="M14 8h3V4h-3c-3.3 0-5 2-5 5v3H6v4h3v4h4v-4h3.2l.8-4H13V9c0-.7.3-1 1-1z" fill="currentColor"></path></svg>
+</a>
+<a aria-label="LinkedIn" href="https://linkedin.com/in/sifa-global-institute-24a360288" rel="noopener noreferrer" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;box-sizing:border-box!important;line-height:1!important;color:#0A66C2!important;text-decoration:none!important;" target="_blank" title="LinkedIn">
+<svg aria-hidden="true" style="display:block!important;width:21px!important;height:21px!important;min-width:21px!important;max-width:21px!important;min-height:21px!important;max-height:21px!important;flex:0 0 21px!important;margin:0!important;" viewbox="0 0 24 24"><rect fill="currentColor" height="11" width="4" x="4" y="9"></rect><circle cx="6" cy="5.5" fill="currentColor" r="2"></circle><path d="M11 9h4v1.5c1-1.2 2.2-2 4.2-2 3.3 0 4.8 2.1 4.8 6v5.5h-4v-5c0-1.8-.6-3-2.1-3-1.5 0-2.1 1.1-2.1 3v5h-4V9z" fill="currentColor"></path></svg>
+</a>
+<a aria-label="YouTube" href="https://youtube.com/@sifaglobalinstitute" rel="noopener noreferrer" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;box-sizing:border-box!important;line-height:1!important;color:#FF0000!important;text-decoration:none!important;" target="_blank" title="YouTube">
+<svg aria-hidden="true" style="display:block!important;width:21px!important;height:21px!important;min-width:21px!important;max-width:21px!important;min-height:21px!important;max-height:21px!important;flex:0 0 21px!important;margin:0!important;" viewbox="0 0 24 24"><rect fill="currentColor" height="12" rx="4" width="19" x="2.5" y="6"></rect><path d="M10 9l5 3-5 3V9z" fill="#041d39"></path></svg>
+</a>
+<a aria-label="TikTok" href="https://vm.tiktok.com/ZS9Dqdpa9k61u-7HzPe/" rel="noopener noreferrer" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;box-sizing:border-box!important;line-height:1!important;color:#00F2EA!important;text-decoration:none!important;" target="_blank" title="TikTok">
+<svg aria-hidden="true" style="display:block!important;width:21px!important;height:21px!important;min-width:21px!important;max-width:21px!important;min-height:21px!important;max-height:21px!important;flex:0 0 21px!important;margin:0!important;" viewbox="0 0 24 24"><path d="M14 4h3c.3 1.8 1.3 3.1 3 3.7v3.1c-1.1-.1-2.1-.4-3-1v5.5c0 3.5-2.5 5.7-5.6 5.7-3 0-5.4-2.2-5.4-5.2 0-3.2 2.7-5.4 6-5.1v3.2c-1.4-.3-2.7.5-2.7 1.9 0 1.1.9 2 2 2 1.3 0 2.7-.8 2.7-2.8V4z" fill="currentColor"></path></svg>
+</a>
+<a aria-label="X" href="https://x.com/sifaglobal12" rel="noopener noreferrer" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;box-sizing:border-box!important;line-height:1!important;color:#FFFFFF!important;text-decoration:none!important;" target="_blank" title="X">
+<svg aria-hidden="true" style="display:block!important;width:21px!important;height:21px!important;min-width:21px!important;max-width:21px!important;min-height:21px!important;max-height:21px!important;flex:0 0 21px!important;margin:0!important;" viewbox="0 0 24 24"><path d="M5 4h4.5l3.3 4.5L16.6 4H19l-5.1 5.8L20 20h-4.5l-3.8-5.1L7.2 20H4.8l5.5-6.3L5 4zm3.8 1.8H7.2l8.9 12.4h1.6L8.8 5.8z" fill="currentColor"></path></svg>
+</a>
+<a aria-label="WhatsApp — Rwanda contact" href="https://wa.me/250782817643" rel="noopener noreferrer" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;min-width:38px!important;max-width:38px!important;min-height:38px!important;max-height:38px!important;flex:0 0 38px!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;box-sizing:border-box!important;line-height:1!important;color:#25D366!important;text-decoration:none!important;" target="_blank" title="WhatsApp — Rwanda contact">
+<svg aria-hidden="true" style="display:block!important;width:21px!important;height:21px!important;min-width:21px!important;max-width:21px!important;min-height:21px!important;max-height:21px!important;flex:0 0 21px!important;margin:0!important;" viewbox="0 0 24 24"><path d="M20.52 3.48A11.8 11.8 0 0 0 12.1 0C5.55 0 .22 5.33.22 11.88c0 2.1.55 4.15 1.6 5.96L.12 24l6.32-1.66a11.87 11.87 0 0 0 5.66 1.44h.01c6.55 0 11.88-5.33 11.88-11.88 0-3.17-1.23-6.15-3.47-8.42ZM12.1 21.75a9.86 9.86 0 0 1-5.02-1.37l-.36-.21-3.75.98 1-3.65-.24-.38a9.84 9.84 0 0 1-1.51-5.24c0-5.45 4.44-9.89 9.9-9.89a9.82 9.82 0 0 1 7 2.9 9.82 9.82 0 0 1 2.9 7c0 5.45-4.44 9.89-9.9 9.89Zm5.43-7.41c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.78.97-.95 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.47-.89-.79-1.49-1.77-1.67-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.08-.15-.68-1.64-.93-2.24-.24-.58-.49-.5-.68-.51h-.58c-.2 0-.52.07-.8.37-.28.3-1.05 1.02-1.05 2.49s1.08 2.89 1.23 3.09c.15.2 2.12 3.24 5.13 4.54.72.31 1.28.5 1.72.64.72.23 1.37.2 1.89.12.58-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35Z" fill="currentColor"></path></svg>
+</a>
+</div>
+</div>
+</div>
+<div class="container copyright">
+        © <span data-year=""></span> SIFA Global Institute. All rights reserved.
+    </div>
 </footer>
 
-<script src="script.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-payments.js"></script><script>
+<script src="script.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script>
 
 document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(b.dataset.copy);const old=b.textContent;b.textContent='IBAN copied';setTimeout(()=>b.textContent=old,1800)}catch(e){const t=document.createElement('textarea');t.value=b.dataset.copy;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();b.textContent='IBAN copied';setTimeout(()=>b.textContent='Copy IBAN',1800)}}));
 
 </script>
 
-</body></html>
+<script>if (location.hash === "#my-payments") location.replace("my-payments.html");</script></body></html>

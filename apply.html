@@ -481,8 +481,13 @@ Applications are currently closed for all programs. SIFA Global Institute will a
     progressFill.style.width = pct + '%';
     stepPercent.textContent = pct + '%';
     stepTitle.textContent = 'Step ' + n + ' of ' + steps.length + ' — ' + titles[n-1];
-    backBtn.disabled = n===1;
-    backBtn.style.opacity = n===1 ? '.55' : '1';
+    
+backBtn.disabled = false;
+backBtn.textContent = n === 1
+  ? '← Back to Student Portal'
+  : '← Back';
+backBtn.style.opacity = '1';
+
     nextBtn.classList.toggle('hidden', n===steps.length);
     submitBtn.classList.toggle('hidden', n!==steps.length);
     if(n===steps.length) buildReview();
@@ -560,7 +565,15 @@ Applications are currently closed for all programs. SIFA Global Institute will a
   }));
 
   nextBtn.addEventListener('click',()=>{ if(validateCurrent()) showStep(current+1); });
-  backBtn.addEventListener('click',()=>{ if(current>1) showStep(current-1); });
+  
+backBtn.addEventListener('click', () => {
+  if (current > 1) {
+    showStep(current - 1);
+  } else {
+    window.location.href = 'student-portal.html';
+  }
+});
+
   dots.forEach((dot,i)=>dot.addEventListener('click',()=>{ if(i+1<=current) showStep(i+1); }));
 
   
