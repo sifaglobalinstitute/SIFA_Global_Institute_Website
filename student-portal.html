@@ -51,6 +51,28 @@
 @media(max-width:850px) { .sifa-student-actions { grid-template-columns:1fr; } }
 @media(max-width:650px) { .sifa-student-action { padding:19px; } .sifa-detail-panel { padding:16px; } }
 </style>
+
+<style id="sifa-staff-workspace-styles">
+/* Staff workspace appears only after the existing protected role check succeeds. */
+.sifa-staff-workspace{border:1px solid #cbdbe6;border-radius:20px;padding:22px;background:#fff;box-shadow:0 14px 34px rgba(7,26,51,.07);margin-bottom:12px}
+.sifa-staff-hero{background:#071a33;color:#fff;padding:24px;border-radius:15px}
+.sifa-staff-kicker{display:flex;align-items:center;gap:8px;color:#62d9a0;font-size:12px;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
+.sifa-staff-hero h2{color:#fff;font-size:clamp(24px,3vw,34px);margin:12px 0 6px}
+.sifa-staff-hero p{color:#d6e3f0;margin:0}
+.sifa-staff-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:18px}
+.sifa-staff-card{background:#f6f9fc;border:1px solid #dce6ef;border-radius:14px;padding:22px}
+.sifa-staff-card h3{margin:0 0 7px;color:#0b2545}
+.sifa-staff-card p{margin:0 0 15px;color:#53677b;line-height:1.6}
+.sifa-staff-card a{display:inline-flex;justify-content:center;align-items:center;min-height:44px;padding:10px 16px;border-radius:9px;background:#0b2545;color:white;text-decoration:none;font-weight:750;box-sizing:border-box}
+.sifa-staff-card a:hover,.sifa-staff-card a:focus-visible{background:#174575;color:white}
+.sifa-staff-card a.sifa-staff-green{background:#16804b}
+.sifa-staff-card a.sifa-staff-green:hover,.sifa-staff-card a.sifa-staff-green:focus-visible{background:#116639}
+.sifa-staff-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:18px}
+.sifa-staff-back,.sifa-staff-reopen{border:1px solid #bfd0df;background:#fff;color:#0b2545;border-radius:10px;padding:12px 18px;font:inherit;font-weight:750;cursor:pointer}
+.sifa-staff-back:hover,.sifa-staff-reopen:hover{background:#edf4fa}
+.sifa-staff-reopen{justify-self:start}
+@media(max-width:650px){.sifa-staff-workspace{padding:14px}.sifa-staff-hero{padding:19px}.sifa-staff-cards{grid-template-columns:1fr}.sifa-staff-card a,.sifa-staff-back{width:100%}.sifa-staff-bottom{align-items:stretch;flex-direction:column}}
+</style>
 <link rel="icon" type="image/png" href="assets/sifa-logo.png">
 
 </head>
@@ -78,6 +100,30 @@
 
 </div>
 <div id="studentDashboard" class="portal-dashboard" hidden>
+<section id="sifaStaffWorkspace" class="sifa-staff-workspace" aria-label="SIFA authorized staff tools" hidden>
+  <div class="sifa-staff-hero">
+    <div class="sifa-staff-kicker"><span aria-hidden="true">◆</span> Authorized staff account</div>
+    <h2>SIFA Global Institute Administration</h2>
+    <p>Secure access to institutional management tools. Permissions are verified by SIFA's protected backend.</p>
+  </div>
+  <div class="sifa-staff-cards">
+    <section class="sifa-staff-card">
+      <h3>Staff Console</h3>
+      <p>Review applications, enrollments, invoices, scholarships and certificates according to your assigned role.</p>
+      <div id="sifaStaffConsoleSlot"></div>
+    </section>
+    <section class="sifa-staff-card">
+      <h3>Classroom Manager</h3>
+      <p>Manage course materials and learning resources. Access is restricted by the classroom service.</p>
+      <a class="sifa-staff-green" href="sifa-classroom-manager.html">Open Classroom Manager</a>
+    </section>
+  </div>
+  <div class="sifa-staff-bottom">
+    <button type="button" id="sifaBackToStudent" class="sifa-staff-back">← Back to Student Portal</button>
+    <span style="color:#607387;font-size:13px">Student features remain available below.</span>
+  </div>
+</section>
+<button type="button" id="sifaReopenStaff" class="sifa-staff-reopen" hidden>Open Staff Administration</button>
 <div class="student-summary"><div><div class="eyebrow" style="color:#62c78a;margin-bottom:8px">Student Account</div><h2>Welcome, <span id="studentName">Student</span></h2><p id="studentEmail"></p></div><div class="summary-meta"><span class="status-pill" id="applicationStatus">Not started</span><small>Application reference: <span id="applicationRef">—</span></small></div></div>
 
 <div class="sifa-student-actions" aria-label="Student destinations">
@@ -241,6 +287,49 @@ $('sifaOpenClassroom')?.addEventListener('click', () => {
   );
 });
 
+})();
+</script>
+
+<script id="sifa-staff-workspace-behavior">
+(function () {
+  const dashboard = document.getElementById('studentDashboard');
+  const workspace = document.getElementById('sifaStaffWorkspace');
+  const slot = document.getElementById('sifaStaffConsoleSlot');
+  const reopen = document.getElementById('sifaReopenStaff');
+  const back = document.getElementById('sifaBackToStudent');
+  const summary = dashboard?.querySelector('.student-summary');
+  if (!dashboard || !workspace || !slot || !reopen || !back) return;
+
+  function synchronizeStaffLink() {
+    // The existing student-portal.js only creates this link after the
+    // protected sifa-admin-api whoami call confirms an active staff role.
+    const link = document.getElementById('sifaStaffConsoleLink');
+    if (!link || dashboard.hidden) {
+      if (!workspace.hidden) workspace.hidden = true;
+      if (!reopen.hidden) reopen.hidden = true;
+      return;
+    }
+    if (link.parentElement !== slot) slot.appendChild(link);
+    link.removeAttribute('style');
+    if (link.textContent !== 'Open SIFA Staff Console') link.textContent = 'Open SIFA Staff Console';
+    if (workspace.hidden && reopen.hidden) workspace.hidden = false;
+  }
+
+  back.addEventListener('click', function () {
+    workspace.hidden = true;
+    reopen.hidden = false;
+    (summary || dashboard).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  reopen.addEventListener('click', function () {
+    workspace.hidden = false;
+    reopen.hidden = true;
+    workspace.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  // React to the existing authorized-link creation and its removal on sign-out.
+  const observer = new MutationObserver(synchronizeStaffLink);
+  observer.observe(dashboard, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden'] });
+  synchronizeStaffLink();
 })();
 </script>
 
