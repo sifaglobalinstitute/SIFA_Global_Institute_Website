@@ -33,9 +33,104 @@
    host.append(card);
   }
  }
- async function loadEnrollments(){try{const b=await api('list_enrollments');renderEnrollments(b.items);}catch(e){msg(e.message,'error');}}
+ 
+async function loadEnrollments() {
+  try {
+    msg("Loading student enrollments…");
+
+    const result = await api("list_enrollments");
+    const items = result.items || [];
+
+    renderEnrollments(items);
+
+    msg(
+      `Loaded ${items.length} student enrollments.`,
+      "success"
+    );
+  } catch (error) {
+    msg(error.message || "Failed to load enrollments.", "error");
+  }
+}
+
  async function loadApps(){try{msg('Loading applications…');const b=await api('list_applications');renderApps(b.items);msg(`Loaded ${b.items?.length||0} applications.`,'success');}catch(e){msg(e.message,'error');}}
  async function loadReceipts(){try{msg('Loading payment receipts…');const b=await api('list_receipts');renderReceipts(b.items);msg(`Loaded ${b.items?.length||0} receipts.`,'success');}catch(e){msg(e.message,'error');}}
+ 
+async function loadScholarships() {
+  try {
+    msg('Loading scholarship requests…');
+
+    const result = await api('list_scholarships');
+    const items = result.items || [];
+    const host = $('scholarships');
+
+    host.replaceChildren();
+
+    if (items.length === 0) {
+      host.textContent = 'No scholarship requests found.';
+    }
+
+    for (const item of items) {
+      const card = document.createElement('article');
+      card.className = 'admin-item';
+
+      const title = document.createElement('h3');
+      title.textContent =
+        item.applicant?.full_name ||
+        item.applicant?.email ||
+        'Scholarship request';
+
+      const details = document.createElement('pre');
+      details.style.whiteSpace = 'pre-wrap';
+      details.style.overflowWrap = 'anywhere';
+      details.textContent = JSON.stringify(item, null, 2);
+
+      card.append(title, details);
+      host.append(card);
+    }
+
+    msg(`Loaded ${items.length} scholarship requests.`, 'success');
+  } catch (error) {
+    msg(error.message || 'Could not load scholarships.', 'error');
+  }
+}
+
+async function loadCertificates() {
+  try {
+    msg('Loading certificates…');
+
+    const result = await api('list_certificates');
+    const items = result.items || [];
+    const host = $('certificates');
+
+    host.replaceChildren();
+
+    if (items.length === 0) {
+      host.textContent = 'No certificate records found.';
+    }
+
+    for (const item of items) {
+      const card = document.createElement('article');
+      card.className = 'admin-item';
+
+      const title = document.createElement('h3');
+      title.textContent =
+        item.certificate_code || 'Certificate record';
+
+      const details = document.createElement('pre');
+      details.style.whiteSpace = 'pre-wrap';
+      details.style.overflowWrap = 'anywhere';
+      details.textContent = JSON.stringify(item, null, 2);
+
+      card.append(title, details);
+      host.append(card);
+    }
+
+    msg(`Loaded ${items.length} certificates.`, 'success');
+  } catch (error) {
+    msg(error.message || 'Could not load certificates.', 'error');
+  }
+}
+
  async function updateUI(){const {data}=await sb.auth.getSession();session=data.session;if(!session){$('loginCard').classList.remove('hidden');$('console').classList.add('hidden');return;} $('loginCard').classList.add('hidden');$('console').classList.remove('hidden');$('staffIdentity').textContent=`Signed in as ${session.user.email}`;try{const me=await api('whoami');currentRole=me.role;}catch(e){msg(e.message,'error');return;}const canApps=['administrator','coordinator'].includes(currentRole),canFinance=['administrator','finance_reviewer'].includes(currentRole),canEnroll=['administrator','coordinator','finance_reviewer'].includes(currentRole),canScholar=['administrator','coordinator'].includes(currentRole),canCert=['administrator','coordinator'].includes(currentRole);const hideCard=(id,hide)=>{$(id).closest('.admin-card').classList.toggle('hidden',hide);};hideCard('applications',!canApps);hideCard('receipts',!canFinance);hideCard('enrollments',!canEnroll);hideCard('scholarships',!canScholar);hideCard('certificates',!canCert);$('refreshApps').classList.toggle('hidden',!canApps);$('refreshReceipts').classList.toggle('hidden',!canFinance);$('refreshEnrollments').classList.toggle('hidden',!canEnroll);$('refreshScholarships').classList.toggle('hidden',!canScholar);$('refreshCertificates').classList.toggle('hidden',!canCert);if(!canApps&&!canFinance&&!canEnroll&&!canScholar&&!canCert){msg('Your staff role does not have a console workflow assigned yet.','error');return;}const jobs=[];if(canApps)jobs.push(loadApps());if(canFinance)jobs.push(loadReceipts());if(canEnroll)jobs.push(loadEnrollments());if(canScholar)jobs.push(loadScholarships());if(canCert)jobs.push(loadCertificates());await Promise.all(jobs);}
  $('loginForm').addEventListener('submit',async e=>{e.preventDefault();const fd=new FormData(e.currentTarget);try{msg('Signing in…');const {error}=await sb.auth.signInWithPassword({email:String(fd.get('email')).trim(),password:String(fd.get('password'))});if(error)throw error;await updateUI();}catch(err){msg(err.message||'Sign-in failed.','error');}});
  $('refreshApps').addEventListener('click',loadApps);$('refreshReceipts').addEventListener('click',loadReceipts);$('refreshEnrollments').addEventListener('click',loadEnrollments);$('refreshScholarships').addEventListener('click',loadScholarships);$('refreshCertificates').addEventListener('click',loadCertificates);$('signOut').addEventListener('click',async()=>{await sb.auth.signOut();await updateUI();msg('Signed out.','success');});sb.auth.onAuthStateChange(()=>{setTimeout(updateUI,0);});updateUI();

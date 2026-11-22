@@ -2,7 +2,19 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const url = Deno.env.get("SUPABASE_URL") ?? "";
 const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
-const allowedOrigins = (Deno.env.get("SIFA_ALLOWED_ORIGINS") ?? "").split(",").map(v => v.trim()).filter(Boolean);
+
+const allowedOrigins = [
+  ...new Set([
+    ...(Deno.env.get("SIFA_ALLOWED_ORIGINS") ?? "")
+      .split(",")
+      .map(v => v.trim())
+      .filter(Boolean),
+
+    "https://sifaglobalinstitute.pages.dev",
+    "http://127.0.0.1:5500"
+  ])
+];
+
 const base = { "Content-Type": "application/json", "Cache-Control": "no-store", "Vary": "Origin" };
 function response(status:number, body:Record<string,unknown>, origin:string|null) {
   return new Response(JSON.stringify(body), {status, headers:{...base, ...(origin && allowedOrigins.includes(origin) ? {"Access-Control-Allow-Origin":origin,"Access-Control-Allow-Headers":"authorization, apikey, content-type, x-client-info","Access-Control-Allow-Methods":"POST, OPTIONS"}: {})}});
@@ -26,9 +38,32 @@ Deno.serve(async req => {
   try { body=await req.json(); } catch { return response(400,{error:"Invalid request."},origin); }
   const action=clean(body.action,80);
   const isAny=(...roles:string[])=>roles.includes(role.role);
-  const audit=async(actionName:string,type:string,id:string|null,after:unknown,reason:string|null=null)=>{
-    await admin.from("sifa_audit_log").insert({actor_user_id:userId,action:actionName,entity_type:type,entity_id:id,before_data:null,after_data:after ?? null,reason});
-  };
+  
+const audit = async (
+  actionName: string,
+  type: string,
+  id: string | null,
+  after: unknown,
+  reason: string | null = null
+) => {
+  const { error } = await admin
+    .from("sifa_audit_log")
+    .insert({
+      actor_user_id: userId,
+      action: actionName,
+      entity_type: type,
+      entity_id: id,
+      before_data: null,
+      after_data: after ?? null,
+      reason
+    });
+
+  if (error) {
+    console.error("SIFA audit logging failed:", error.message);
+    throw new Error("Audit logging failed");
+  }
+};
+
   try {
     if(action==="whoami") return response(200,{role:role.role,active:role.active},origin);
     if(action==="list_applications") {
@@ -108,8 +143,33 @@ Deno.serve(async req => {
       if(!isAny("administrator","coordinator")) return response(403,{error:"Coordinator or administrator role required."},origin);
       const id=clean(body.id,80);if(!id)return response(400,{error:"Application ID is required."},origin);
       const {data:app,error:appErr}=await admin.from("sifa_public_applications").select("id,email,application_ref,status,linked_user_id").eq("id",id).single();if(appErr)throw appErr;
-      let foundUser:any=null;
-      for(let page=1;page<=10;page++){const {data,error}=await admin.auth.admin.listUsers({page,perPage:1000});if(error)throw error;foundUser=(data.users||[]).find((u:any)=>(u.email||"").toLowerCase()===app.email.toLowerCase())||null;if(foundUser||(data.users||[]).length<1000)break;}
+      let foundUser: {
+  id: string;
+  email?: string;
+  email_confirmed_at?: string | null;
+} | null = null;
+      
+for (let page = 1; page <= 10; page++) {
+  const { data, error } = await admin.auth.admin.listUsers({
+    page,
+    perPage: 1000
+  });
+
+  if (error) throw error;
+
+  foundUser = (data.users || []).find(
+    (u: {
+      id: string;
+      email?: string;
+      email_confirmed_at?: string | null;
+    }) => (u.email || "").toLowerCase() === app.email.toLowerCase()
+  ) || null;
+
+  if (foundUser || (data.users || []).length < 1000) {
+    break;
+  }
+}
+
       if(!foundUser)return response(404,{error:"No registered student account matches this application email yet. Ask the applicant to create and verify their Student Portal account, then retry."},origin);
       if(!foundUser.email_confirmed_at)return response(409,{error:"The matching Student Portal account has not verified its email address yet."},origin);
       const {data,error}=await admin.from("sifa_public_applications").update({linked_user_id:foundUser.id,updated_at:new Date().toISOString()}).eq("id",id).select("id,application_ref,email,linked_user_id").single();if(error)throw error;
@@ -151,7 +211,51 @@ Deno.serve(async req => {
     if(action==="list_scholarships") {
       if(!isAny("administrator","coordinator")) return response(403,{error:"Coordinator or administrator role required."},origin);
       const {data,error}=await admin.from("sifa_scholarship_decisions").select("id,public_application_id,application_id,decision,monthly_discount_percent,starts_on,ends_on,reason,created_at,decided_at").order("created_at",{ascending:false}).limit(200);
-      if(error) throw error;const ids=(data||[]).map((x:any)=>x.public_application_id).filter(Boolean);let apps:any[]=[];if(ids.length){const {data:a,error:ae}=await admin.from("sifa_public_applications").select("id,application_ref,full_name,email,program,status,payload").in("id",ids);if(ae)throw ae;apps=a||[];}const byId=new Map(apps.map((a:any)=>[a.id,a]));return response(200,{items:(data||[]).map((x:any)=>({...x,applicant:byId.get(x.public_application_id)||null}))},origin);
+      
+if (error) throw error;
+
+type ScholarshipRecord = {
+  public_application_id: string | null;
+  [key: string]: unknown;
+};
+
+type ApplicationRecord = {
+  id: string;
+  [key: string]: unknown;
+};
+
+const scholarships = (data || []) as ScholarshipRecord[];
+
+const ids = scholarships
+  .map(x => x.public_application_id)
+  .filter((id): id is string => Boolean(id));
+
+let apps: ApplicationRecord[] = [];
+
+if (ids.length) {
+  const { data: applicationRows, error: applicationError } = await admin
+    .from("sifa_public_applications")
+    .select("id,application_ref,full_name,email,program,status,payload")
+    .in("id", ids);
+
+  if (applicationError) throw applicationError;
+
+  apps = (applicationRows || []) as ApplicationRecord[];
+}
+
+const byId = new Map(apps.map(a => [a.id, a]));
+
+return response(
+  200,
+  {
+    items: scholarships.map(x => ({
+      ...x,
+      applicant: byId.get(x.public_application_id || "") || null
+    }))
+  },
+  origin
+);
+
     }
     if(action==="create_monthly_invoice") {
       if(!isAny("administrator","finance_reviewer")) return response(403,{error:"Finance reviewer or administrator role required."},origin);

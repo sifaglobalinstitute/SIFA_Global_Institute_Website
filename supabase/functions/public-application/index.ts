@@ -116,12 +116,31 @@ Deno.serve(async (req) => {
       return json(500, { error: "We could not save your application. Please try again later or contact SIFA support." }, origin);
     }
 
-    if (cleanText(payload.financialSupport, 100).toLowerCase().includes("scholarship")) {
+    
+const applicationId = data.id;
+
+const cleanupApplication = async () => {
+  const { error } = await supabase
+    .from("sifa_public_applications")
+    .delete()
+    .eq("id", applicationId);
+
+  if (error) {
+    console.error(
+      "SIFA application cleanup failed:",
+      error.message
+    );
+
+    throw new Error(
+      "Failed to clean up the incomplete application."
+    );
+  }
+};if (cleanText(payload.financialSupport, 100).toLowerCase().includes("scholarship")) {
       const { error: scholarshipError } = await supabase.from("sifa_scholarship_decisions").insert({
         public_application_id: data.id, decision: "pending", monthly_discount_percent: 0,
       });
       if (scholarshipError) {
-        await supabase.from("sifa_public_applications").delete().eq("id", data.id);
+        await cleanupApplication();
         console.error("Scholarship request record failed", { code: scholarshipError.code, message: scholarshipError.message });
         return json(500, { error: "Your application could not record the financial-support request. Please try again later." }, origin);
       }
@@ -130,12 +149,49 @@ Deno.serve(async (req) => {
     // Documents are optional. If supplied, the server validates each item and stores it in a private bucket.
     const files = Array.isArray(body.files) ? body.files : [];
     if (files.length > 8) {
-      await supabase.from("sifa_public_applications").delete().eq("id", data.id);
+      await cleanupApplication();
       return json(400, { error: "Please attach no more than eight files per submission." }, origin);
     }
     let totalBytes = 0;
     const uploadedPaths: string[] = [];
-    const cleanupUploaded = async () => { if (uploadedPaths.length) await supabase.storage.from("sifa-private-documents").remove(uploadedPaths); };
+    
+const cleanupUploaded = async () => {
+  if (uploadedPaths.length === 0) return;
+
+  const { error } = await supabase.storage
+    .from("sifa-private-documents")
+    .remove(uploadedPaths);
+
+  if (error) {
+    console.error("SIFA document cleanup failed:", error.message);
+    throw new Error("Failed to clean up uploaded documents.");
+  }
+};
+
+const cleanupFailedSubmission = async () => {
+  // First remove uploaded files from private storage.
+  try {
+    await cleanupUploaded();
+  } catch (error) {
+    console.error(
+      "SIFA document cleanup failed. Application retained for investigation.",
+      error
+    );
+
+    throw new Error(
+      "Could not safely remove uploaded documents."
+    );
+  }
+
+  // Delete the incomplete application only after storage cleanup.
+  await cleanupApplication();
+};
+
+
+
+
+
+
     const allowedExt = new Set(["pdf", "jpg", "jpeg", "png", "doc", "docx"]);
     for (const entry of files) {
       if (!entry || typeof entry !== "object") continue;
@@ -146,17 +202,17 @@ Deno.serve(async (req) => {
       const base64 = typeof file.base64 === "string" ? file.base64 : "";
       const ext = name.includes(".") ? name.split(".").pop()!.toLowerCase() : "";
       if (!name || !base64 || !allowedExt.has(ext)) {
-        await cleanupUploaded(); await supabase.from("sifa_public_applications").delete().eq("id", data.id);
+        await cleanupFailedSubmission();
         return json(400, { error: "One of the attachments has an unsupported file name or type." }, origin);
       }
       let bytes: Uint8Array;
       try { bytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0)); } catch {
-        await cleanupUploaded(); await supabase.from("sifa_public_applications").delete().eq("id", data.id);
+        await cleanupFailedSubmission();
         return json(400, { error: "One of the attachments could not be read." }, origin);
       }
       totalBytes += bytes.byteLength;
       if (bytes.byteLength < 1 || bytes.byteLength > 5 * 1024 * 1024 || totalBytes > 8 * 1024 * 1024) {
-        await cleanupUploaded(); await supabase.from("sifa_public_applications").delete().eq("id", data.id);
+        await cleanupFailedSubmission();
         return json(413, { error: "Each attachment must be at most 5 MB and all attachments together must be at most 8 MB." }, origin);
       }
       const signature = Array.from(bytes.slice(0, 8));
@@ -166,23 +222,32 @@ Deno.serve(async (req) => {
         || (ext === "docx" && signature[0]===80 && signature[1]===75)
         || (ext === "doc" && signature.slice(0,4).join(",")==="208,207,17,224");
       if (!signatureOk) {
-        await cleanupUploaded(); await supabase.from("sifa_public_applications").delete().eq("id", data.id);
+        await cleanupFailedSubmission();
         return json(400, { error: `The file ${name} does not appear to match its file extension.` }, origin);
       }
       const path = `public-applications/${data.id}/${crypto.randomUUID()}-${name}`;
       const { error: uploadError } = await supabase.storage.from("sifa-private-documents").upload(path, bytes, { contentType: mime || "application/octet-stream", upsert: false });
       if (uploadError) {
-        await cleanupUploaded(); await supabase.from("sifa_public_applications").delete().eq("id", data.id);
+        await cleanupFailedSubmission();
         console.error("Private document upload failed", { code: uploadError.name, message: uploadError.message });
         return json(500, { error: "The application could not safely store an attachment. Please try again or submit without the file." }, origin);
       }
       uploadedPaths.push(path);
       const { error: metadataError } = await supabase.from("sifa_application_documents").insert({ public_application_id: data.id, storage_bucket: "sifa-private-documents", storage_path: path, original_filename: name, content_type: mime || "application/octet-stream", byte_size: bytes.byteLength });
-      if (metadataError) {
-        await cleanupUploaded();
-        await supabase.from("sifa_public_applications").delete().eq("id", data.id);
-        return json(500, { error: "The application could not safely record an attachment. Please try again." }, origin);
-      }
+      
+if (metadataError) {
+  console.error(
+    "SIFA document metadata insert failed:",
+    metadataError.message
+  );
+
+  await cleanupFailedSubmission();
+
+  return json(500, {
+    error: "The application could not safely record an attachment. Please try again."
+  }, origin);
+}
+
       payload[`uploaded_${field || "document"}`] = "true";
     }
     return json(201, { ok: true, application_ref: data.application_ref, submitted_at: data.submitted_at }, origin);

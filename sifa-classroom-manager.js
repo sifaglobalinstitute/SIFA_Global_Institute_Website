@@ -13,7 +13,26 @@
  const button=$("cmUploadButton");button.disabled=true;button.textContent="Uploading…";
  try{const meta={title:String(f.get("title")).trim(),program:String(f.get("program")).trim(),material_type:String(f.get("material_type")),filename:file.name,byte_size:file.size,content_type:"application/pdf",description:String(f.get("description")||"").trim()};
  const upload=await api("create-upload",meta);const {data:sessionData}=await sb.auth.getSession();const {error:upError}=await sb.storage.from("sifa-learning-materials").uploadToSignedUrl(upload.path,upload.token,file,{contentType:"application/pdf",upsert:false});if(upError)throw upError;
- await api("publish",{...meta,path:upload.path,published:f.get("published")==="on",sort_order:0});msg("PDF uploaded successfully. "+(f.get("published")==="on"?"It is published for eligible students.":"It is saved as a draft until you publish it."),"success");ev.currentTarget.reset();ev.currentTarget.elements.program.value="QuickBooks Practical Training";await load();
+ await api("publish",{...meta,path:upload.path,published:f.get("published")==="on",sort_order:0});msg("PDF uploaded successfully. "+(f.get("published")==="on"?"It is published for eligible students.":"It is saved as a draft until you publish it."),"success");
+$("cmUploadForm").reset();
+
+$("cmUploadForm").elements.program.value = "QuickBooks Practical Training";
+await load();
  }catch(e){msg(e.message||"Upload failed. Check that the classroom schema and Edge Function are deployed.","error")}finally{button.disabled=false;button.textContent="Upload PDF"}});
- $("cmRefresh").addEventListener("click",load);$("cmSignOut").addEventListener("click",async()=>{await sb.auth.signOut();await update();msg("Signed out.","success")});sb.auth.onAuthStateChange(()=>setTimeout(update,0));update();
+ 
+$("cmRefresh").addEventListener("click", async () => {
+  msg("Refreshing classroom materials…");
+
+  try {
+    const result = await api("list-staff");
+    renderList(result.items || []);
+    msg(
+      `Loaded ${(result.items || []).length} classroom materials.`,
+      "success"
+    );
+  } catch (error) {
+    msg(error.message || "Failed to refresh materials.", "error");
+  }
+});
+$("cmSignOut").addEventListener("click",async()=>{await sb.auth.signOut();await update();msg("Signed out.","success")});sb.auth.onAuthStateChange(()=>setTimeout(update,0));update();
 })();
