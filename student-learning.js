@@ -3,7 +3,13 @@
  const show=(msg,type="")=>{if(!status)return;status.textContent=msg;status.className="classroom-status"+(type?" "+type:"")};
  if(!status||!details)return;
  if(!window.supabase||!cfg.url||!cfg.anonKey){show("Learning access service is not configured. Contact SIFA support.","error");return}
- const sb=window.supabase.createClient(cfg.url,cfg.anonKey);
+ 
+const sb = window.supabase.createClient(
+  cfg.url,
+  cfg.anonKey,
+  window.SIFA_AUTH_OPTIONS
+);
+
  try{
   const {data,error}=await sb.auth.getSession();
   if(error||!data.session){
