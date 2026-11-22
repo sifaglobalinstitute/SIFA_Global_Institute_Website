@@ -398,7 +398,9 @@
 </div>
 </form>
 </div>
-<div class="apply-note" style="margin-top:24px"><strong>Current admissions status:</strong> Applications are currently open for <strong>QuickBooks Practical Training only</strong>. Other programs remain closed until SIFA announces future cohorts.</div>
+<div class="apply-note" style="margin-top:24px"><strong>Current admissions status:</strong> 
+Applications are currently closed for all programs. SIFA Global Institute will announce when admissions reopen.
+</div>
 <div class="apply-note" style="margin-top:24px"><strong>Application process:</strong> Complete the application → SIFA reviews the information → SIFA may contact you for clarification or supporting documents → enrollment arrangements are confirmed where applicable.</div>
 <p style="margin-top:18px">Before applying, you can also review <a href="scholarships.html">Scholarships &amp; Fee Waivers</a>, <a href="courses.html">Courses</a>, or <a href="contact.html">Contact SIFA</a>.</p>
 </div></section>
@@ -561,7 +563,9 @@
   backBtn.addEventListener('click',()=>{ if(current>1) showStep(current-1); });
   dots.forEach((dot,i)=>dot.addEventListener('click',()=>{ if(i+1<=current) showStep(i+1); }));
 
-  form.addEventListener('submit', async e => {
+  
+form.addEventListener('sifa-legacy-submit-disabled', async e => {
+
   e.preventDefault();
 
   if (!APPLICATIONS_OPEN) {
