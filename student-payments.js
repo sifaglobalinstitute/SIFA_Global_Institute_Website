@@ -181,10 +181,13 @@
     }
 
     try {
-      sb = window.supabase.createClient(
-        cfg.url,
-        cfg.anonKey
-      );
+    
+sb = window.supabase.createClient(
+  cfg.url,
+  cfg.anonKey,
+  window.SIFA_AUTH_OPTIONS
+);
+
 
       // Check whether the student is signed in.
       const { data, error } = await sb.auth.getSession();

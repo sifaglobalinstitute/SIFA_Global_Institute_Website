@@ -13,7 +13,19 @@
     anonKey: "sb_publishable_BDKUviKyHZl10Yf07jInLw_NSbw_moh"
   };
 
-  window.SIFA_SETTINGS = {
+  
+  // SIFA browser authentication settings.
+  // Keep sessions across pages in the same tab,
+  // but do not use persistent localStorage.
+  window.SIFA_AUTH_OPTIONS = {
+    auth: {
+      storage: window.sessionStorage,
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  };
+window.SIFA_SETTINGS = {
     // Admissions are currently closed.
     // Reopen a program only when SIFA is ready to accept applications.
     applicationsOpen: false,

@@ -207,7 +207,13 @@ const target = activePanel === loginPanel && loginMessage
 
   if (!ready) { showLogin('Student Portal setup is not connected yet. Please complete the Supabase configuration first.','warning'); return; }
   if (!window.supabase?.createClient) { showLogin('The secure Student Portal library could not be loaded. Please refresh the page.','error'); return; }
-  supabase=window.supabase.createClient(config.url,config.anonKey);
+  
+supabase = window.supabase.createClient(
+  config.url,
+  config.anonKey,
+  window.SIFA_AUTH_OPTIONS
+);
+
 
   $('showSignup')?.addEventListener('click',e=>{e.preventDefault();showSignup();});
   $('showLogin')?.addEventListener('click',e=>{e.preventDefault();showLogin();});

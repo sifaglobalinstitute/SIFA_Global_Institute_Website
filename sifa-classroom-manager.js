@@ -1,7 +1,13 @@
 (()=>{
  const cfg=window.SIFA_SUPABASE_CONFIG||{},$=id=>document.getElementById(id),msg=(t,type="")=>{$("cmMessage").textContent=t;$("cmMessage").className="cm-msg"+(type?" "+type:"")};
  if(!window.supabase||!cfg.url||!cfg.anonKey){msg("Supabase is not configured.","error");return}
- const sb=window.supabase.createClient(cfg.url,cfg.anonKey);
+ 
+const sb = window.supabase.createClient(
+  cfg.url,
+  cfg.anonKey,
+  window.SIFA_AUTH_OPTIONS
+);
+
  async function api(action,payload={}){const {data}=await sb.auth.getSession(),token=data.session?.access_token;if(!token)throw Error("Please sign in again.");const r=await fetch(`${cfg.url}/functions/v1/sifa-classroom-api`,{method:"POST",headers:{"Content-Type":"application/json","apikey":cfg.anonKey,"Authorization":`Bearer ${token}`},body:JSON.stringify({action,...payload})});const b=await r.json().catch(()=>({}));if(!r.ok)throw Error(b.error||"Classroom request failed.");return b}
  function btn(label,fn,primary=false){const b=document.createElement("button");b.type="button";b.className=primary?"btn btn-primary":"btn btn-secondary";b.textContent=label;b.addEventListener("click",fn);return b}
  const typeLabel={book:"Books and PDF materials",lesson:"Lessons and notes",assignment:"Assignments",announcement:"Announcements"};
