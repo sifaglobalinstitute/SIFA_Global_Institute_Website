@@ -157,6 +157,90 @@ const target = activePanel === loginPanel && loginMessage
     renderProfile(user, profile); renderApplication(latestApplication(applications), applications || []);
   }
 
+
+  // Display enrollment records from the protected student billing API.
+  // Never infer classroom authorization solely from enrollment status.
+  async function loadEnrollments(userId) {
+    const section = $('sifaEnrollmentSection');
+    const status = $('sifaEnrollmentStatus');
+    const host = $('sifaEnrollmentItems');
+    if (!section || !status || !host) return;
+
+    status.hidden = false;
+    status.className = 'sifa-state';
+    status.textContent = 'Loading your enrollments…';
+    host.replaceChildren();
+
+    try {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) throw error;
+      if (!data.session?.access_token || data.session.user.id !== userId) {
+        throw new Error('Please sign in again to view your enrollments.');
+      }
+      const response = await fetch(`${config.url}/functions/v1/sifa-student-billing`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': config.anonKey,
+          'Authorization': `Bearer ${data.session.access_token}`
+        },
+        body: JSON.stringify({ action: 'list_invoices' })
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || 'Unable to load enrollments.');
+      // Do not expose an older account's response if the user switched accounts.
+      if (currentUser?.id !== userId) return;
+      const enrollments = Array.isArray(result.enrollments) ? result.enrollments : [];
+      if (!enrollments.length) {
+        status.textContent = 'No enrollment has been issued to your account yet. An accepted application does not automatically create an active enrollment.';
+        return;
+      }
+      status.hidden = true;
+      const labels = {
+        pending_payment: 'Pending payment',
+        active: 'Active enrollment',
+        suspended: 'Suspended',
+        completed: 'Completed',
+        cancelled: 'Cancelled'
+      };
+      for (const enrollment of enrollments) {
+        const item = document.createElement('article');
+        item.className = 'sifa-enrollment-item';
+        const heading = document.createElement('h4');
+        heading.textContent = enrollment.program || 'SIFA program';
+        item.append(heading);
+        const fields = document.createElement('div');
+        fields.className = 'sifa-enrollment-fields';
+        for (const [label, value] of [
+          ['Enrollment status', labels[enrollment.status] || enrollment.status || '—'],
+          ['Start date', formatDate(enrollment.start_date)],
+          ['End date', formatDate(enrollment.end_date)]
+        ]) {
+          const field = document.createElement('div');
+          field.className = 'sifa-enrollment-field';
+          const key = document.createElement('span');
+          key.textContent = label;
+          const val = document.createElement('strong');
+          val.textContent = String(value);
+          field.append(key, val);
+          fields.append(field);
+        }
+        item.append(fields);
+        const note = document.createElement('p');
+        note.className = 'sifa-enrollment-note';
+        note.textContent = 'Classroom access is checked separately against current fees, enrollment dates, and approved exceptions.';
+        item.append(note);
+        host.append(item);
+      }
+    } catch (error) {
+      if (currentUser?.id !== userId) return;
+      console.error('Enrollment loading failed:', error);
+      status.hidden = false;
+      status.className = 'sifa-state error';
+      status.textContent = 'Your enrollment status could not be loaded. Please refresh or contact SIFA support.';
+    }
+  }
+
   async function checkStaffRole() {
     try {
       const { data, error } = await supabase.auth.getSession();
@@ -218,6 +302,7 @@ const target = activePanel === loginPanel && loginMessage
     const merged=[...(applications||[]),...mappedPublic].sort((a,b)=>new Date(b.created_at||b.submitted_at||0)-new Date(a.created_at||a.submitted_at||0));
     
     showDashboard(user, profile || {}, merged);
+    void loadEnrollments(user.id);
 
     // Remove any staff link left from a previous account.
     document.getElementById('sifaStaffConsoleLink')?.remove();
