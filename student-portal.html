@@ -50,6 +50,23 @@
 #emailChangeMessage { margin-top:12px; }
 @media(max-width:850px) { .sifa-student-actions { grid-template-columns:1fr; } }
 @media(max-width:650px) { .sifa-student-action { padding:19px; } .sifa-detail-panel { padding:16px; } }
+
+/* Student-owned enrollment overview; data comes from protected billing API. */
+.sifa-enrollment-panel{border:1px solid #dce6ef;border-top:4px solid #16834c;border-radius:18px;background:#fff;padding:24px;box-shadow:0 8px 24px rgba(8,30,54,.05);margin:2px 0 24px}
+.sifa-enrollment-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.sifa-enrollment-head h3{color:#0b2545;font-size:1.4rem;margin:0 0 7px}
+.sifa-enrollment-head p{color:#53677b;margin:0;line-height:1.55}
+.sifa-enrollment-items{display:grid;gap:12px;margin-top:17px}
+.sifa-enrollment-item{background:#f7fafc;border:1px solid #dce6ef;border-radius:12px;padding:16px}
+.sifa-enrollment-item h4{color:#0b2545;margin:0 0 12px;font-size:1.1rem}
+.sifa-enrollment-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.sifa-enrollment-field{min-width:0}
+.sifa-enrollment-field span{display:block;color:#607387;font-size:12px;font-weight:750;margin-bottom:4px}
+.sifa-enrollment-field strong{color:#163d5e;overflow-wrap:anywhere}
+.sifa-enrollment-note{color:#52677b;font-size:13px;line-height:1.6;margin:12px 0 0}
+.sifa-enrollment-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+.sifa-enrollment-actions .btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px}
+@media(max-width:650px){.sifa-enrollment-panel{padding:18px}.sifa-enrollment-fields{grid-template-columns:1fr}}
 </style>
 
 <style id="sifa-staff-workspace-styles">
@@ -139,6 +156,14 @@
 </section>
 
 </div>
+ <section id="sifaEnrollmentSection" class="sifa-enrollment-panel" aria-labelledby="sifaEnrollmentTitle">
+   <div class="sifa-enrollment-head">
+     <div><h3 id="sifaEnrollmentTitle">My Enrollment</h3><p>See your course enrollment status and important dates. Admission and classroom access are separate decisions.</p></div>
+   </div>
+   <div id="sifaEnrollmentStatus" class="sifa-state" role="status" aria-live="polite" style="margin-top:16px">Loading your enrollments…</div>
+   <div id="sifaEnrollmentItems" class="sifa-enrollment-items"></div>
+   <div class="sifa-enrollment-actions"><a class="btn btn-secondary" href="my-payments.html">View My Fees &amp; Payments</a><a class="btn btn-secondary" href="student-learning.html">Check Classroom Access</a></div>
+ </section>
 <section id="sifaApplicationPanel" class="sifa-detail-panel" hidden><h3>Application</h3><p id="sifaApplicationSummary">Loading your application status…</p><div class="sifa-action-row"><a id="sifaApplyLink" class="btn btn-primary" href="apply.html">Apply / Continue Application</a><button type="button" class="btn btn-secondary" id="sifaCloseApplication">Back to Student Portal</button></div><div id="sifaApplicationStatusDetail" style="margin-top:18px"></div></section>
 <div class="dashboard-grid" id="sifaAccountGrid" hidden>
 <section class="account-card" id="my-account"><div class="sifa-view-heading"><h3>Account Settings</h3><button type="button" class="btn btn-secondary" id="sifaCloseAccount">Back to Student Portal</button></div><p>Manage your personal details and account security. Your login email is linked to your SIFA account.</p>
@@ -197,7 +222,7 @@
     and submit receipts for SIFA staff verification.
   </p>
   
-<a class="btn btn-secondary" href="student-payments.html#my-payments">
+<a class="btn btn-secondary" href="my-payments.html">
   View My Payments
 </a>
 
@@ -241,6 +266,7 @@
   const accountGrid = $('sifaAccountGrid');
   const appPanel = $('sifaApplicationPanel');
   const legacyApp = $('my-application');
+  const enrollmentPanel = $('sifaEnrollmentSection');
 
   function moveApplicationIntoPanel(){
     if (legacyApp && $('sifaApplicationStatusDetail') && legacyApp.parentElement !== $('sifaApplicationStatusDetail')) {
@@ -250,6 +276,7 @@
   function showHome(){
     if (summary) summary.hidden = false;
     if (actions) actions.hidden = false;
+    if (enrollmentPanel) enrollmentPanel.hidden = false;
     if (accountGrid) accountGrid.hidden = true;
     if (appPanel) appPanel.hidden = true;
     if (legacyApp) legacyApp.hidden = true;
@@ -258,6 +285,7 @@
   function showApplication(){
     if (summary) summary.hidden = true;
     if (actions) actions.hidden = true;
+    if (enrollmentPanel) enrollmentPanel.hidden = true;
     if (accountGrid) accountGrid.hidden = true;
     moveApplicationIntoPanel();
     if (legacyApp) legacyApp.hidden = false;
@@ -268,6 +296,7 @@
   function showAccount(){
     if (summary) summary.hidden = true;
     if (actions) actions.hidden = true;
+    if (enrollmentPanel) enrollmentPanel.hidden = true;
     if (appPanel) appPanel.hidden = true;
     if (legacyApp) legacyApp.hidden = true;
     if (accountGrid) accountGrid.hidden = false;
