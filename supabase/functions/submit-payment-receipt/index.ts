@@ -23,7 +23,19 @@ Deno.serve(async req=>{
  if(!invoiceId||! ["Rwanda Mobile Money","Ziraat Bank Transfer"].includes(method)||!Number.isFinite(amount)||amount<=0||!["RWF","TRY"].includes(currency)||!base64)return out(400,{error:"Please provide the invoice, payment method, amount, currency, and receipt file."},origin);
  const {data:invoice,error:invErr}=await db.from("sifa_fee_invoices").select("id,enrollment_id,amount_due,currency,status,sifa_enrollments!inner(student_user_id)").eq("id",invoiceId).single();
  if(invErr||!invoice)return out(404,{error:"Invoice not found."},origin);
- if((invoice as any).sifa_enrollments?.student_user_id!==auth.user.id)return out(403,{error:"You cannot submit a receipt for another student's invoice."},origin);
+ 
+
+if (
+  !invoice.sifa_enrollments?.some(
+    enrollment => enrollment.student_user_id === auth.user.id
+  )
+) {
+  return out(403, {
+    error: "You cannot submit a receipt for another student's invoice."
+  }, origin);
+}
+
+
  if(["paid","waived","cancelled","receipt_submitted"].includes(invoice.status))return out(409,{error:"This invoice does not accept another receipt."},origin);
  if(currency!==invoice.currency||amount<Number(invoice.amount_due))return out(400,{error:"The claimed currency must match the invoice and the amount must cover the amount due. Contact SIFA if you need help."},origin);
  let bytes:Uint8Array;try{bytes=Uint8Array.from(atob(base64),c=>c.charCodeAt(0))}catch{return out(400,{error:"The receipt file could not be read."},origin)};
@@ -33,9 +45,43 @@ Deno.serve(async req=>{
  if(!valid||!["application/pdf","image/jpeg","image/png"].includes(mime))return out(400,{error:"Upload a valid PDF, JPG, or PNG receipt."},origin);
  const path=`payment-receipts/${auth.user.id}/${invoiceId}/${crypto.randomUUID()}-${name}`;
  const {error:upErr}=await db.storage.from("sifa-private-documents").upload(path,bytes,{contentType:mime,upsert:false});if(upErr)return out(500,{error:"Receipt upload failed. Please try again."},origin);
- const {data:receipt,error:recErr}=await db.from("sifa_payment_receipts").insert({invoice_id:invoiceId,student_user_id:auth.user.id,storage_path:path,payment_method:method,claimed_amount:amount,claimed_currency:currency,transaction_reference:ref,status:"pending_review"}).select("id,status,submitted_at").single();
- if(recErr){await db.storage.from("sifa-private-documents").remove([path]);return out(500,{error:"Receipt could not be recorded. Please try again."},origin)}
- const {error:updErr}=await db.from("sifa_fee_invoices").update({status:"receipt_submitted"}).eq("id",invoiceId);
- if(updErr)return out(500,{error:"Receipt received, but invoice status needs staff reconciliation. Contact SIFA support."},origin);
- return out(201,{ok:true,receipt_id:receipt.id,status:receipt.status,submitted_at:receipt.submitted_at,message:"Receipt submitted for manual review. It does not activate course access until approved."},origin);
+ 
+ // Record the receipt and update the invoice atomically.
+ const { data: result, error: recErr } = await db.rpc(
+   "sifa_submit_payment_receipt",
+   {
+     p_invoice_id: invoiceId,
+     p_student_user_id: auth.user.id,
+     p_storage_path: path,
+     p_payment_method: method,
+     p_claimed_amount: amount,
+     p_claimed_currency: currency,
+     p_transaction_reference: ref
+   }
+ );
+
+ if (recErr) {
+   console.error("Receipt database transaction failed", {
+     code: recErr.code,
+     message: recErr.message
+   });
+
+   // The database transaction failed; remove the uploaded file.
+   const { error: cleanupErr } = await db.storage
+     .from("sifa-private-documents")
+     .remove([path]);
+
+   if (cleanupErr) {
+     console.error("Receipt cleanup failed", cleanupErr);
+     return out(500, {
+       error: "Receipt recording failed and the uploaded file requires staff cleanup. Please contact SIFA support before retrying."
+     }, origin);
+   }
+
+   return out(409, {
+     error: "The receipt could not be recorded. The invoice may already be awaiting review. Please refresh your invoices and try again if appropriate."
+   }, origin);
+ }
+
+ return out(201, result, origin);
 });
