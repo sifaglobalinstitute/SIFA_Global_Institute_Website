@@ -19,7 +19,25 @@ const sb = window.supabase.createClient(
   const r=await fetch(`${cfg.url}/functions/v1/sifa-classroom-api`,{method:"POST",headers:{"Content-Type":"application/json","apikey":cfg.anonKey,"Authorization":`Bearer ${data.session.access_token}`},body:JSON.stringify({action:"list-student"})});
   const b=await r.json().catch(()=>({}));
   if(r.status===404||r.status===503){show("SIFA classroom service is not deployed or configured yet. Your payment status has not been determined. Please try again later or contact SIFA support.","error");return}
-  if(!r.ok||!b.authorized){show(b.error||"Your learning access could not be confirmed. This does not automatically mean payment is missing. Please retry or contact SIFA support.","error");return}
+  
+if (!r.ok || !b.authorized) {
+  details.hidden = true;
+
+  if (r.status === 403 && b.authorized === false) {
+    show(
+      "Your student account has been recognized. Access to private classes and learning materials is currently pending. SIFA Global Institute will enable classroom access once your enrollment and applicable payment requirements have been verified.",
+      "access-pending"
+    );
+  } else {
+    show(
+      b.error || "We could not verify your classroom access right now. Please try again or contact SIFA Support.",
+      "error"
+    );
+  }
+
+  return;
+}
+
   show(`Access approved for ${b.program}. Your protected classroom is ready.`,"success");
   details.replaceChildren();
   const hero=document.createElement("div");hero.className="classroom-welcome";hero.innerHTML="<span class='classroom-kicker'>YOUR SIFA CLASSROOM</span><h2></h2><p>Keep your learning materials organized here. Downloads are private and temporary.</p>";hero.querySelector("h2").textContent=b.program;details.append(hero);
