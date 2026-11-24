@@ -38,7 +38,7 @@ Deno.serve(async req => {
   try { body=await req.json(); } catch { return response(400,{error:"Invalid request."},origin); }
   const action=clean(body.action,80);
   const isAny=(...roles:string[])=>roles.includes(role.role);
-  
+
 const audit = async (
   actionName: string,
   type: string,
@@ -188,11 +188,42 @@ const audit = async (
       const {data,error}=await admin.from("sifa_public_applications").update({status,decision_reason:reason||null,decided_by:userId,decided_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq("id",id).select("id,application_ref,status,decided_at").single();
       if(error) throw error; await audit("application_decision","public_application",id,data,reason||null); return response(200,{ok:true,item:data},origin);
     }
-    if(action==="list_receipts") {
-      if(!isAny("administrator","finance_reviewer")) return response(403,{error:"Finance reviewer or administrator role required."},origin);
-      const {data,error}=await admin.from("sifa_payment_receipts").select("id,invoice_id,student_user_id,storage_path,payment_method,claimed_amount,claimed_currency,transaction_reference,status,submitted_at").order("submitted_at",{ascending:false}).limit(200);
-      if(error) throw error; return response(200,{items:data},origin);
+
+    if (action === "list_receipts") {
+      if (!isAny("administrator", "finance_reviewer")) {
+        return response(403, {
+          error: "Finance reviewer or administrator role required."
+        }, origin);
+      }
+
+      const { data, error } = await admin
+        .from("sifa_payment_receipts")
+        .select(`
+          id,
+          invoice_id,
+          student_user_id,
+          storage_path,
+          payment_method,
+          claimed_amount,
+          claimed_currency,
+          transaction_reference,
+          sender_full_name,
+          sender_contact,
+          sender_relationship,
+          payment_quote_id,
+          status,
+          submitted_at
+        `)
+        .order("submitted_at", { ascending: false })
+        .limit(200);
+
+      if (error) throw error;
+
+      return response(200, {
+        items: data
+      }, origin);
     }
+
     if(action==="get_receipt_url") {
       if(!isAny("administrator","finance_reviewer")) return response(403,{error:"Finance reviewer or administrator role required."},origin);
       const id=clean(body.id,80);if(!id)return response(400,{error:"Receipt ID is required."},origin);
@@ -253,7 +284,7 @@ const audit = async (
   email?: string;
   email_confirmed_at?: string | null;
 } | null = null;
-      
+
 for (let page = 1; page <= 10; page++) {
   const { data, error } = await admin.auth.admin.listUsers({
     page,
@@ -316,7 +347,7 @@ for (let page = 1; page <= 10; page++) {
     if(action==="list_scholarships") {
       if(!isAny("administrator","coordinator")) return response(403,{error:"Coordinator or administrator role required."},origin);
       const {data,error}=await admin.from("sifa_scholarship_decisions").select("id,public_application_id,application_id,decision,monthly_discount_percent,starts_on,ends_on,reason,created_at,decided_at").order("created_at",{ascending:false}).limit(200);
-      
+
 if (error) throw error;
 
 type ScholarshipRecord = {
