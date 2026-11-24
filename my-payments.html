@@ -167,7 +167,52 @@ body.sifa-workspace{background:#f5f8fc}
 @media(max-width:900px){.sifa-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}.sifa-workspace footer .footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:650px){.sifa-workspace header .nav{flex-wrap:wrap;justify-content:center;padding:9px 0}.sifa-nav-actions{justify-content:center}.sifa-workspace .page-hero{padding:40px 0}.sifa-shortcuts{grid-template-columns:1fr 1fr}.sifa-workspace .admin-card,.sifa-workspace .cm-card,.sifa-workspace .pay-card{padding:17px}.sifa-workspace footer .footer-grid{grid-template-columns:1fr}.sifa-workspace .cm-form{grid-template-columns:1fr}}
 </style></head><body class="sifa-workspace"><header><div class="container nav"><a class="brand" href="index.html"><img src="assets/sifa-logo.png" alt="SIFA logo"><span>SIFA Global Institute<small>Private student payments</small></span></a><div class="sifa-nav-actions"><a class="btn btn-secondary" href="student-portal.html">← Back to Student Dashboard</a><a class="btn btn-secondary" href="student-payments.html">Public Fees &amp; Scholarships</a></div></div></header><main><section class="page-hero"><div class="container"><span class="eyebrow">Private student account</span><h1>My Fees &amp; Payments</h1><p>View invoices issued to your account and submit payment evidence for staff review. Your records require student authentication.</p></div></section><section><div class="container pay-shell"><p class="sifa-panel-label">Student billing</p><div class="fee-form-wrap" id="my-payments">
-<div id="payMessage" class="pay-message" role="status">Private payment tools load after account verification. All fee and scholarship information above is available without signing in.</div><section id="invoiceCard" class="pay-card" hidden><h2>Your invoices</h2><p>These invoices are private to your account.</p><div id="invoiceList" class="pay-list"></div></section><section id="receiptCard" class="pay-card" hidden><h2>Submit a payment receipt</h2><p class="muted">Submit only a receipt for a payment you actually made. Your receipt is sent for manual review and does not automatically activate course access.</p><form id="receiptForm" class="pay-form"><label>Invoice<select name="invoice_id" id="invoiceSelect" required></select></label><label>Payment method<select name="payment_method" required><option value="">Choose a method</option><option>Rwanda Mobile Money</option><option>Ziraat Bank Transfer</option></select></label><label>Amount paid<input name="claimed_amount" type="number" min="0.01" step="0.01" required></label><label>Currency<select name="claimed_currency" required><option value="">Choose currency</option><option>RWF</option><option>TRY</option></select></label><label>Transaction reference (if available)<input name="transaction_reference" maxlength="160"></label><label>Receipt file (PDF, JPG or PNG; max 5 MB)<input name="receipt" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required></label><button id="receiptSubmit" class="btn btn-primary" type="submit">Submit receipt for review</button></form><p class="muted">Never send your bank password, PIN, card number or one-time password.</p></section></div>
+<div id="payMessage" class="pay-message" role="status">Private payment tools load after account verification. All fee and scholarship information above is available without signing in.</div><section id="invoiceCard" class="pay-card" hidden><h2>Your invoices</h2><p>These invoices are private to your account.</p><div id="invoiceList" class="pay-list"></div></section><section id="receiptCard" class="pay-card" hidden><h2>Submit a payment receipt</h2><p class="muted">Submit only a receipt for a payment you actually made. Your receipt is sent for manual review and does not automatically activate course access.</p><form id="receiptForm" class="pay-form"><label>Invoice<select name="invoice_id" id="invoiceSelect" required></select></label><label>Payment method<select name="payment_method" required><option value="">Choose a method</option><option>Rwanda Mobile Money</option>
+<option> Ziraat Bank Transfer</option>
+<option value="Ziraat USD Bank Transfer">Ziraat USD Bank Transfer</option>
+</select></label><label>Amount paid<input name="claimed_amount" type="number" min="0.01" step="0.01" required></label><label>Currency<select name="claimed_currency" required><option value="">Choose currency</option><option>RWF</option>
+<option>TRY</option>
+<option>USD</option>
+</select></label>
+<div class="sender-section">
+  <h3>Payment Sender Information</h3>
+  <p class="muted">
+    If someone else paid on your behalf, enter their details
+    exactly as shown on the payment confirmation.
+  </p>
+
+  <label>
+    Sender's full name
+    <input
+      name="sender_full_name"
+      type="text"
+      maxlength="150"
+      autocomplete="name"
+      required
+      placeholder="Name of the person who sent the payment">
+  </label>
+
+  <label>
+    Sender's contact (optional)
+    <input
+      name="sender_contact"
+      type="text"
+      maxlength="100"
+      placeholder="Phone number or payment reference">
+  </label>
+
+  <label>
+    Who made the payment?
+    <select name="sender_relationship" required>
+      <option value="">Choose relationship</option>
+      <option value="self">Student (self)</option>
+      <option value="parent">Parent or guardian</option>
+      <option value="employer">Employer</option>
+      <option value="other">Another person</option>
+    </select>
+  </label>
+</div>
+<label>Transaction reference (if available)<input name="transaction_reference" maxlength="160"></label><label>Receipt file (PDF, JPG or PNG; max 5 MB)<input name="receipt" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required></label><button id="receiptSubmit" class="btn btn-primary" type="submit">Submit receipt for review</button></form><p class="muted">Never send your bank password, PIN, card number or one-time password.</p></section></div>
 
 <section class="pay-card" aria-labelledby="sifaBillingHelpTitle" style="margin-top:22px;border-left:5px solid #16834c;background:#ffffff;box-shadow:0 10px 28px rgba(7,26,51,.06)">
   <h2 id="sifaBillingHelpTitle" style="font-size:clamp(1.3rem,2.8vw,1.9rem);margin:0 0 10px">Need help with an invoice or payment?</h2>

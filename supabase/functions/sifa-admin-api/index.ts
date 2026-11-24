@@ -66,6 +66,111 @@ const audit = async (
 
   try {
     if(action==="whoami") return response(200,{role:role.role,active:role.active},origin);
+
+    // Approve a payment quote using the signed-in administrator.
+    if (action === "approve_payment_quote") {
+      if (!isAny("administrator")) {
+        return response(403, {
+          error: "Administrator permission required."
+        }, origin);
+      }
+
+      const invoiceId = clean(body.invoice_id, 80);
+      const currency = clean(body.payment_currency, 3);
+      const method = clean(body.payment_method, 80);
+      const note = clean(body.approval_note, 1001);
+      const validUntil = clean(body.valid_until, 50);
+
+      const amount = body.payable_amount;
+      const rate = body.exchange_rate;
+
+      const methods: Record<string, string> = {
+        RWF: "Rwanda Mobile Money",
+        TRY: "Ziraat Bank Transfer",
+        USD: "Ziraat USD Bank Transfer"
+      };
+
+      if (
+        !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(invoiceId) ||
+        methods[currency] !== method ||
+        typeof amount !== "number" ||
+        !Number.isFinite(amount) ||
+        amount <= 0 ||
+        typeof rate !== "number" ||
+        !Number.isFinite(rate) ||
+        rate <= 0 ||
+        note.length < 10 ||
+        note.length > 1000 ||
+        !validUntil ||
+        Number.isNaN(Date.parse(validUntil))
+      ) {
+        return response(400, {
+          error: "Provide a valid invoice, payment method, amount, exchange rate, expiry and approval note."
+        }, origin);
+      }
+
+      const anonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
+
+      if (!anonKey) {
+        return response(503, {
+          error: "Authenticated approval service is not configured."
+        }, origin);
+      }
+
+      // Use the administrator's JWT so auth.uid() is correct.
+      const staffClient = createClient(url, anonKey, {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false
+        },
+        global: {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      });
+
+      const { data: quoteId, error: quoteError } =
+        await staffClient.rpc("sifa_approve_payment_quote", {
+          p_invoice_id: invoiceId,
+          p_payment_method: method,
+          p_payment_currency: currency,
+          p_payable_amount: amount,
+          p_exchange_rate: rate,
+          p_valid_until: validUntil,
+          p_approval_note: note
+        });
+
+      if (quoteError) {
+        console.error("Payment quote approval failed:", quoteError.message);
+
+        return response(409, {
+          error: "Quote approval was not completed. Check the invoice, amount, exchange rate, and existing approvals."
+        }, origin);
+      }
+
+      await audit(
+        "payment_quote_approved",
+        "payment_quote",
+        quoteId,
+        {
+          invoice_id: invoiceId,
+          payment_currency: currency,
+          payment_method: method,
+          payable_amount: amount,
+          exchange_rate: rate,
+          valid_until: validUntil
+        },
+        note
+      );
+
+      return response(201, {
+        ok: true,
+        quote_id: quoteId,
+        message: "Payment quote approved. No payment has been confirmed."
+      }, origin);
+    }
+
     if(action==="list_applications") {
       if(!isAny("administrator","coordinator")) return response(403,{error:"Coordinator or administrator role required."},origin);
       const {data,error}=await admin.from("sifa_public_applications").select("id,application_ref,full_name,email,phone,country,program,status,payload,submitted_at,updated_at,decided_at,decision_reason").order("submitted_at",{ascending:false}).limit(200);

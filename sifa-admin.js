@@ -139,7 +139,103 @@ async function loadCertificates() {
   }
 }
 
- async function updateUI(){const {data}=await sb.auth.getSession();session=data.session;if(!session){$('loginCard').classList.remove('hidden');$('console').classList.add('hidden');return;} $('loginCard').classList.add('hidden');$('console').classList.remove('hidden');$('staffIdentity').textContent=`Signed in as ${session.user.email}`;try{const me=await api('whoami');currentRole=me.role;}catch(e){msg(e.message,'error');return;}const canApps=['administrator','coordinator'].includes(currentRole),canFinance=['administrator','finance_reviewer'].includes(currentRole),canEnroll=['administrator','coordinator','finance_reviewer'].includes(currentRole),canScholar=['administrator','coordinator'].includes(currentRole),canCert=['administrator','coordinator'].includes(currentRole);const hideCard=(id,hide)=>{$(id).closest('.admin-card').classList.toggle('hidden',hide);};hideCard('applications',!canApps);hideCard('receipts',!canFinance);hideCard('enrollments',!canEnroll);hideCard('scholarships',!canScholar);hideCard('certificates',!canCert);$('refreshApps').classList.toggle('hidden',!canApps);$('refreshReceipts').classList.toggle('hidden',!canFinance);$('refreshEnrollments').classList.toggle('hidden',!canEnroll);$('refreshScholarships').classList.toggle('hidden',!canScholar);$('refreshCertificates').classList.toggle('hidden',!canCert);if(!canApps&&!canFinance&&!canEnroll&&!canScholar&&!canCert){msg('Your staff role does not have a console workflow assigned yet.','error');return;}const jobs=[];if(canApps)jobs.push(loadApps());if(canFinance)jobs.push(loadReceipts());if(canEnroll)jobs.push(loadEnrollments());if(canScholar)jobs.push(loadScholarships());if(canCert)jobs.push(loadCertificates());await Promise.all(jobs);}
+
+  // Payment quote approval: existing staff authentication and protected admin API.
+  // This does not submit or approve a payment receipt.
+  const quoteForm = $('quoteApprovalForm');
+  const quoteCard = $('admin-payment-quotes');
+  const quoteSubmit = $('quoteApproveButton');
+  const quoteIds = [
+    'quoteInvoiceId', 'quotePaymentCurrency', 'quotePayableAmount',
+    'quoteExchangeRate', 'quoteValidUntil', 'quoteApprovalNote'
+  ];
+  const quoteMethods = {
+    RWF: 'Rwanda Mobile Money',
+    TRY: 'Ziraat Bank Transfer',
+    USD: 'Ziraat USD Bank Transfer'
+  };
+  function quoteMessage(text, type = '') {
+    const el = $('quoteMessage');
+    if (!el) return;
+    el.textContent = text;
+    el.className = 'admin-message' + (type ? ' ' + type : '');
+  }
+  function setQuoteAccess(enabled) {
+    if (!quoteCard || !quoteForm || !quoteSubmit) return;
+    quoteCard.classList.toggle('hidden', !enabled);
+    for (const id of quoteIds) {
+      const el = $(id);
+      if (!el) continue;
+      el.disabled = !enabled;
+      if (id === 'quoteInvoiceId') el.readOnly = !enabled;
+    }
+    quoteSubmit.disabled = !enabled;
+    quoteSubmit.textContent = 'Approve payment quote';
+    if (enabled) {
+      quoteMessage('Administrator access confirmed. Enter an existing unpaid invoice ID and a staff-approved conversion amount. Approving a quote does not mark the invoice paid.');
+    }
+  }
+  setQuoteAccess(false);
+  if (quoteForm) quoteForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (currentRole !== 'administrator' || !session) {
+      quoteMessage('Administrator sign-in is required.', 'error');
+      return;
+    }
+    if (!quoteForm.reportValidity()) return;
+    const fd = new FormData(quoteForm);
+    const invoiceId = String(fd.get('invoice_id') || '').trim();
+    const currency = String(fd.get('payment_currency') || '');
+    const amount = Number(fd.get('payable_amount'));
+    const rate = Number(fd.get('exchange_rate'));
+    const expiry = String(fd.get('valid_until') || '');
+    const note = String(fd.get('approval_note') || '').trim();
+    const expiryDate = new Date(expiry);
+    const now = Date.now();
+    const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidPattern.test(invoiceId) || !quoteMethods[currency] ||
+        !Number.isFinite(amount) || amount <= 0 ||
+        !Number.isFinite(rate) || rate <= 0 ||
+        !Number.isFinite(expiryDate.getTime()) ||
+        expiryDate.getTime() <= now || expiryDate.getTime() > now + 7 * 86400000 ||
+        note.length < 10 || note.length > 1000) {
+      quoteMessage('Check the invoice ID, approved amount, exchange rate, expiry (within 7 days), and approval note.', 'error');
+      return;
+    }
+    // The invoice and matching exchange amount are independently checked by SQL.
+    const ok = confirm(
+      `Approve a payment quote for invoice ${invoiceId}?\n\n` +
+      `Method: ${quoteMethods[currency]}\n` +
+      `Payable: ${amount} ${currency}\n` +
+      `Rate: ${rate} ${currency} per invoice currency unit\n\n` +
+      'Confirm this amount and rate have been verified by SIFA. This does NOT confirm payment.'
+    );
+    if (!ok) return;
+    quoteSubmit.disabled = true;
+    quoteSubmit.textContent = 'Approving securely…';
+    try {
+      const result = await api('approve_payment_quote', {
+        invoice_id: invoiceId,
+        payment_method: quoteMethods[currency],
+        payment_currency: currency,
+        payable_amount: amount,
+        exchange_rate: rate,
+        valid_until: expiryDate.toISOString(),
+        approval_note: note
+      });
+      quoteForm.reset();
+      quoteMessage(`Quote approved. Reference: ${result.quote_id}. No payment has been confirmed.`, 'success');
+    } catch (error) {
+      quoteMessage(error.message || 'Quote approval failed.', 'error');
+    } finally {
+      if (currentRole === 'administrator' && session) {
+        quoteSubmit.disabled = false;
+        quoteSubmit.textContent = 'Approve payment quote';
+      }
+    }
+  });
+
+ async function updateUI(){const {data}=await sb.auth.getSession();session=data.session;if(!session){currentRole='';setQuoteAccess(false);$('loginCard').classList.remove('hidden');$('console').classList.add('hidden');return;} $('loginCard').classList.add('hidden');$('console').classList.remove('hidden');$('staffIdentity').textContent=`Signed in as ${session.user.email}`;try{const me=await api('whoami');currentRole=me.role;setQuoteAccess(currentRole==='administrator');}catch(e){setQuoteAccess(false);msg(e.message,'error');return;}const canApps=['administrator','coordinator'].includes(currentRole),canFinance=['administrator','finance_reviewer'].includes(currentRole),canEnroll=['administrator','coordinator','finance_reviewer'].includes(currentRole),canScholar=['administrator','coordinator'].includes(currentRole),canCert=['administrator','coordinator'].includes(currentRole);const hideCard=(id,hide)=>{$(id).closest('.admin-card').classList.toggle('hidden',hide);};hideCard('applications',!canApps);hideCard('receipts',!canFinance);hideCard('enrollments',!canEnroll);hideCard('scholarships',!canScholar);hideCard('certificates',!canCert);$('refreshApps').classList.toggle('hidden',!canApps);$('refreshReceipts').classList.toggle('hidden',!canFinance);$('refreshEnrollments').classList.toggle('hidden',!canEnroll);$('refreshScholarships').classList.toggle('hidden',!canScholar);$('refreshCertificates').classList.toggle('hidden',!canCert);if(!canApps&&!canFinance&&!canEnroll&&!canScholar&&!canCert){msg('Your staff role does not have a console workflow assigned yet.','error');return;}const jobs=[];if(canApps)jobs.push(loadApps());if(canFinance)jobs.push(loadReceipts());if(canEnroll)jobs.push(loadEnrollments());if(canScholar)jobs.push(loadScholarships());if(canCert)jobs.push(loadCertificates());await Promise.all(jobs);}
  $('loginForm').addEventListener('submit',async e=>{e.preventDefault();const fd=new FormData(e.currentTarget);try{msg('Signing in…');const {error}=await sb.auth.signInWithPassword({email:String(fd.get('email')).trim(),password:String(fd.get('password'))});if(error)throw error;await updateUI();}catch(err){msg(err.message||'Sign-in failed.','error');}});
  $('refreshApps').addEventListener('click',loadApps);$('refreshReceipts').addEventListener('click',loadReceipts);$('refreshEnrollments').addEventListener('click',loadEnrollments);$('refreshScholarships').addEventListener('click',loadScholarships);$('refreshCertificates').addEventListener('click',loadCertificates);$('signOut').addEventListener('click',async()=>{await sb.auth.signOut();await updateUI();msg('Signed out.','success');});sb.auth.onAuthStateChange(()=>{setTimeout(updateUI,0);});updateUI();
 })();

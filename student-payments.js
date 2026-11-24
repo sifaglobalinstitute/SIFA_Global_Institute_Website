@@ -6,6 +6,33 @@
   let sb;
   let session;
   let invoices = [];
+  let approvedQuotes = [];
+  const methodsByCurrency = {
+    RWF: 'Rwanda Mobile Money',
+    TRY: 'Ziraat Bank Transfer',
+    USD: 'Ziraat USD Bank Transfer'
+  };
+
+  // Only show quotes returned by the authenticated billing service.
+  function loadQuotes(result) {
+    const values = [
+      ...(Array.isArray(result.payment_quotes) ? result.payment_quotes : []),
+      ...(Array.isArray(result.quotes) ? result.quotes : []),
+      ...(Array.isArray(result.invoices) ? result.invoices.flatMap(i =>
+        Array.isArray(i.payment_quotes) ? i.payment_quotes :
+        Array.isArray(i.quotes) ? i.quotes : i.payment_quote ? [{...i.payment_quote, invoice_id:i.id, status:"approved"}] : []
+      ) : [])
+    ];
+    const now = Date.now();
+    approvedQuotes = values.filter(q =>
+      q && q.status === 'approved' &&
+      methodsByCurrency[q.payment_currency] === q.payment_method &&
+      Number.isFinite(Number(q.payable_amount)) && Number(q.payable_amount) > 0 &&
+      q.valid_until && Date.parse(q.valid_until) > now &&
+      result.invoices?.some(i => i.id === q.invoice_id && ['unpaid','overdue'].includes(i.status))
+    );
+  }
+
 
   // Display payment information and error messages.
   function msg(text, type = '') {
@@ -116,6 +143,28 @@
         ` · Status: ${btnTextStatus(invoice.status)}`;
 
       article.append(title, description);
+
+      if (['unpaid', 'overdue'].includes(invoice.status)) {
+        const heading = document.createElement('h4');
+        heading.textContent = 'Payment methods and approved amounts';
+        article.append(heading);
+        const info = document.createElement('p');
+        info.textContent = 'Choose the payment route suitable for you. Cross-currency transfers require an approved SIFA quote; a receipt does not confirm payment.';
+        article.append(info);
+        for (const [currency, method] of Object.entries(methodsByCurrency)) {
+          const q = approvedQuotes.find(q => q.invoice_id === invoice.id && q.payment_currency === currency);
+          const line = document.createElement('p');
+          line.className = 'small';
+          if (q) {
+            line.textContent = `${method} (${currency}): ${q.payable_amount} ${currency} approved until ${new Date(q.valid_until).toLocaleString()}.`;
+          } else if (currency === invoice.currency) {
+            line.textContent = `${method} (${currency}): ${invoice.amount_due} ${currency} (invoice amount).`;
+          } else {
+            line.textContent = `${method} (${currency}): request an approved amount from SIFA before transferring.`;
+          }
+          article.append(line);
+        }
+      }
       host.append(article);
 
       // Only eligible invoices can receive new payment receipts.
@@ -140,7 +189,59 @@
       }
     }
 
+
     receiptCard.hidden = !select.options.length;
+    const currencySelect = document.querySelector('#receiptForm select[name="claimed_currency"]');
+    const methodSelect = document.querySelector('#receiptForm select[name="payment_method"]');
+    const amountInput = document.querySelector('#receiptForm input[name="claimed_amount"]');
+    let quoteSelect = document.getElementById('approvedPaymentChoice');
+    if (!quoteSelect) {
+      const label = document.createElement('label');
+      label.textContent = 'Choose an approved payment option';
+      quoteSelect = document.createElement('select');
+      quoteSelect.id = 'approvedPaymentChoice';
+      quoteSelect.name = 'payment_quote_id';
+      quoteSelect.required = true;
+      label.append(quoteSelect);
+      const invoiceField = select.closest('label');
+      invoiceField?.insertAdjacentElement('afterend', label);
+    }
+    function updatePaymentOptions() {
+      const invoice = invoices.find(x => x.id === select.value);
+      quoteSelect.replaceChildren();
+      if (!invoice) return;
+      const options = approvedQuotes.filter(q => q.invoice_id === invoice.id);
+      const choices = [];
+      // Invoice-currency transfers continue using the existing secure v2 path.
+      choices.push({id: '', currency: invoice.currency, method: methodsByCurrency[invoice.currency], amount: Number(invoice.amount_due)});
+      // Cross-currency transfers require a live staff-approved quote.
+      for (const q of options) {
+        if (q.payment_currency !== invoice.currency) {
+          choices.push({id: q.id, currency: q.payment_currency, method: q.payment_method, amount: Number(q.payable_amount)});
+        }
+      }
+      for (const choice of choices) {
+        const option = document.createElement('option');
+        option.value = choice.id || 'invoice';
+        option.textContent = `${choice.method} — ${choice.amount} ${choice.currency}`;
+        quoteSelect.append(option);
+      }
+      const apply = () => {
+        const c = choices.find(x => (x.id || 'invoice') === quoteSelect.value);
+        if (!c) return;
+        currencySelect.value = c.currency;
+        methodSelect.value = c.method;
+        amountInput.value = String(c.amount);
+      };
+      quoteSelect.onchange = apply;
+      apply();
+    }
+    for (const field of [currencySelect, methodSelect, amountInput]) {
+      if (field) { field.style.pointerEvents = 'none'; field.tabIndex = -1; field.setAttribute('aria-readonly', 'true'); }
+    }
+    select.onchange = updatePaymentOptions;
+    updatePaymentOptions();
+
   }
 
   // Convert a selected receipt file into Base64.
@@ -213,7 +314,7 @@ sb = window.supabase.createClient(
       );
 
       const studentInvoices = result.invoices || [];
-
+      loadQuotes(result);
       render(studentInvoices);
 
       // Show an explanation when no invoices exist.
@@ -277,13 +378,18 @@ sb = window.supabase.createClient(
       return msg('Choose a valid invoice.', 'error');
     }
 
-    // Verify that the selected currency matches the invoice.
-    if (formData.get('claimed_currency') !== invoice.currency) {
-      return msg(
-        `This invoice is in ${invoice.currency}. ` +
-        'Please choose the matching currency.',
-        'error'
-      );
+    const selectedQuoteId = String(formData.get('payment_quote_id') || 'invoice');
+    const selectedQuote = selectedQuoteId === 'invoice' ? null : approvedQuotes.find(q =>
+      q.id === selectedQuoteId && q.invoice_id === invoice.id && q.valid_until && Date.parse(q.valid_until) > Date.now()
+    );
+    if (selectedQuoteId !== 'invoice' && !selectedQuote) return msg('Approved payment quote expired or unavailable. Refresh the page.', 'error');
+    const expectedCurrency = selectedQuote?.payment_currency || invoice.currency;
+    const expectedMethod = selectedQuote?.payment_method || methodsByCurrency[invoice.currency];
+    const expectedAmount = Number(selectedQuote?.payable_amount ?? invoice.amount_due);
+    if (formData.get('claimed_currency') !== expectedCurrency ||
+        formData.get('payment_method') !== expectedMethod ||
+        Number(formData.get('claimed_amount')) !== expectedAmount) {
+      return msg('Payment details must match the approved payment option.', 'error');
     }
 
     const button = $('receiptSubmit');
@@ -302,12 +408,18 @@ sb = window.supabase.createClient(
         'submit-payment-receipt',
         {
           invoice_id: invoice.id,
+          payment_quote_id: selectedQuote?.id || null,
           payment_method: formData.get('payment_method'),
           claimed_amount: Number(
             formData.get('claimed_amount')
           ),
           claimed_currency: formData.get('claimed_currency'),
-          transaction_reference: formData.get('transaction_reference'),
+          
+transaction_reference: formData.get('transaction_reference'),
+sender_full_name: String(formData.get('sender_full_name') || '').trim(),
+sender_contact: String(formData.get('sender_contact') || '').trim(),
+sender_relationship: String(formData.get('sender_relationship') || ''),
+
           name: file.name,
           type: file.type,
           base64
@@ -329,6 +441,7 @@ sb = window.supabase.createClient(
         }
       );
 
+      loadQuotes(refreshed);
       render(refreshed.invoices || []);
 
     } catch (error) {
