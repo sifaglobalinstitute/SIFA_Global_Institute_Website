@@ -9,6 +9,24 @@
 <link href="styles.css" rel="stylesheet"/>
 <style>
 .availability-note{border:1px solid #d9e5ef;background:#f8fbfd;border-radius:14px;padding:18px 20px;margin-bottom:28px}.availability-note strong{color:#071a33}.availability-note p{margin:6px 0 0;color:#62748a;line-height:1.6}.course-card{display:flex;flex-direction:column;height:100%;box-sizing:border-box}.course-card .tag{display:inline-flex;align-items:center;align-self:flex-start;min-height:32px;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}.course-card .course-status-open{background:#e8f7ef;color:#187345}.course-card .course-status-closed{background:#eef2f6;color:#5f7082}.course-card h3{min-height:58px;margin-top:14px}.course-card p{flex:1}.course-card .actions{margin-top:22px}.course-card .btn-disabled{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:12px 22px;border-radius:10px;background:#e9eef3;color:#667789;border:1px solid #d7e0e8;font-weight:700;cursor:not-allowed;pointer-events:none;opacity:1}@media(max-width:760px){.course-card h3{min-height:0}}
+
+/* SIFA Digital Campus — Courses gateway (page-local styles) */
+.sifa-courses-gateway{padding:32px 0 0;background:#fff}
+.sifa-courses-gateway .campus-card{box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.85fr);gap:32px;align-items:center;padding:clamp(24px,4vw,44px);border-radius:20px;border-top:4px solid #48bd36;background:linear-gradient(115deg,#0b2545 0%,#123e70 75%,#12636a 100%);box-shadow:0 12px 30px rgba(11,37,69,.12);color:#fff}
+.sifa-courses-gateway .campus-label{display:flex;align-items:center;gap:10px;color:#a5edbe;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin:0 0 12px}
+.sifa-courses-gateway .campus-label svg{flex:none;width:26px;height:26px}
+.sifa-courses-gateway h2{color:#fff;font-size:clamp(25px,3.3vw,38px);line-height:1.18;letter-spacing:-.025em;margin:0 0 12px}
+.sifa-courses-gateway p{color:#e1eaf5;line-height:1.65;margin:0;font-size:16px;max-width:680px}
+.sifa-courses-gateway .campus-actions{display:flex;flex-direction:column;gap:12px;border-left:1px solid rgba(255,255,255,.22);padding-left:28px;min-width:0}
+.sifa-courses-gateway .campus-link{display:flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:12px 16px;border-radius:10px;font-size:15px;font-weight:800;line-height:1.35;text-align:center;text-decoration:none;box-sizing:border-box;transition:background .15s ease}
+.sifa-courses-gateway .campus-primary{background:#54d044;color:#092b47;border:1px solid #54d044}
+.sifa-courses-gateway .campus-primary:hover{background:#79df6c}
+.sifa-courses-gateway .campus-secondary{border:1px solid #a9c2da;color:#fff;background:transparent}
+.sifa-courses-gateway .campus-secondary:hover{background:rgba(255,255,255,.12)}
+.sifa-courses-gateway .campus-link:focus-visible{outline:3px solid #fff;outline-offset:4px}
+.sifa-courses-gateway .campus-security{display:flex;align-items:flex-start;gap:8px;color:#dce8f4;font-size:12px;line-height:1.55;margin-top:3px}
+.sifa-courses-gateway .campus-security svg{flex:none;width:17px;height:17px;color:#a5edbe}
+@media(max-width:760px){.sifa-courses-gateway{padding-top:22px}.sifa-courses-gateway .campus-card{grid-template-columns:1fr;gap:22px}.sifa-courses-gateway .campus-actions{border-left:0;border-top:1px solid rgba(255,255,255,.22);padding:20px 0 0}}
 </style>
 <link rel="icon" type="image/png" href="assets/sifa-logo.png">
 </head>
@@ -29,6 +47,23 @@
 </div></header>
 <main>
 <section class="page-hero"><div class="container"><span class="eyebrow">Courses</span><h1>Practical software training.</h1><p>Initial training focuses on software and digital tools that connect directly to accounting, finance and business work.</p></div></section>
+<section class="sifa-courses-gateway" aria-labelledby="campus-courses-title">
+  <div class="container">
+    <div class="campus-card">
+      <div>
+        <div class="campus-label"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m2 9 10-5 10 5-10 5-10-5Zm4 2v6c3 3 9 3 12 0v-6M22 9v8"/></svg>SIFA Global Institute · Digital Campus</div>
+        <h2 id="campus-courses-title">Already enrolled in a SIFA program?</h2>
+        <p>Continue your professional learning journey. Sign in to your Student Portal to access your enrolled courses, live classes, learning materials and practical assignments.</p>
+      </div>
+      <div class="campus-actions">
+        <a class="campus-link campus-primary" href="student-portal.html">Access My Courses <span aria-hidden="true">→</span></a>
+        <a class="campus-link campus-secondary" href="contact.html">Contact Student Support</a>
+        <div class="campus-security"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg><span>Secure classroom access for eligible enrolled students.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section><div class="container"><div class="availability-note"><strong>Course availability is controlled by SIFA.</strong><p><strong>QuickBooks Practical Training is currently closed for applications.</strong> Other offerings are being opened in stages as cohorts are prepared. Only courses marked <strong>Open Now</strong> can receive applications when admissions are active.</p></div><div class="grid-3">
 <div class="card course-card"><span class="tag course-status-closed">Not Open Yet</span><h3>QuickBooks Practical Training</h3><p>Practical training in company setup, customers and suppliers, transactions, reconciliation, reporting and accounting workflows.</p><div class="actions"><span aria-disabled="true" class="btn-disabled">Closed</span></div></div>
 <div class="card course-card"><span class="tag course-status-closed">Not Open Yet</span><h3>Sage Accounting Training</h3><p>Practical computerized accounting workflows, transaction processing, reporting and financial management.</p><div class="actions"><span aria-disabled="true" class="btn-disabled">Closed</span></div></div>

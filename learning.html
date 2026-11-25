@@ -8,6 +8,32 @@
 <meta content="SIFA Global Institute provides practical education in accounting software, financial systems and digital professional tools." name="description"/>
 <link href="styles.css" rel="stylesheet"/>
 <link rel="icon" type="image/png" href="assets/sifa-logo.png">
+<style>
+/* SIFA Digital Learning Gateway — scoped to this page */
+.sifa-gateway{padding:42px 0;background:#f3f7fa}
+.sifa-gateway .sg-shell{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);background:#0b2545;border-radius:20px;overflow:hidden;box-shadow:0 15px 40px rgba(11,37,69,.12);border-top:4px solid #42bd35}
+.sifa-gateway .sg-intro{padding:clamp(24px,4vw,48px);background:linear-gradient(125deg,#0b2545,#123e70 75%,#105b65);color:#fff}
+.sifa-gateway .sg-kicker{display:block;color:#a4edb5;font-size:12px;letter-spacing:.13em;font-weight:800;text-transform:uppercase;margin-bottom:14px}
+.sifa-gateway .sg-intro h2{color:#fff;font-size:clamp(28px,3.4vw,43px);line-height:1.15;margin:0 0 15px;letter-spacing:-.025em}
+.sifa-gateway .sg-intro p{color:#e1eaf5;line-height:1.75;margin:0 0 24px;font-size:16px}
+.sifa-gateway .sg-features{display:grid;grid-template-columns:1fr 1fr;gap:12px;list-style:none;padding:0;margin:0}
+.sifa-gateway .sg-features li{display:flex;align-items:center;gap:9px;color:#fff;font-size:14px;line-height:1.5}
+.sifa-gateway .sg-features li::before{content:'✓';color:#a4edb5;font-weight:800}
+.sifa-gateway .sg-access{padding:clamp(24px,4vw,38px);background:#fff;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.sifa-gateway .sg-access h3,.sifa-gateway .sg-new h3{font-size:22px;color:#0b2545;margin:0 0 10px;line-height:1.25}
+.sifa-gateway .sg-access p,.sifa-gateway .sg-new p{color:#42566b;font-size:15px;line-height:1.7;margin:0 0 18px}
+.sifa-gateway a.sg-button{display:inline-flex;align-items:center;justify-content:center;gap:12px;padding:13px 19px;border-radius:10px;font-weight:800;text-decoration:none;line-height:1.4;text-align:center;font-size:15px;border:1px solid #a8bdcf;color:#123e70;background:#fff;box-sizing:border-box}
+.sifa-gateway a.sg-primary{background:#117847;color:#fff;border-color:#117847;width:100%}
+.sifa-gateway a.sg-primary:hover{background:#0b5c36;color:#fff}
+.sifa-gateway a.sg-button:focus-visible,.sifa-gateway a.sg-contact:focus-visible{outline:3px solid #2181d3;outline-offset:4px}
+.sifa-gateway .sg-secure{margin:13px 0 0;color:#526579;font-size:13px;line-height:1.6}
+.sifa-gateway .sg-new{margin-top:18px;border:1px solid #d9e5ef;background:#fff;border-radius:16px;padding:24px;display:flex;align-items:center;justify-content:space-between;gap:22px;flex-wrap:wrap}
+.sifa-gateway .sg-new-copy{flex:1 1 350px}.sifa-gateway .sg-new p{margin:0}
+.sifa-gateway .sg-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.sifa-gateway a.sg-contact{color:#117847;font-weight:700;text-decoration:underline;text-underline-offset:3px;font-size:14px}
+@media(max-width:800px){.sifa-gateway .sg-shell{grid-template-columns:1fr}.sifa-gateway{padding:24px 0}}
+@media(max-width:420px){.sifa-gateway .sg-features{grid-template-columns:1fr}.sifa-gateway .sg-actions{width:100%}.sifa-gateway .sg-actions .sg-button{width:100%}}
+</style>
 </head>
 <body>
 <div class="topbar"><div class="container"><span>Empowering Financial Professionals Through Technology</span><span>sifaglobalinstitute12@gmail.com</span></div></div>
@@ -26,6 +52,38 @@
 </div></header>
 <main>
 <section class="page-hero"><div class="container"><span class="eyebrow">Learning Experience</span><h1>Learn. Practice. Apply.</h1><p>SIFA's learning model is built around practical demonstrations, guided exercises, independent work, assessment and realistic projects.</p></div></section>
+<section class="sifa-gateway" aria-labelledby="sifa-gateway-title">
+  <div class="container">
+    <div class="sg-shell">
+      <div class="sg-intro">
+        <span class="sg-kicker">SIFA Global Institute · Digital Campus</span>
+        <h2 id="sifa-gateway-title">Your learning journey starts here.</h2>
+        <p>Build practical skills and continue your professional training through the SIFA Digital Classroom. Your enrolled programs bring live instruction, learning resources and practical exercises together in one place.</p>
+        <ul class="sg-features">
+          <li>Live online classes</li><li>Digital course materials</li>
+          <li>Practical assignments</li><li>Professional development</li>
+        </ul>
+      </div>
+      <div class="sg-access">
+        <h3>Already a SIFA student?</h3>
+        <p>Sign in to your Student Portal to access your enrolled programs, check your learning eligibility and continue your training.</p>
+        <a class="sg-button sg-primary" href="student-portal.html">Sign in to Student Portal <span aria-hidden="true">→</span></a>
+        <div class="sg-secure">Secure classroom access is available to eligible enrolled students after the applicable enrollment and payment requirements have been met.</div>
+      </div>
+    </div>
+    <div class="sg-new">
+      <div class="sg-new-copy">
+        <h3>New to SIFA Global Institute?</h3>
+        <p>Explore our accounting, financial technology and business software training programs and learn about upcoming admission opportunities.</p>
+      </div>
+      <div class="sg-actions">
+        <a class="sg-button" href="courses.html">Explore Training Programs</a>
+        <a class="sg-contact" href="contact.html">Contact Admissions</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section><div class="container"><div class="grid-3"><div class="card"><div class="icon">1</div><h3>Theory</h3><p>Understand the accounting or business concept behind the task.</p></div><div class="card"><div class="icon">2</div><h3>Demonstration</h3><p>Watch the instructor connect the concept to the software.</p></div><div class="card"><div class="icon">3</div><h3>Guided Practice</h3><p>Perform the task with structured support.</p></div><div class="card"><div class="icon">4</div><h3>Independent Practice</h3><p>Complete a realistic task independently.</p></div><div class="card"><div class="icon">5</div><h3>Assessment</h3><p>Show that the defined competency has been achieved.</p></div><div class="card"><div class="icon">6</div><h3>Project</h3><p>Apply multiple skills to a simulated business environment.</p></div></div></div></section>
 <section class="light"><div class="container"><div class="section-head"><span class="kicker">Delivery</span><h2>Online, practical and accessible.</h2><p class="lead">SIFA's learning programs are designed to support live online classes, recorded resources, practical files, Q&amp;A sessions, and digital learning materials.</p></div><div class="notice">Specific platforms such as Zoom, Google Meet, Microsoft Teams or other tools may change according to cost, scale and learner needs.</div></div></section>
 </main>

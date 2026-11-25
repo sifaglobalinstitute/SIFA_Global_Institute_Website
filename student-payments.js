@@ -6,6 +6,33 @@
   let sb;
   let session;
   let invoices = [];
+  let approvedQuotes = [];
+  const methodsByCurrency = {
+    RWF: 'Rwanda Mobile Money',
+    TRY: 'Ziraat Bank Transfer',
+    USD: 'Ziraat USD Bank Transfer'
+  };
+
+  // Only show quotes returned by the authenticated billing service.
+  function loadQuotes(result) {
+    const values = [
+      ...(Array.isArray(result.payment_quotes) ? result.payment_quotes : []),
+      ...(Array.isArray(result.quotes) ? result.quotes : []),
+      ...(Array.isArray(result.invoices) ? result.invoices.flatMap(i =>
+        Array.isArray(i.payment_quotes) ? i.payment_quotes :
+        Array.isArray(i.quotes) ? i.quotes : i.payment_quote ? [{...i.payment_quote, invoice_id:i.id, status:"approved"}] : []
+      ) : [])
+    ];
+    const now = Date.now();
+    approvedQuotes = values.filter(q =>
+      q && q.status === 'approved' &&
+      methodsByCurrency[q.payment_currency] === q.payment_method &&
+      Number.isFinite(Number(q.payable_amount)) && Number(q.payable_amount) > 0 &&
+      q.valid_until && Date.parse(q.valid_until) > now &&
+      result.invoices?.some(i => i.id === q.invoice_id && ['unpaid','overdue'].includes(i.status))
+    );
+  }
+
 
   // Display payment information and error messages.
   function msg(text, type = '') {
@@ -69,6 +96,91 @@
     return result;
   }
 
+  let receiptHistory = new Map();
+  let historyAvailable = false;
+  let programNames = new Map();
+  let selectedGroup = null;
+  const groups = [
+    ['unpaid','Unpaid invoices','Payments requiring attention','#94610e'],
+    ['pending','Pending verification','Receipts awaiting staff review','#245b9c'],
+    ['paid','Paid invoices','Verified payments','#147847'],
+    ['rejected','Rejected payments','Outstanding invoices with rejected evidence','#a72c37'],
+    ['waived','Fee waivers','Invoices fully waived','#147847'],
+    ['other','Other invoices','Cancelled or other statuses','#52677b']
+  ];
+  function category(invoice, latest) {
+    if (invoice.status === 'paid') return 'paid';
+    if (invoice.status === 'waived') return 'waived';
+    if (invoice.status === 'receipt_submitted') return 'pending';
+    if (['unpaid','overdue'].includes(invoice.status)) return latest?.status === 'rejected' ? 'rejected' : 'unpaid';
+    return 'other';
+  }
+  async function loadDashboardData(result) {
+    programNames = new Map((Array.isArray(result.enrollments) ? result.enrollments : []).map(e => [e.id,e.program]));
+    receiptHistory = new Map(); historyAvailable = false;
+    const list = Array.isArray(result.invoices) ? result.invoices : [];
+    if (!list.length) { historyAvailable = true; return; }
+    const ids = new Set(list.map(i => i.id));
+    try {
+      const {data,error} = await sb.auth.getSession();
+      if (error || !data.session || data.session.user.id !== session?.user.id) throw new Error('Session changed');
+      // Existing authenticated RLS governs access. Explicit owner filter also limits staff accounts to their own receipts.
+      for (let offset=0;;offset+=200) {
+        const {data:rows,error:err} = await sb.from('sifa_payment_receipts')
+          .select('id,invoice_id,status,submitted_at,reviewed_at,reviewer_note')
+          .eq('student_user_id',data.session.user.id)
+          .order('submitted_at',{ascending:false}).order('id',{ascending:false}).range(offset,offset+199);
+        if (err || !Array.isArray(rows)) throw err || new Error('Receipt history unavailable');
+        for (const r of rows) if (ids.has(r.invoice_id) && !receiptHistory.has(r.invoice_id)) receiptHistory.set(r.invoice_id,r);
+        if (rows.length < 200) break;
+      }
+      historyAvailable = true;
+    } catch (_) { receiptHistory.clear(); }
+  }
+  function element(tag,text,cls) {
+    const el=document.createElement(tag); if(text!==undefined) el.textContent=text; if(cls) el.className=cls; return el;
+  }
+  function invoiceTitle(i) { return i.invoice_type === 'certificate_fee' ? 'Certificate fee' : i.invoice_type === 'monthly_course' ? 'Monthly course fee' : 'Invoice'; }
+  function program(i) { return programNames.get(i.enrollment_id) || i.program || ''; }
+  function renderCategories(host,list) {
+    const grid=element('div',undefined,'billing-groups');
+    const panel=element('div',undefined,'billing-records'); panel.id='billingRecords';
+    const buttons=[];
+    if (!historyAvailable) host.append(element('p','Receipt history is temporarily unavailable. Outstanding invoices remain under Unpaid; rejected payment counts cannot be confirmed. Refresh records or contact SIFA support.','billing-history-warning'));
+    function show(key) {
+      selectedGroup=key; panel.replaceChildren(); panel.hidden=!key;
+      for(const [k,b] of buttons) { b.setAttribute('aria-expanded',String(k===key)); b.querySelector('.billing-view').textContent=k===key?'Close records':'View records'; }
+      if (!key) return;
+      const group=groups.find(g=>g[0]===key); panel.append(element('h3',group[1]));
+      const rows=list.filter(i=>category(i,receiptHistory.get(i.id))===key);
+      if (!rows.length) panel.append(element('p',key==='rejected'&&!historyAvailable?'Receipt history unavailable.':'No records in this category.','billing-empty'));
+      for(const i of rows) {
+        const r=receiptHistory.get(i.id); const item=element('details',undefined,'invoice');
+        const summary=element('summary'); const left=element('div'); left.append(element('strong',invoiceTitle(i)),element('small',[program(i),i.period_start+' — '+i.period_end].filter(Boolean).join(' · ')));
+        const right=element('div',undefined,'billing-amount'); right.append(element('strong',`${i.amount_due} ${i.currency}`),element('small',key==='rejected'?'Receipt rejected':btnTextStatus(i.status))); summary.append(left,right);
+        const detail=element('div',undefined,'billing-detail');
+        detail.append(element('p',`Invoice amount: ${i.amount_due} ${i.currency} · Due date: ${i.due_date || 'Not specified'}`),element('p',`Invoice status: ${btnTextStatus(i.status)}`));
+        if (r) { detail.append(element('p',`Latest receipt: ${r.status.replaceAll('_',' ')}${r.reviewed_at?' · Reviewed '+new Date(r.reviewed_at).toLocaleString():''}`)); if(r.status==='rejected' && r.reviewer_note) detail.append(element('p','Review reason: '+r.reviewer_note)); }
+        if (['unpaid','overdue'].includes(i.status)) {
+          detail.append(element('h4','Payment methods and approved amounts'),element('p','Cross-currency transfers require an approved SIFA quote. Submit only evidence of an actual payment; do not pay again solely because a receipt was rejected.'));
+          for (const [currency,method] of Object.entries(methodsByCurrency)) {
+            const q=approvedQuotes.find(q=>q.invoice_id===i.id && q.payment_currency===currency && Date.parse(q.valid_until)>Date.now());
+            detail.append(element('p',q?`${method} (${currency}): ${q.payable_amount} ${currency} approved until ${new Date(q.valid_until).toLocaleString()}.`:currency===i.currency?`${method}: ${i.amount_due} ${currency} (invoice amount).`:`${method}: request an approved amount from SIFA before transferring.`));
+          }
+          const action=element('button',key==='rejected'?'Submit corrected receipt':'Submit payment receipt','btn btn-primary'); action.type='button'; action.addEventListener('click',()=>{const s=$('invoiceSelect'); s.value=i.id; s.dispatchEvent(new Event('change')); $('receiptCard').hidden=false; $('receiptCard').scrollIntoView({block:'start',behavior:'smooth'});}); detail.append(action);
+        }
+        item.append(summary,detail); panel.append(item);
+      }
+    }
+    for(const [key,name,desc,color] of groups) {
+      const count=list.filter(i=>category(i,receiptHistory.get(i.id))===key).length;
+      if(key==='other' && !count) continue;
+      const b=element('button',undefined,'billing-group'); b.type='button'; b.style.setProperty('--accent',color); b.setAttribute('aria-controls','billingRecords');
+      b.append(element('span',key==='rejected'&&!historyAvailable?'—':String(count),'billing-count'),element('strong',name),element('small',desc),element('span','View records','billing-view')); b.addEventListener('click',()=>show(selectedGroup===key?null:key)); buttons.push([key,b]); grid.append(b);
+    }
+    host.append(grid,panel); show(buttons.some(([k])=>k===selectedGroup)?selectedGroup:null);
+  }
+
   // Display invoices belonging to the signed-in student.
   function render(list) {
     invoices = list;
@@ -87,60 +199,67 @@
 
     invoiceCard.hidden = false;
 
-    if (!list.length) {
-      host.textContent =
-        'No invoices are currently available for your account. ' +
-        'Contact SIFA support if you expect an invoice.';
-
-      receiptCard.hidden = true;
-      return;
-    }
-
+    renderCategories(host,list);
     for (const invoice of list) {
-      const article = document.createElement('article');
-      article.className = 'invoice';
-
-      const title = document.createElement('h3');
-
-      title.textContent =
-        (invoice.invoice_type === 'certificate_fee'
-          ? 'Certificate fee'
-          : 'Monthly course fee') +
-        ` · ${invoice.period_start} — ${invoice.period_end}`;
-
-      const description = document.createElement('p');
-
-      description.textContent =
-        `Amount due: ${invoice.amount_due} ${invoice.currency}` +
-        ` · Due: ${invoice.due_date}` +
-        ` · Status: ${btnTextStatus(invoice.status)}`;
-
-      article.append(title, description);
-      host.append(article);
-
-      // Only eligible invoices can receive new payment receipts.
-      if (
-        ![
-          'paid',
-          'waived',
-          'cancelled',
-          'receipt_submitted'
-        ].includes(invoice.status)
-      ) {
-        const option = document.createElement('option');
-
-        option.value = invoice.id;
-
-        option.textContent =
-          `${invoice.period_start} · ` +
-          `${invoice.amount_due} ${invoice.currency} · ` +
-          btnTextStatus(invoice.status);
-
+      if (['unpaid','overdue'].includes(invoice.status)) {
+        const option=document.createElement('option'); option.value=invoice.id;
+        option.textContent=[invoiceTitle(invoice),program(invoice),invoice.period_start,`${invoice.amount_due} ${invoice.currency}`,btnTextStatus(invoice.status)].filter(Boolean).join(' · ');
         select.append(option);
       }
     }
 
-    receiptCard.hidden = !select.options.length;
+    receiptCard.hidden = true;
+    const currencySelect = document.querySelector('#receiptForm select[name="claimed_currency"]');
+    const methodSelect = document.querySelector('#receiptForm select[name="payment_method"]');
+    const amountInput = document.querySelector('#receiptForm input[name="claimed_amount"]');
+    let quoteSelect = document.getElementById('approvedPaymentChoice');
+    if (!quoteSelect) {
+      const label = document.createElement('label');
+      label.textContent = 'Choose an approved payment option';
+      quoteSelect = document.createElement('select');
+      quoteSelect.id = 'approvedPaymentChoice';
+      quoteSelect.name = 'payment_quote_id';
+      quoteSelect.required = true;
+      label.append(quoteSelect);
+      const invoiceField = select.closest('label');
+      invoiceField?.insertAdjacentElement('afterend', label);
+    }
+    function updatePaymentOptions() {
+      const invoice = invoices.find(x => x.id === select.value);
+      quoteSelect.replaceChildren();
+      if (!invoice) return;
+      const options = approvedQuotes.filter(q => q.invoice_id === invoice.id);
+      const choices = [];
+      // Invoice-currency transfers continue using the existing secure v2 path.
+      choices.push({id: '', currency: invoice.currency, method: methodsByCurrency[invoice.currency], amount: Number(invoice.amount_due)});
+      // Cross-currency transfers require a live staff-approved quote.
+      for (const q of options) {
+        if (q.payment_currency !== invoice.currency) {
+          choices.push({id: q.id, currency: q.payment_currency, method: q.payment_method, amount: Number(q.payable_amount)});
+        }
+      }
+      for (const choice of choices) {
+        const option = document.createElement('option');
+        option.value = choice.id || 'invoice';
+        option.textContent = `${choice.method} — ${choice.amount} ${choice.currency}`;
+        quoteSelect.append(option);
+      }
+      const apply = () => {
+        const c = choices.find(x => (x.id || 'invoice') === quoteSelect.value);
+        if (!c) return;
+        currencySelect.value = c.currency;
+        methodSelect.value = c.method;
+        amountInput.value = String(c.amount);
+      };
+      quoteSelect.onchange = apply;
+      apply();
+    }
+    for (const field of [currencySelect, methodSelect, amountInput]) {
+      if (field) { field.style.pointerEvents = 'none'; field.tabIndex = -1; field.setAttribute('aria-readonly', 'true'); }
+    }
+    select.onchange = updatePaymentOptions;
+    updatePaymentOptions();
+
   }
 
   // Convert a selected receipt file into Base64.
@@ -213,7 +332,8 @@ sb = window.supabase.createClient(
       );
 
       const studentInvoices = result.invoices || [];
-
+      loadQuotes(result);
+      await loadDashboardData(result);
       render(studentInvoices);
 
       // Show an explanation when no invoices exist.
@@ -273,17 +393,22 @@ sb = window.supabase.createClient(
       item => item.id === formData.get('invoice_id')
     );
 
-    if (!invoice) {
+    if (!invoice || !["unpaid","overdue"].includes(invoice.status)) {
       return msg('Choose a valid invoice.', 'error');
     }
 
-    // Verify that the selected currency matches the invoice.
-    if (formData.get('claimed_currency') !== invoice.currency) {
-      return msg(
-        `This invoice is in ${invoice.currency}. ` +
-        'Please choose the matching currency.',
-        'error'
-      );
+    const selectedQuoteId = String(formData.get('payment_quote_id') || 'invoice');
+    const selectedQuote = selectedQuoteId === 'invoice' ? null : approvedQuotes.find(q =>
+      q.id === selectedQuoteId && q.invoice_id === invoice.id && q.valid_until && Date.parse(q.valid_until) > Date.now()
+    );
+    if (selectedQuoteId !== 'invoice' && !selectedQuote) return msg('Approved payment quote expired or unavailable. Refresh the page.', 'error');
+    const expectedCurrency = selectedQuote?.payment_currency || invoice.currency;
+    const expectedMethod = selectedQuote?.payment_method || methodsByCurrency[invoice.currency];
+    const expectedAmount = Number(selectedQuote?.payable_amount ?? invoice.amount_due);
+    if (formData.get('claimed_currency') !== expectedCurrency ||
+        formData.get('payment_method') !== expectedMethod ||
+        Number(formData.get('claimed_amount')) !== expectedAmount) {
+      return msg('Payment details must match the approved payment option.', 'error');
     }
 
     const button = $('receiptSubmit');
@@ -302,12 +427,18 @@ sb = window.supabase.createClient(
         'submit-payment-receipt',
         {
           invoice_id: invoice.id,
+          payment_quote_id: selectedQuote?.id || null,
           payment_method: formData.get('payment_method'),
           claimed_amount: Number(
             formData.get('claimed_amount')
           ),
           claimed_currency: formData.get('claimed_currency'),
-          transaction_reference: formData.get('transaction_reference'),
+          
+transaction_reference: formData.get('transaction_reference'),
+sender_full_name: String(formData.get('sender_full_name') || '').trim(),
+sender_contact: String(formData.get('sender_contact') || '').trim(),
+sender_relationship: String(formData.get('sender_relationship') || ''),
+
           name: file.name,
           type: file.type,
           base64
@@ -329,6 +460,9 @@ sb = window.supabase.createClient(
         }
       );
 
+      loadQuotes(refreshed);
+      await loadDashboardData(refreshed);
+      selectedGroup = "pending";
       render(refreshed.invoices || []);
 
     } catch (error) {
@@ -344,6 +478,8 @@ sb = window.supabase.createClient(
       }
     }
   });
+
+  $("billingRefresh")?.addEventListener("click",()=>{ if ($("receiptCard").hidden || window.confirm("Refresh records? Unsaved receipt form details will be cleared.")) location.reload(); });
 
   // Start the payment system.
   init();

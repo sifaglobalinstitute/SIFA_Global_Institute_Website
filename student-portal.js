@@ -158,6 +158,15 @@ const target = activePanel === loginPanel && loginMessage
   }
 
 
+  function formatEnrollmentDate(value) {
+    if (!value) return '—';
+    if (/^\d{4}-\d{2}-\d{2}$/.test(String(value))) {
+      const d = new Date(value + 'T00:00:00Z');
+      return Number.isNaN(d.getTime()) ? '—' : d.toLocaleDateString(undefined, {year:'numeric',month:'long',day:'numeric',timeZone:'UTC'});
+    }
+    return formatDate(value);
+  }
+
   // Display enrollment records from the protected student billing API.
   // Never infer classroom authorization solely from enrollment status.
   async function loadEnrollments(userId) {
@@ -204,17 +213,34 @@ const target = activePanel === loginPanel && loginMessage
         cancelled: 'Cancelled'
       };
       for (const enrollment of enrollments) {
-        const item = document.createElement('article');
+        const item = document.createElement('details');
         item.className = 'sifa-enrollment-item';
-        const heading = document.createElement('h4');
+        const summary = document.createElement('summary');
+        summary.className = 'sifa-enrollment-summary';
+        const mark = document.createElement('span');
+        mark.className = 'sifa-enrollment-mark';
+        mark.setAttribute('aria-hidden', 'true');
+        mark.textContent = '▤';
+        const heading = document.createElement('span');
+        heading.className = 'sifa-enrollment-name';
         heading.textContent = enrollment.program || 'SIFA program';
-        item.append(heading);
+        const badge = document.createElement('span');
+        badge.className = 'sifa-enrollment-badge';
+        badge.dataset.state = String(enrollment.status || '');
+        badge.textContent = labels[enrollment.status] || enrollment.status || 'Status unavailable';
+        const chevron = document.createElement('span');
+        chevron.className = 'sifa-enrollment-chevron';
+        chevron.setAttribute('aria-hidden', 'true');
+        summary.append(mark, heading, badge, chevron);
+        item.append(summary);
+        const body = document.createElement('div');
+        body.className = 'sifa-enrollment-body';
         const fields = document.createElement('div');
         fields.className = 'sifa-enrollment-fields';
         for (const [label, value] of [
           ['Enrollment status', labels[enrollment.status] || enrollment.status || '—'],
-          ['Start date', formatDate(enrollment.start_date)],
-          ['End date', formatDate(enrollment.end_date)]
+          ['Start date', formatEnrollmentDate(enrollment.start_date)],
+          ['End date', formatEnrollmentDate(enrollment.end_date)]
         ]) {
           const field = document.createElement('div');
           field.className = 'sifa-enrollment-field';
@@ -225,11 +251,12 @@ const target = activePanel === loginPanel && loginMessage
           field.append(key, val);
           fields.append(field);
         }
-        item.append(fields);
+        body.append(fields);
         const note = document.createElement('p');
         note.className = 'sifa-enrollment-note';
         note.textContent = 'Classroom access is checked separately against current fees, enrollment dates, and approved exceptions.';
-        item.append(note);
+        body.append(note);
+        item.append(body);
         host.append(item);
       }
     } catch (error) {

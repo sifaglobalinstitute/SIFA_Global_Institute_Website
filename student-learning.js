@@ -1,43 +1,36 @@
 (async()=>{
- const cfg=window.SIFA_SUPABASE_CONFIG||{},status=document.getElementById("learningStatus"),details=document.getElementById("learningDetails");
- const show=(msg,type="")=>{if(!status)return;status.textContent=msg;status.className="classroom-status"+(type?" "+type:"")};
- if(!status||!details)return;
- if(!window.supabase||!cfg.url||!cfg.anonKey){show("Learning access service is not configured. Contact SIFA support.","error");return}
- 
-const sb = window.supabase.createClient(
-  cfg.url,
-  cfg.anonKey,
-  window.SIFA_AUTH_OPTIONS
-);
-
+ const cfg=window.SIFA_SUPABASE_CONFIG||{};
+ const status=document.getElementById("learningStatus"), details=document.getElementById("learningDetails"), overview=document.getElementById("classroomOverview");
+ if(!status||!details||!overview)return;
+ function hideClassroom(){overview.hidden=true;details.hidden=true;details.replaceChildren();}
+ function show(msg,type=""){status.textContent=msg;status.className="classroom-status"+(type?" "+type:"");}
+ function notice(kind){
+  hideClassroom();
+  const messages={
+   restricted:["Classroom access restricted","Your classroom is not currently available. Your enrollment or current payment eligibility must be confirmed before you can enter.","Check My Payments for outstanding fees or receipts awaiting review. If you have already paid, have a scholarship, or believe your access is suspended in error, contact SIFA support. Do not make another payment unless your payment record shows it is required.","Open My Payments","my-payments.html"],
+   signin:["Sign in to your Student Portal","Please sign in to check your classroom eligibility.","Use your registered student account, then return to your classroom.","Sign in","student-portal.html?next=student-learning.html"],
+   unavailable:["Classroom temporarily unavailable","We could not verify your classroom eligibility right now. This does not mean your payment was rejected or your enrollment suspended.","Refresh the page to try again. If the problem continues, contact SIFA support.","Return to Student Portal","student-portal.html"]
+  };
+  const [title,intro,steps,action,href]=messages[kind];
+  status.className="classroom-status restricted";
+  status.innerHTML=`<div class="sifa-access-header"><div class="sifa-access-kicker">SIFA Global Institute · Student access</div><h2></h2><p></p></div><div class="sifa-access-body"><div><h3>What to do next</h3><p class="sifa-next-step"></p><div class="sifa-access-actions"><a class="sifa-action primary" href="#"></a><a class="sifa-action secondary" href="contact.html">Contact SIFA support</a></div></div><div><h3>Need assistance?</h3><p>Email: <a href="mailto:sifaglobalinstitute12@gmail.com">sifaglobalinstitute12@gmail.com</a></p><p>Türkiye: <a href="tel:+905372746944">+90 537 274 6944</a><br>Rwanda: <a href="tel:+250782817643">+250 782 817 643</a></p><a href="student-portal.html">Return to Student Portal</a></div></div>`;
+  status.querySelector("h2").textContent=title;
+  status.querySelector(".sifa-access-header p").textContent=intro;
+  status.querySelector(".sifa-next-step").textContent=steps;
+  const a=status.querySelector(".sifa-action.primary");a.href=href;a.textContent=action;
+ }
+ hideClassroom();
  try{
+  if(!window.supabase||!cfg.url||!cfg.anonKey){notice("unavailable");return;}
+  const sb=window.supabase.createClient(cfg.url,cfg.anonKey,window.SIFA_AUTH_OPTIONS);
   const {data,error}=await sb.auth.getSession();
-  if(error||!data.session){
-   show("Please sign in to your Student Portal to check access.","error");
-   const a=document.createElement("a");a.className="private-link";a.href="student-portal.html?next=student-learning.html";a.textContent="Open Student Portal";status.append(" ",a);return
-  }
+  if(error){notice("unavailable");return;}
+  if(!data.session){notice("signin");return;}
   const r=await fetch(`${cfg.url}/functions/v1/sifa-classroom-api`,{method:"POST",headers:{"Content-Type":"application/json","apikey":cfg.anonKey,"Authorization":`Bearer ${data.session.access_token}`},body:JSON.stringify({action:"list-student"})});
   const b=await r.json().catch(()=>({}));
-  if(r.status===404||r.status===503){show("SIFA classroom service is not deployed or configured yet. Your payment status has not been determined. Please try again later or contact SIFA support.","error");return}
-  
-if (!r.ok || !b.authorized) {
-  details.hidden = true;
-
-  if (r.status === 403 && b.authorized === false) {
-    show(
-      "Your student account has been recognized. Access to private classes and learning materials is currently pending. SIFA Global Institute will enable classroom access once your enrollment and applicable payment requirements have been verified.",
-      "access-pending"
-    );
-  } else {
-    show(
-      b.error || "We could not verify your classroom access right now. Please try again or contact SIFA Support.",
-      "error"
-    );
-  }
-
-  return;
-}
-
+  if(r.status===401){notice("signin");return;}
+  if(r.status===403&&b.authorized===false){notice("restricted");return;}
+  if(!r.ok||b.authorized!==true){notice("unavailable");return;}
   show(`Access approved for ${b.program}. Your protected classroom is ready.`,"success");
   details.replaceChildren();
   const hero=document.createElement("div");hero.className="classroom-welcome";hero.innerHTML="<span class='classroom-kicker'>YOUR SIFA CLASSROOM</span><h2></h2><p>Keep your learning materials organized here. Downloads are private and temporary.</p>";hero.querySelector("h2").textContent=b.program;details.append(hero);
@@ -49,10 +42,6 @@ if (!r.ok || !b.authorized) {
    for(const item of items){const card=document.createElement("article");card.className="material-item";const title=document.createElement("h4");title.textContent=item.title||"Learning material";card.append(title);if(item.description){const p=document.createElement("p");p.textContent=item.description;card.append(p)}const meta=document.createElement("p");meta.className="small";meta.textContent=`PDF · ${Math.max(1,Math.round((Number(item.bytes)||0)/1024))} KB`;card.append(meta);if(item.download_url){const a=document.createElement("a");a.className="private-link";a.href=item.download_url;a.target="_blank";a.rel="noopener noreferrer";a.textContent="Open / download PDF";card.append(a)}section.append(card)}
    details.append(section)
   }
-  const note=document.createElement("p");note.className="small";note.textContent="Do not forward class links or downloaded materials without permission. SIFA may verify enrollment and attendance.";details.append(note);details.hidden=false;
- }catch(e){
-  console.error("SIFA classroom loading error:",e);
-  details.hidden=true;
-  show("We could not load your classroom right now. Your access status has not changed. Please refresh the page or contact SIFA support.","error");
- }
+  details.hidden=false;overview.hidden=false;
+ }catch(e){console.error("SIFA classroom loading error:",e);notice("unavailable");}
 })();
