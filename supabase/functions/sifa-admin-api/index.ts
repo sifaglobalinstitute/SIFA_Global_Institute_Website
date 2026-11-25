@@ -149,20 +149,6 @@ const audit = async (
         }, origin);
       }
 
-      await audit(
-        "payment_quote_approved",
-        "payment_quote",
-        quoteId,
-        {
-          invoice_id: invoiceId,
-          payment_currency: currency,
-          payment_method: method,
-          payable_amount: amount,
-          exchange_rate: rate,
-          valid_until: validUntil
-        },
-        note
-      );
 
       return response(201, {
         ok: true,
@@ -224,13 +210,87 @@ const audit = async (
       }, origin);
     }
 
-    if(action==="get_receipt_url") {
-      if(!isAny("administrator","finance_reviewer")) return response(403,{error:"Finance reviewer or administrator role required."},origin);
-      const id=clean(body.id,80);if(!id)return response(400,{error:"Receipt ID is required."},origin);
-      const {data:receipt,error}=await admin.from("sifa_payment_receipts").select("id,storage_path,submitted_at").eq("id",id).single();if(error)throw error;
-      const {data:link,error:linkError}=await admin.storage.from("sifa-private-documents").createSignedUrl(receipt.storage_path,60);if(linkError)throw linkError;
-      await audit("payment_receipt_access","payment_receipt",id,{submitted_at:receipt.submitted_at});return response(200,{url:link.signedUrl,expires_in_seconds:60},origin);
+    if (action === "get_receipt_url") {
+  if (!isAny("administrator", "finance_reviewer")) {
+    return response(403, {
+      error: "Finance reviewer or administrator role required."
+    }, origin);
+  }
+
+  const id = typeof body.id === "string"
+    ? body.id.trim()
+    : "";
+
+  const uuidPattern =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+  if (!uuidPattern.test(id)) {
+    return response(400, {
+      error: "A valid receipt ID is required."
+    }, origin);
+  }
+
+  const { data: receipt, error } = await admin
+    .from("sifa_payment_receipts")
+    .select("id,invoice_id,student_user_id,storage_path,submitted_at")
+    .eq("id", id)
+    .single();
+
+  if (error || !receipt) {
+    return response(404, {
+      error: "Receipt not found or unavailable."
+    }, origin);
+  }
+
+  const expectedPrefix =
+    `payment-receipts/${receipt.student_user_id}/${receipt.invoice_id}/`;
+
+  const path = receipt.storage_path;
+
+  if (
+    !uuidPattern.test(receipt.student_user_id) ||
+    !uuidPattern.test(receipt.invoice_id) ||
+    typeof path !== "string" ||
+    path.length > 500 ||
+    !path.startsWith(expectedPrefix) ||
+    !/^[a-zA-Z0-9._-]+$/.test(
+      path.slice(expectedPrefix.length)
+    ) ||
+    [".", ".."].includes(
+      path.slice(expectedPrefix.length)
+    )
+  ) {
+    return response(409, {
+      error: "Receipt storage location requires verification."
+    }, origin);
+  }
+
+  const { data: link, error: linkError } = await admin
+    .storage
+    .from("sifa-private-documents")
+    .createSignedUrl(path, 60);
+
+  if (linkError || !link?.signedUrl) {
+    return response(503, {
+      error: "Private receipt is temporarily unavailable."
+    }, origin);
+  }
+
+  await audit(
+    "payment_receipt_access",
+    "payment_receipt",
+    id,
+    {
+      invoice_id: receipt.invoice_id,
+      submitted_at: receipt.submitted_at
     }
+  );
+
+  return response(200, {
+    url: link.signedUrl,
+    expires_in_seconds: 60
+  }, origin);
+}
     if(action==="review_receipt") {
       if(!isAny("administrator","finance_reviewer")) return response(403,{error:"Finance reviewer or administrator role required."},origin);
       const id=clean(body.id,80), status=clean(body.status,20), note=clean(body.note,2000);
@@ -329,8 +389,8 @@ for (let page = 1; page <= 10; page++) {
       if(!isAny("administrator")) return response(403,{error:"Administrator role required for an access exception."},origin);
       const id=clean(body.id,80), reason=clean(body.reason,1000), expires=clean(body.expires_at,40);const expiresAt=new Date(expires);
       if(!id||reason.length<8||!expires||Number.isNaN(expiresAt.getTime())||expiresAt<=new Date()||expiresAt>new Date(Date.now()+31*86400000))return response(400,{error:"Provide an enrollment, a reason of at least 8 characters, and an expiry within the next 31 days."},origin);
-      const {data:existing,error:existingErr}=await admin.from("sifa_enrollments").select("status").eq("id",id).single();if(existingErr)throw existingErr;if(["completed","withdrawn"].includes(existing.status))return response(409,{error:"A completed or withdrawn enrollment cannot receive a temporary access exception."},origin);
-      const {data,error}=await admin.from("sifa_enrollments").update({status:"active",access_exception_reason:reason,access_exception_approved_by:userId,access_exception_expires_at:expiresAt.toISOString(),updated_at:new Date().toISOString()}).eq("id",id).select("id,status,program,access_exception_reason,access_exception_expires_at").single();if(error)throw error;
+      const {data:existing,error:existingErr}=await admin.from("sifa_enrollments").select("status").eq("id",id).single();if(existingErr)throw existingErr;if(!["active","pending_payment"].includes(existing.status))return response(409,{error:"Suspended, completed or withdrawn enrollments cannot receive a temporary access exception."},origin);
+      const {data,error}=await admin.from("sifa_enrollments").update({status:"active",access_exception_reason:reason,access_exception_approved_by:userId,access_exception_expires_at:expiresAt.toISOString(),updated_at:new Date().toISOString()}).eq("id",id).in("status",["active","pending_payment"]).select("id,status,program,access_exception_reason,access_exception_expires_at").maybeSingle();if(error)throw error;if(!data)return response(409,{error:"Enrollment status changed. Refresh and try again."},origin);
       await audit("temporary_access_exception_authorized","enrollment",id,data,reason);return response(200,{ok:true,item:data},origin);
     }
     if(action==="set_enrollment_status") {
@@ -341,7 +401,7 @@ for (let page = 1; page <= 10; page++) {
         const {data:paidInvoice,error:paidErr}=await admin.from("sifa_fee_invoices").select("id").eq("enrollment_id",id).eq("invoice_type","monthly_course").in("status",["paid","waived"]).lte("period_start",today).gte("period_end",today).limit(1).maybeSingle();if(paidErr)throw paidErr;
         if(!paidInvoice)return response(409,{error:"Activation requires a verified paid or valid waived monthly invoice for the current period. Use the separate time-limited administrator exception only when explicitly authorized."},origin);
       }
-      const patch:Record<string,unknown>={status,updated_at:new Date().toISOString()};if(status==="active"){patch.access_exception_reason=null;patch.access_exception_approved_by=null;patch.access_exception_expires_at=null;}
+      const patch:Record<string,unknown>={status,updated_at:new Date().toISOString()};patch.access_exception_reason=null;patch.access_exception_approved_by=null;patch.access_exception_expires_at=null;
       const {data,error}=await admin.from("sifa_enrollments").update(patch).eq("id",id).select("id,status,program").single();if(error)throw error;await audit("enrollment_status_changed","enrollment",id,data,reason||null);return response(200,{ok:true,item:data},origin);
     }
     if(action==="list_scholarships") {

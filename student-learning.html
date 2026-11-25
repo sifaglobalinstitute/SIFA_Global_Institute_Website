@@ -1,37 +1,6 @@
 <!doctype html>
 <html lang="en">
 
-<style>
-.classroom-status.access-pending {
-  display: block;
-  margin: 28px 0;
-  padding: 28px 30px;
-  border: 1px solid #cbdde8;
-  border-left: 5px solid #16834c;
-  border-radius: 18px;
-  background: linear-gradient(125deg, #ffffff, #f3f8fb);
-  box-shadow: 0 12px 32px rgba(7, 26, 51, 0.06);
-  color: #42566b;
-  font-size: 15px;
-  line-height: 1.85;
-}
-
-.classroom-status.access-pending::before {
-  content: "🔒  Classroom Access Pending";
-  display: block;
-  margin-bottom: 14px;
-  color: #0b2545;
-  font-size: clamp(21px, 3vw, 28px);
-  font-weight: 800;
-  line-height: 1.3;
-}
-
-@media (max-width: 600px) {
-  .classroom-status.access-pending {
-    padding: 21px 19px;
-  }
-}
-</style>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -78,6 +47,28 @@
 .classroom-footer-note{margin-top:24px;padding:20px;border:1px solid var(--sifa-border);background:#fff;border-radius:14px;color:var(--sifa-muted);font-size:13px;line-height:1.7}
 @media(max-width:760px){.classroom-hero{padding:42px 0}.classroom-hero-inner{grid-template-columns:1fr;gap:22px}.hero-note{max-width:none}.learning-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.classroom-section-heading{display:block}.classroom-section-heading p{margin-top:8px}}
 @media(max-width:480px){.learning-grid{grid-template-columns:1fr}.learning-tile{min-height:0}.classroom-main{padding:26px 16px 42px}.classroom-hero-inner{padding:0 16px}}
+
+#classroomOverview[hidden], #learningDetails[hidden] { display:none !important; }
+#learningStatus.restricted { padding:0; overflow:hidden; border:1px solid #cbdde8; border-radius:18px; background:#fff; color:#17283e; box-shadow:0 12px 32px rgba(7,26,51,.08); }
+.sifa-access-header { background:linear-gradient(125deg,#0b2340,#123e70); color:#fff; padding:24px 28px; border-top:5px solid #15965b; }
+.sifa-access-header h2 { color:#fff; font-size:clamp(23px,3vw,30px); line-height:1.25; margin:8px 0 10px; }
+.sifa-access-header p { color:#e1eaf5; margin:0; max-width:760px; }
+.sifa-access-kicker { color:#a3efbd; font-size:12px; font-weight:800; letter-spacing:.09em; text-transform:uppercase; }
+.sifa-access-body { padding:24px 28px; display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:24px; }
+.sifa-access-body h3 { color:#0b2340; margin:0 0 10px; font-size:18px; }
+.sifa-access-body p { margin:0 0 12px; }
+.sifa-access-body a { overflow-wrap:anywhere; }
+.sifa-access-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+#learningStatus .sifa-action { display:inline-flex; padding:10px 16px; border-radius:9px; background:#0d7042; color:white; font-weight:750; text-decoration:none; border:1px solid #0d7042; }
+#learningStatus .sifa-action.secondary { background:white; color:#123e70; border-color:#a9bdcf; }
+#learningStatus a:focus-visible, #learningStatus button:focus-visible { outline:3px solid #15965b; outline-offset:3px; }
+.sifa-privacy-warning { border:1px solid #cbdde8; border-left:4px solid #15965b; background:#fff; padding:17px 20px; border-radius:12px; color:#354a60; margin:22px 0; line-height:1.65; }
+.sifa-privacy-warning strong { display:block; color:#0b2340; margin-bottom:5px; }
+@media(max-width:650px) { .sifa-access-body { grid-template-columns:1fr; gap:18px; padding:20px; } .sifa-access-header { padding:20px; } }
+.classroom-section-heading,
+.learning-grid {
+    display: none !important;
+}
 </style>
 <link rel="icon" type="image/png" href="assets/sifa-logo.png">
 </head>
@@ -114,6 +105,8 @@
  <div style="margin-bottom:22px">
   <a class="btn btn-secondary" href="student-portal.html" id="backToStudentPortal">← Back to Student Portal</a>
  </div>
+ <div id="learningStatus" class="classroom-status" role="status" aria-live="polite">Checking your classroom access…</div>
+ <div id="classroomOverview" hidden>
  <div class="classroom-section-heading">
   <div><h2>Explore your classroom</h2><p>Everything you need for your learning journey, organized in one place.</p></div>
  </div>
@@ -125,8 +118,9 @@
   <article class="learning-tile"><div class="tile-icon" aria-hidden="true">i</div><h3>Announcements</h3><p>Keep up with class updates, schedule changes, new resources and important student notices.</p></article>
   <article class="learning-tile"><div class="tile-icon" aria-hidden="true">↗</div><h3>Learn → Practice → Apply</h3><p>Build practical skills step by step and connect each lesson with real-world tasks.</p></article>
  </div>
- <div id="learningStatus" class="classroom-status" role="status" aria-live="polite">Checking your classroom access…</div>
+ </div>
  <div id="learningDetails" hidden></div>
+ <aside class="sifa-privacy-warning"><strong>Private learning resources — important notice</strong>Google Meet links, classroom links, books, PDFs, notes, assignments and other private resources are for your authorized personal study only. Do not share, forward or distribute them to anyone else without SIFA’s permission. Do not share your account credentials.</aside>
  <div class="classroom-footer-note"><strong>Student access and privacy</strong><br>Private course materials and meeting links are available only after your student access is confirmed. If you believe you should have access but cannot open your classroom, return to the Student Portal or contact SIFA support.</div>
 </section>
 </main>

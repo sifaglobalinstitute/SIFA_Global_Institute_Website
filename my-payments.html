@@ -166,8 +166,34 @@ body.sifa-workspace{background:#f5f8fc}
 .sifa-workspace footer .footer-grid div:nth-child(3) p a+a{display:block;margin-top:6px}
 @media(max-width:900px){.sifa-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}.sifa-workspace footer .footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:650px){.sifa-workspace header .nav{flex-wrap:wrap;justify-content:center;padding:9px 0}.sifa-nav-actions{justify-content:center}.sifa-workspace .page-hero{padding:40px 0}.sifa-shortcuts{grid-template-columns:1fr 1fr}.sifa-workspace .admin-card,.sifa-workspace .cm-card,.sifa-workspace .pay-card{padding:17px}.sifa-workspace footer .footer-grid{grid-template-columns:1fr}.sifa-workspace .cm-form{grid-template-columns:1fr}}
+</style>
+<style id="sifa-financial-dashboard">
+#invoiceCard [hidden]{display:none!important}
+#invoiceCard .billing-top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+#invoiceCard .billing-top p{margin:5px 0;color:#52677b}
+#invoiceCard .billing-groups{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:20px 0}
+#invoiceCard .billing-group{font:inherit;text-align:left;cursor:pointer;border:1px solid #dce6ef;border-top:4px solid var(--accent);border-radius:14px;background:#fff;padding:17px;color:#0b2545;display:grid;gap:8px;min-width:0;box-shadow:0 5px 15px #071a3309}
+#invoiceCard .billing-group:hover,#invoiceCard .billing-group[aria-expanded=true]{background:#f2f7fb;border-color:var(--accent)}
+#invoiceCard .billing-group:focus-visible,#invoiceCard summary:focus-visible{outline:3px solid #16834c;outline-offset:3px}
+#invoiceCard .billing-count{font-size:30px;font-weight:850;color:var(--accent);line-height:1.15}
+#invoiceCard .billing-group small{color:#52677b;line-height:1.4}
+#invoiceCard .billing-group .billing-view{font-size:13px;color:var(--accent);font-weight:750}
+#invoiceCard .billing-records{border-top:1px solid #dce6ef;padding-top:18px;display:grid;gap:10px}
+#invoiceCard .invoice{padding:0;overflow:hidden;background:#f8fafc}
+#invoiceCard .invoice summary{cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px;list-style:none;color:#0b2545}
+#invoiceCard .invoice summary::-webkit-details-marker{display:none}
+#invoiceCard .invoice summary:after{content:'+';font-weight:800;color:#16834c;font-size:20px}
+#invoiceCard .invoice[open] summary:after{content:'−'}
+#invoiceCard .invoice summary small{display:block;color:#52677b;font-size:12px;margin-top:4px}
+#invoiceCard .invoice .billing-amount{text-align:right;white-space:nowrap}
+#invoiceCard .invoice .billing-detail{border-top:1px solid #dce6ef;padding:16px;overflow-wrap:anywhere}
+#invoiceCard .billing-detail p{margin:8px 0;line-height:1.6}
+#invoiceCard .billing-history-warning{padding:12px;border-left:4px solid #a66a12;background:#fff8e8;color:#735014;border-radius:8px}
+#invoiceCard .billing-empty{padding:18px;background:#f3f7fb;border-radius:10px;color:#52677b}
+@media(max-width:760px){#invoiceCard .billing-groups{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:440px){#invoiceCard .billing-groups{grid-template-columns:1fr}#invoiceCard .invoice summary{flex-wrap:wrap}}
 </style></head><body class="sifa-workspace"><header><div class="container nav"><a class="brand" href="index.html"><img src="assets/sifa-logo.png" alt="SIFA logo"><span>SIFA Global Institute<small>Private student payments</small></span></a><div class="sifa-nav-actions"><a class="btn btn-secondary" href="student-portal.html">← Back to Student Dashboard</a><a class="btn btn-secondary" href="student-payments.html">Public Fees &amp; Scholarships</a></div></div></header><main><section class="page-hero"><div class="container"><span class="eyebrow">Private student account</span><h1>My Fees &amp; Payments</h1><p>View invoices issued to your account and submit payment evidence for staff review. Your records require student authentication.</p></div></section><section><div class="container pay-shell"><p class="sifa-panel-label">Student billing</p><div class="fee-form-wrap" id="my-payments">
-<div id="payMessage" class="pay-message" role="status">Private payment tools load after account verification. All fee and scholarship information above is available without signing in.</div><section id="invoiceCard" class="pay-card" hidden><h2>Your invoices</h2><p>These invoices are private to your account.</p><div id="invoiceList" class="pay-list"></div></section><section id="receiptCard" class="pay-card" hidden><h2>Submit a payment receipt</h2><p class="muted">Submit only a receipt for a payment you actually made. Your receipt is sent for manual review and does not automatically activate course access.</p><form id="receiptForm" class="pay-form"><label>Invoice<select name="invoice_id" id="invoiceSelect" required></select></label><label>Payment method<select name="payment_method" required><option value="">Choose a method</option><option>Rwanda Mobile Money</option>
+<div id="payMessage" class="pay-message" role="status">Private payment tools load after account verification.</div><section id="invoiceCard" class="pay-card" hidden><div class="billing-top"><div><h2>My payment overview</h2><p>Select a category to view your private invoices.</p></div><button type="button" id="billingRefresh" class="btn btn-secondary">Refresh records</button></div><div id="invoiceList" class="pay-list"></div></section><section id="receiptCard" class="pay-card" hidden><h2>Submit a payment receipt</h2><p class="muted">Submit only a receipt for a payment you actually made. Your receipt is sent for manual review and does not automatically activate course access.</p><form id="receiptForm" class="pay-form"><label>Invoice<select name="invoice_id" id="invoiceSelect" required></select></label><label>Payment method<select name="payment_method" required><option value="">Choose a method</option><option>Rwanda Mobile Money</option>
 <option> Ziraat Bank Transfer</option>
 <option value="Ziraat USD Bank Transfer">Ziraat USD Bank Transfer</option>
 </select></label><label>Amount paid<input name="claimed_amount" type="number" min="0.01" step="0.01" required></label><label>Currency<select name="claimed_currency" required><option value="">Choose currency</option><option>RWF</option>
