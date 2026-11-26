@@ -510,6 +510,7 @@
 
 </style>
 <link rel="icon" type="image/png" href="assets/sifa-logo.png">
+<link rel="canonical" href="https://sifaglobalinstitute.pages.dev/ai-support.html">
 </head>
 <body>
 <div class="topbar"><div class="container">
@@ -589,7 +590,7 @@
 <button class="ai-ask" type="submit">Ask SIFA AI</button>
 <button class="ai-clear" id="clearQuestion" type="button">Clear conversation</button>
 </div>
-<div class="ai-status">SIFA AI provides educational guidance from its built-in knowledge. For official SIFA decisions or private records, contact SIFA directly.</div>
+<div class="ai-status">SIFA AI provides educational guidance using institutional reference answers and an online assistant. For official SIFA decisions or private records, contact SIFA directly.</div>
 <div aria-live="polite" class="ai-answer" id="aiAnswer"></div>
 </form>
 </div>
@@ -985,7 +986,7 @@ function saveConversation(){
 
 
 function appendMessageWithLinks(container, text) {
-  const value = String(text || "");
+  const value = String(text || "").replace(/https?:\/\/sifaglobalinstitutewebsite\.vercel\.app\/?/gi,"https://sifaglobalinstitute.pages.dev/").replace(/https?:\/\/sifaglobalinstitute\.github\.io\/SIFA_Global_Institute_Website\/?/gi,"https://sifaglobalinstitute.pages.dev/").replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g,"$1 — $2");
   const lines = value.split(/\r?\n/);
   let list = null;
 
@@ -1155,6 +1156,8 @@ const askButton = aiForm ? aiForm.querySelector('button[type="submit"]') : null;
 const aiStatus = aiForm ? aiForm.querySelector(".ai-status") : null;
 let aiIsResponding = false;
 
+const SIFA_PUBLIC_ANSWERS = [[["official website", "website link", "sifa website", "link of sifa", "link to sifa", "sifa web site"], "Official SIFA website: https://sifaglobalinstitute.pages.dev/"], [["course list", "list of courses", "all courses", "all programs", "training programs"], "- QuickBooks Practical Training (4 months)\n- Sage Accounting Training (2 months)\n- Tally Practical Accounting (2 months)\n- Microsoft Excel for Accounting & Finance (1 month)\n- Xero Accounting (2 months)\n- Zoho Books (2 months)\n- Odoo Accounting & Business Systems (2 months)\n- SAP Financial & Business Systems (2 months)\n- Oracle NetSuite (2 months)\n- Microsoft Dynamics 365 (2 months)\n- ETA Accounting (2 months)\n- Logo Accounting & ERP (2 months)\n- Mikro Accounting & ERP (2 months)\n- LUCA Accounting (2 months)\n- Zirve Accounting (2 months)\n- DİA Business Software (2 months)\n- Paraşüt Accounting (2 months)\n- AKINSOFT Wolvox (2 months)\n- Nebim (2 months)\n- Accounting Fundamentals (1 month)\n- Financial Reporting & Analysis (1 month)\n- Digital Finance & Professional Tools (2 months)\n- Power BI for Financial Analysis (1 month)\n- Advanced Excel & Financial Modeling (1 month)\n- Advanced Microsoft Word (1 month)\n- Advanced Microsoft PowerPoint (1 month)\nhttps://sifaglobalinstitute.pages.dev/courses.html"], [["scholarship decision", "scholarship status", "fee waiver status"], "Open My Application or Scholarships & Fee Waivers in My Fees & Payments. Awards and waived invoices are displayed separately.\nhttps://sifaglobalinstitute.pages.dev/student-portal.html"], [["classroom access", "enter classroom", "access my classroom"], "An eligible enrollment, staff classroom authorization and current verified payment or waiver (or a valid authorized temporary exception) are required.\nhttps://sifaglobalinstitute.pages.dev/student-portal.html"], [["tuition fees", "monthly tuition", "course fees", "how much is tuition"], "Monthly published tuition is 10,000 RWF in Rwanda, 15 USD in other African countries and 25 USD in the rest of the world. Follow your issued invoice.\nhttps://sifaglobalinstitute.pages.dev/student-payments.html"], [["apply for", "how to apply", "admission status", "application status"], "Sign in to the Student Portal, open My Application and apply when admissions for your program are available. You can track your decision and reference there.\nhttps://sifaglobalinstitute.pages.dev/student-portal.html"], [["payment history", "payment records", "my invoices"], "Sign in and open My Fees & Payments. Review unpaid, pending, paid, rejected and waived records before paying again.\nhttps://sifaglobalinstitute.pages.dev/student-portal.html"], [["admissions open", "applications open", "scholarships open"], "Check current availability in your Student Portal. Public program listings do not indicate that applications are open. https://sifaglobalinstitute.pages.dev/student-portal.html"]];
+function publicSifaAnswer(q){const n=normalize(q);for(const [terms,answer] of SIFA_PUBLIC_ANSWERS){if(terms.some(t=>n.includes(t)))return answer;}return null;}
 async function submitSifaQuestion(event){
   if(event) {
     event.preventDefault();
@@ -1191,6 +1194,8 @@ conversationEl.scrollTop = conversationEl.scrollHeight;
     askButton.textContent = "Preparing answer…";
   }
   try {
+    const directAnswer = publicSifaAnswer(q);
+    if(directAnswer){conversation.push({role:"assistant",text:directAnswer});conversation=conversation.slice(-80);saveConversation();renderConversation();questionEl.value="";if(aiStatus) aiStatus.textContent="SIFA AI has responded.";return false;}
     const supabaseConfig = window.SIFA_SUPABASE_CONFIG;
 
 if (!supabaseConfig?.url || !supabaseConfig?.anonKey) {
@@ -1237,7 +1242,7 @@ const answer = data.answer;
     conversationEl.scrollIntoView({behavior:"smooth", block:"nearest"});
   } catch(error) {
     console.error("SIFA AI response error:", error);
-    if(aiStatus) aiStatus.textContent = "Sorry, SIFA AI encountered a problem preparing the answer. Please try again or contact SIFA at sifaglobalinstitute12@gmail.com or WhatsApp https://wa.me/250782817643.";
+    conversation.push({role:"assistant",text:"The online assistant is temporarily unavailable. "+multilingualFallback(detectSifaLanguage(q))});saveConversation();renderConversation();if(aiStatus) aiStatus.textContent="Online service unavailable; official support links are shown above.";
   } finally {
   if (loadingIndicator) loadingIndicator.remove();
     aiIsResponding = false;

@@ -20,6 +20,7 @@ function initializeSifaMenu() {
   }
 
   setMenuOpen(false);
+  window.matchMedia("(max-width: 1350px)").addEventListener("change", () => setMenuOpen(false));
   menu.addEventListener("click", function (event) {
     event.preventDefault();
     event.stopPropagation();
