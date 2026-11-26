@@ -27,7 +27,8 @@ Deno.serve(async req=>{
  const program = requestedProgram || "QuickBooks Practical Training";
  const match = (eligible || []).find((e:{program:string})=>e.program===program);
  if(match){
-   const meet=program==="QuickBooks Practical Training" ? (Deno.env.get("SIFA_LIVE_CLASS_URL")??"") : "";
+   const {data:links,error:linkError}=await db.from("sifa_classroom_resources").select("resource_url").eq("program",program).eq("resource_type","live").eq("published",true).order("created_at",{ascending:false}).limit(1);if(linkError)return out(503,{error:"Class link temporarily unavailable."},origin);
+   const meet=links?.[0]?.resource_url || (program==="QuickBooks Practical Training" ? (Deno.env.get("SIFA_LIVE_CLASS_URL")??"") : "");
    if(!meet)return out(503,{error:"Learning access is approved, but the class link is not configured. Contact SIFA support."},origin);
    return out(200,{authorized:true,program:match.program,access_basis:match.access_basis,meeting_url:meet,message:"Do not share the private class link. The instructor may verify attendance."},origin);
  }

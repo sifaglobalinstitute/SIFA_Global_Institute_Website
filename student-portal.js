@@ -8,6 +8,7 @@
   const signupMessage = $('signupMessage');
   let supabase = null;
   let currentUser = null;
+  let savedProfile = null, profileReady = false, profileSaving = false, profileLoadVersion = 0;
   let bootComplete = false;
   let pendingConfirm = null;
   let recoveryLinkError = null;
@@ -66,6 +67,9 @@ const target = activePanel === loginPanel && loginMessage
   function hideMessage(){ if(message) message.hidden = true; if(loginMessage) loginMessage.hidden = true; if(signupMessage) signupMessage.hidden = true; }
   function showLogin(messageText, type='info') {
     loginPanel.hidden=false; signupPanel.hidden=true; dashboard.hidden=true;
+    window.SIFAClearPhoto?.(); aidRecords=[]; dashboard.removeAttribute("data-staff"); $("sifaStaffWorkspace").hidden=true; currentUser=null; savedProfile=null; profileReady=false; profileLoadVersion++;
+    for(const id of ["profileName","profilePhone","profileCountry"]) if($(id)) $(id).value="";
+    if($("profileSaveMessage")) $("profileSaveMessage").hidden=true; syncProfileControls();
     if (messageText) showMessage(messageText, type); else hideMessage();
   }
   function showSignup(){ loginPanel.hidden=true; signupPanel.hidden=false; dashboard.hidden=true; hideMessage(); }
@@ -75,7 +79,10 @@ const target = activePanel === loginPanel && loginMessage
     if (Number.isNaN(d.getTime())) return '—';
     return d.toLocaleDateString(undefined, { year:'numeric', month:'long', day:'numeric' });
   }
-  function getOpenPrograms() { return Array.isArray(window.SIFA_SETTINGS?.openPrograms) ? window.SIFA_SETTINGS.openPrograms : []; }
+  let aidRecords = [];
+  let admissionAvailable = false;
+  let admissionPrograms = [];
+  function getOpenPrograms() { return admissionPrograms; }
   function latestApplication(applications) { return applications?.[0] || null; }
   function activeApplicationStatus(status) { return ['Submitted','Under Review','Needs Information','Accepted'].includes(status); }
 
@@ -83,57 +90,66 @@ const target = activePanel === loginPanel && loginMessage
     const payload = app?.payload || {};
     const status = app?.status || 'Not started';
     const withdrawn = app?.status === 'Withdrawn';
-    const ref = withdrawn ? '—' : (app?.application_ref || '—');
-    $('applicationStatus').textContent = status;
+    const ref = app?.application_ref || '—';
+    $('applicationStatus').textContent = status === 'Accepted' ? 'Admitted' : status;
     $('applicationRef').textContent = ref;
     $('currentApplicationId').value = app?.id || '';
     $('quickbooksStatus').textContent = status;
-    $('detailStatus').textContent = status;
-    $('detailReference').textContent = ref;
-    $('detailProgram').textContent = payload.course || '—';
-    $('detailMode').textContent = payload.mode || '—';
-    $('detailCohort').textContent = payload.cohort || '—';
-    $('detailSubmitted').textContent = formatDate(app?.submitted_at);
-    $('detailUpdated').textContent = formatDate(app?.updated_at || app?.submitted_at);
-    $('detailSchedule').textContent = payload.schedule || '—';
-    $('detailFullName').textContent = payload.name || app?.full_name || '—';
-    $('detailEmail').textContent = payload.email || app?.email || '—';
-    $('detailPhone').textContent = payload.phone || '—';
-    $('detailCountry').textContent = payload.country || '—';
-
     const empty = $('applicationEmpty');
+    $('my-application').dataset.empty = String(!app);
     if (app) {
       empty.hidden = true;
       $('applicationNote').textContent = withdrawn
-        ? 'This application has been withdrawn. There is no active application on your account.'
-        : 'Your application is securely linked to this account. SIFA can update its status during review.';
+        ? 'This application has been withdrawn. Other applications may still be active.'
+        : 'Your submitted applications are read-only. Expand a record to review your submitted information and track your admission status.';
     } else {
       empty.hidden = false;
-      $('applicationNote').textContent = 'You have not submitted an application. Admissions are currently closed.';
+      $('applicationNote').textContent = admissionAvailable ? 'You have not submitted an application. Check the available programs.' : 'You have not submitted an application. Admissions are currently closed or unavailable.';
     }
 
-    const withdrawBtn = $('withdrawApplicationBtn');
-    if (withdrawBtn) withdrawBtn.hidden = !(app && app.source !== 'public' && activeApplicationStatus(status));
 
     const history = $('applicationHistory');
     history.innerHTML = '';
-    if (allApplications && allApplications.length > 1) {
-      const heading = document.createElement('div');
-      heading.innerHTML = '<strong style="color:#071a33">Application history</strong>';
-      history.appendChild(heading);
-      allApplications.slice(1).forEach(item => {
-        const row = document.createElement('div'); row.className='history-item';
-        const refText = document.createElement('strong'); refText.textContent=item.application_ref || 'Application';
-        const meta=document.createElement('span'); meta.style='color:#62748a;font-size:13px'; meta.textContent=`${item.payload?.course || 'Program'} · ${item.status || 'Submitted'} · ${formatDate(item.submitted_at)}`;
-        row.append(refText, document.createElement('br'), meta); history.appendChild(row);
+    if (allApplications && allApplications.length > 0) {
+
+      allApplications.forEach(item => {
+        const row = document.createElement('article'); row.className='sifa-app-record';
+        const refText = document.createElement('span'); refText.className='sifa-app-ref';refText.textContent=item.application_ref || 'Application';
+        const header=document.createElement('div');header.className='sifa-app-header';const title=document.createElement('h4');title.textContent=item.payload?.course||'Program';const state=document.createElement('span');state.className='sifa-app-status';state.dataset.status=item.status||'';state.textContent=item.status==='Accepted'?'Admitted':item.status||'Submitted';header.append(title,state);
+        const meta=document.createElement('span'); meta.style='color:#62748a;font-size:13px'; meta.textContent=`Submitted ${formatDate(item.submitted_at)}${item.payload?.mode?' · '+item.payload.mode:''}`;
+        const details = document.createElement('details');
+        const summary = document.createElement('summary'); summary.textContent = 'View submitted information'; details.append(summary);
+        const grid = document.createElement('div'); grid.className = 'application-grid';
+        const fields = {name:'Full name',email:'Email',phone:'Phone',country:'Country',city:'City',nationality:'Nationality',course:'Program',mode:'Learning mode',cohort:'Cohort',schedule:'Schedule',language:'Language',education:'Education',background:'Background',status:'Occupation',occupationOther:'Other occupation',kinyarwanda:'Speaks Kinyarwanda',softwareExperience:'Software experience',goals:'Learning goals',financialSupport:'Financial support',financialCircumstances:'Financial circumstances',scholarshipReason:'Scholarship reason',scholarshipValue:'Requested scholarship',documentStatus:'Document status',documentIssue:'Document issue'};
+        const values = {...(item.payload||{}),name:item.full_name || item.payload?.name,email:item.email || item.payload?.email,phone:item.phone || item.payload?.phone,country:item.country || item.payload?.country};
+        for (const [key,label] of Object.entries(fields)) {
+          if (values[key] == null || values[key] === '') continue;
+          const cell=document.createElement('div'); cell.className='application-item';
+          const caption=document.createElement('span'); caption.textContent=label;
+          const value=document.createElement('strong'); value.style.overflowWrap='anywhere'; value.textContent=String(values[key]); cell.append(caption,value); grid.append(cell);
+        }
+        details.append(grid); row.append(header,refText,meta,details);
+        for(const award of aidRecords.filter(x=>x.application_id===item.id && x.source===(item.source||'legacy'))){const panel=document.createElement('div');panel.style.cssText='padding:12px;background:#f1f6f4;border-radius:10px';const h=document.createElement('strong');h.textContent='Scholarship / fee waiver — '+award.decision;const note=document.createElement('p');note.textContent=award.decision==='approved'?`${award.monthly_discount_percent}% monthly tuition discount · ${award.starts_on||'No start date'} to ${award.ends_on||'No end date'}`:'Your financial support decision is recorded separately from admission.';panel.append(h,note);row.append(panel);}
+        if (['Submitted','Under Review','Needs Information'].includes(item.status)) {
+          const button=document.createElement('button'); button.type='button'; button.className='btn danger-btn'; button.textContent='Withdraw application'; button.addEventListener('click',()=>requestWithdrawal(item.id,item.source || 'legacy',button)); const action=document.createElement('div');action.className='sifa-app-actions';const hint=document.createElement('p');hint.textContent='Need to correct your information? Withdraw this application and reapply when admissions are open. Your original submission stays in your history.';action.append(hint,button);row.append(action);
+        } else if(item.status==='Accepted'){const hint=document.createElement('p');hint.className='sifa-app-help';hint.textContent='For changes or withdrawal after admission, contact SIFA support.';row.append(hint);}
+        history.appendChild(row);
       });
     }
 
-    const open = window.SIFA_SETTINGS?.applicationsOpen === true && getOpenPrograms().includes('QuickBooks Practical Training');
-    const hasActiveApplication = !!app && activeApplicationStatus(status) && payload.course === 'QuickBooks Practical Training';
+    const open = admissionAvailable && getOpenPrograms().includes('QuickBooks Practical Training');
+    if (!app) empty.textContent = open ? 'No application has been submitted. You can apply for QuickBooks Practical Training.' : 'No application has been submitted. Admissions are currently closed or unavailable.';
+    const hasActiveApplication = (allApplications || []).some(item => activeApplicationStatus(item.status) && item.payload?.course === 'QuickBooks Practical Training');
+    const visibleApply = $('sifaApplyLink');
+    if (visibleApply) {
+      visibleApply.textContent = open && !hasActiveApplication ? 'Start Application' : 'Explore Programs';
+      visibleApply.href = open && !hasActiveApplication ? 'apply.html' : 'courses.html';
+    }
     const btn = $('applyPortalBtn');
+    btn.classList.remove('btn-disabled');btn.removeAttribute('aria-disabled');
+    const badge=document.querySelector('.quickbooks-card .course-badge');if(badge){badge.textContent=open?'ADMISSIONS OPEN':'ADMISSIONS CLOSED';badge.classList.toggle('closed-badge',!open);}
     if (hasActiveApplication) {
-      btn.textContent = 'View My Application'; btn.href='#my-application'; btn.onclick=(e)=>{e.preventDefault(); $('my-application')?.scrollIntoView({behavior:'smooth',block:'start'});};
+      btn.textContent = 'View My Application'; btn.href='#my-application'; btn.onclick=(e)=>{e.preventDefault(); $('sifaOpenApplication')?.click();};
     } else {
       btn.textContent = open ? 'Apply for QuickBooks' : 'Applications Closed';
       btn.href = open ? 'apply.html?program=QuickBooks%20Practical%20Training' : 'apply.html';
@@ -145,11 +161,62 @@ const target = activePanel === loginPanel && loginMessage
 
   function renderProfile(user, profile) {
     const name = profile?.full_name || user.user_metadata?.full_name || 'Student';
-    $('studentName').textContent=name; $('studentEmail').textContent=user.email || '';
+    $('studentName').textContent=name;
+    $('accountProfileName').textContent=name;
+    $('accountProfileInitials').textContent=name.trim().split(/\s+/).slice(0,2).map(part=>Array.from(part)[0]||'').join('').toUpperCase(); $('studentEmail').textContent=user.email || '';
     $('accountEmail').textContent=user.email || '—'; $('accountStatus').textContent='Active';
     $('emailStatus').textContent=user.email_confirmed_at ? 'Confirmed' : 'Not confirmed';
     $('memberSince').textContent=formatDate(user.created_at);
-    $('profileName').value=name; $('profilePhone').value=profile?.phone || ''; $('profileCountry').value=profile?.country || '';
+    if (profileReady && !profileSaving && !profileDirty()) fillProfileFields(savedProfile);
+  }
+
+  function profileValues(){return {full_name:$('profileName').value.trim(),phone:$('profilePhone').value.trim(),country:$('profileCountry').value.trim()};}
+  function profileDirty(){return !!savedProfile && Object.keys(profileValues()).some(k=>profileValues()[k]!==savedProfile[k]);}
+  function fillProfileFields(p){
+    if(!p)return;
+    $('profileName').value=p.full_name; $('profilePhone').value=p.phone;
+    const select=$('profileCountry');
+    if(p.country && !Array.from(select.options).some(o=>o.value===p.country)) select.add(new Option(p.country,p.country));
+    select.value=p.country;
+  }
+  function profileNotice(text,type='info'){
+    const box=$('profileSaveMessage'); box.textContent=text; box.className='portal-message '+type; box.hidden=!text;
+    box.setAttribute('role',type==='error'?'alert':'status');
+  }
+  function syncProfileControls(){
+    const editable=profileReady&&!profileSaving;
+    for(const id of ['profileName','profilePhone','profileCountry']) if($(id)) $(id).disabled=!editable;
+    $('saveProfileBtn').disabled=!editable||!profileDirty(); $('resetProfileBtn').disabled=!editable||!profileDirty();
+    $('retryProfileBtn').hidden=profileReady||profileSaving;
+  }
+  function acceptProfile(user,profile){
+    savedProfile={full_name:profile?.full_name||user.user_metadata?.full_name||'',phone:profile?.phone||'',country:profile?.country||''};
+    profileReady=true; fillProfileFields(savedProfile); syncProfileControls();
+  }
+  // Registration may require email confirmation before an authenticated session exists.
+  // Create a missing profile on authenticated entry, without overwriting existing edits.
+  async function ensureStudentProfile(user, existing){
+    if(existing) return existing;
+    const name=String(user.user_metadata?.full_name||'').trim();
+    if(!name) return null;
+    const {error}=await supabase.from('profiles').upsert({id:user.id,full_name:name,email:user.email||''},{onConflict:'id',ignoreDuplicates:true});
+    if(error) throw error;
+    const {data,error:readError}=await supabase.from('profiles').select('full_name,phone,country').eq('id',user.id).single();
+    if(readError) throw readError;
+    return data;
+  }
+  async function reloadProfile(){
+    const user=currentUser; if(!user||profileSaving)return;
+    const version=++profileLoadVersion; profileReady=false; syncProfileControls(); profileNotice('Loading your saved details…');
+    try{
+      const {data,error}=await supabase.from('profiles').select('full_name,phone,country').eq('id',user.id).maybeSingle();
+      if(error)throw error;
+      if(currentUser?.id!==user.id||version!==profileLoadVersion)return;
+      const resolved=await ensureStudentProfile(user,data);
+      if(currentUser?.id!==user.id||version!==profileLoadVersion)return;
+      acceptProfile(user,resolved); renderProfile(user,resolved); profileNotice('');
+    }catch(error){if(currentUser?.id!==user.id||version!==profileLoadVersion)return; console.error('Profile load failed',error); profileNotice('We could not load your saved details. Reload them before editing to avoid overwriting existing information.','error');syncProfileControls();}
+
   }
 
   function showDashboard(user, profile, applications) {
@@ -201,7 +268,7 @@ const target = activePanel === loginPanel && loginMessage
       if (currentUser?.id !== userId) return;
       const enrollments = Array.isArray(result.enrollments) ? result.enrollments : [];
       if (!enrollments.length) {
-        status.textContent = 'No enrollment has been issued to your account yet. An accepted application does not automatically create an active enrollment.';
+        status.textContent = 'You do not have an enrollment yet. Explore SIFA programs to plan your next step.';
         return;
       }
       status.hidden = true;
@@ -273,7 +340,7 @@ const target = activePanel === loginPanel && loginMessage
       const { data, error } = await supabase.auth.getSession();
 
       if (error || !data.session?.access_token) {
-        return null;
+        throw new Error('Session unavailable');
       }
 
       const response = await fetch(
@@ -285,7 +352,7 @@ const target = activePanel === loginPanel && loginMessage
             'Authorization': `Bearer ${data.session.access_token}`,
             'apikey': config.anonKey
           },
-          body: JSON.stringify({ action: 'whoami' })
+          body: JSON.stringify({ action: 'whoami' }),signal:AbortSignal.timeout(15000)
         }
       );
 
@@ -295,66 +362,77 @@ const target = activePanel === loginPanel && loginMessage
       }
 
       if (!response.ok) {
-        console.warn('SIFA staff-role check is unavailable.');
-        return null;
+        throw new Error('Account role could not be verified.');
       }
 
       const result = await response.json();
 
       if (
         result.active === true &&
-        ['administrator', 'coordinator', 'finance_reviewer'].includes(result.role)
+        ['administrator', 'coordinator', 'finance_reviewer','instructor'].includes(result.role)
       ) {
-        return result.role;
+        return result;
       }
 
       return null;
     } catch (error) {
       console.warn('SIFA staff-role check failed:', error);
-      return null;
+      throw error;
     }
   }
 
   async function loadUser(user, noticeText) {
     if (!user) return showLogin();
+    const changed=currentUser?.id!==user.id;
+    if(changed){savedProfile=null;profileReady=false;profileSaving=false;fillProfileFields({full_name:'',phone:'',country:''});syncProfileControls();}
     currentUser=user;
-    const [{data:profile},{data:applications,error:appError},{data:publicApplications,error:publicAppError}]=await Promise.all([
+    const version=++profileLoadVersion;
+    dashboard.hidden=true; window.SIFAClearPhoto?.(); aidRecords=[];
+    dashboard.removeAttribute('data-staff'); $('sifaStaffWorkspace').hidden=true;
+    let staffRole;
+    try{staffRole=await checkStaffRole();}catch(e){if(currentUser?.id===user.id&&version===profileLoadVersion){loginPanel.hidden=true;signupPanel.hidden=true;showMessage('We could not verify your account type. Refresh this page to try again.','error');}return;}
+    if(currentUser?.id!==user.id||version!==profileLoadVersion)return;
+    if(staffRole){
+      dashboard.dataset.staff='true';loginPanel.hidden=true;signupPanel.hidden=true;dashboard.hidden=false;
+      $('sifaStaffWorkspace').hidden=false;$('sifaStaffName').textContent='Welcome, '+(staffRole.full_name||user.user_metadata?.full_name||'Staff member');
+      $('sifaStaffRole').textContent=staffRole.role.replaceAll('_',' ').replace(/^./,c=>c.toUpperCase());
+      const slot=$('sifaStaffConsoleSlot');slot.replaceChildren();const link=document.createElement('a');link.className='sifa-staff-green';link.href='sifa-admin.html';link.textContent='Open Staff Console';slot.append(link);
+      $('sifaStaffWorkspace').querySelector('a[href="sifa-classroom-manager.html"]').closest('section').hidden=!['administrator','coordinator','instructor'].includes(staffRole.role);
+      if(noticeText)showMessage(noticeText,'success');else hideMessage();return;
+    }
+    admissionAvailable=false; admissionPrograms=[];
+    const admission = await supabase.from('admission_settings').select('applications_open,open_programs').eq('id',true).single();
+    if(currentUser?.id!==user.id||version!==profileLoadVersion)return;
+    if(!admission.error){admissionAvailable=admission.data?.applications_open===true; admissionPrograms=Array.isArray(admission.data?.open_programs)?admission.data.open_programs:[];}
+    let [{data:profile,error:profileError},{data:applications,error:appError},{data:publicApplications,error:publicAppError}]=await Promise.all([
       supabase.from('profiles').select('*').eq('id',user.id).maybeSingle(),
       supabase.from('applications').select('id,application_ref,status,submitted_at,updated_at,payload,created_at,full_name,email').eq('user_id',user.id).order('created_at',{ascending:false}),
-      supabase.from('sifa_public_applications').select('id,application_ref,status,submitted_at,updated_at,payload,full_name,email,program').eq('linked_user_id',user.id).order('submitted_at',{ascending:false})
+      supabase.from('sifa_public_applications').select('id,application_ref,status,submitted_at,updated_at,payload,full_name,email,phone,country,program').eq('linked_user_id',user.id).order('submitted_at',{ascending:false})
     ]);
+    if(currentUser?.id!==user.id||version!==profileLoadVersion)return;
+    if(!profileSaving && !profileDirty()){
+      if(!profileError && !profile){try{profile=await ensureStudentProfile(user,profile);}catch(error){profileError=error;}}
+      if(currentUser?.id!==user.id||version!==profileLoadVersion)return;
+      if(profileError){profileReady=false;console.error('Profile load failed',profileError);profileNotice('We could not load your saved details. Reload them before editing.','error');syncProfileControls();}
+      else {acceptProfile(user,profile);profileNotice('');}
+    }
     if(appError) console.error('Application load error:',appError);
     if(publicAppError) console.warn('Public application load skipped (backend migration may not yet be deployed):',publicAppError.message);
-    const mappedPublic=(publicApplications||[]).map(a=>({...a,source:'public',created_at:a.submitted_at,payload:{...(a.payload||{}),course:a.program}}));
+    const mappedPublic=(publicApplications||[]).map(a=>({...a,source:'public',created_at:a.submitted_at,payload:{...(a.payload||{}),course:a.program,phone:a.phone,country:a.country}}));
     const merged=[...(applications||[]),...mappedPublic].sort((a,b)=>new Date(b.created_at||b.submitted_at||0)-new Date(a.created_at||a.submitted_at||0));
     
+    let aidUnavailable=false;let announcements=[];
+    try{const {data:auth}=await supabase.auth.getSession();if(auth.session?.user.id!==user.id)return;const r=await fetch(`${config.url}/functions/v1/sifa-student-billing`,{method:'POST',headers:{'Content-Type':'application/json',apikey:config.anonKey,Authorization:'Bearer '+auth.session.access_token},body:JSON.stringify({action:'student_support'}),signal:AbortSignal.timeout(15000)});if(!r.ok)throw Error('Support unavailable');const support=await r.json();if(currentUser?.id!==user.id||version!==profileLoadVersion)return;aidRecords=support.awards||[];announcements=support.announcements||[];}catch{aidUnavailable=true;}
+    if(currentUser?.id!==user.id||version!==profileLoadVersion)return;
     showDashboard(user, profile || {}, merged);
+    const old=$('sifaSupportNotices');old?.remove();const notices=document.createElement('section');notices.id='sifaSupportNotices';notices.className='sifa-app-record';
+    if(aidUnavailable){notices.textContent='Scholarship and announcement records could not be loaded. Refresh to try again.';$('applicationHistory').before(notices);}
+    else if(announcements.length){notices.style.gridColumn='1 / -1';const h=document.createElement('h3');h.textContent='Private admission announcements';notices.append(h);for(const a of announcements){const d=document.createElement('article');const t=document.createElement('strong');t.textContent=a.title+' · '+a.program;const m=document.createElement('p');m.textContent=a.description;d.append(t,m);notices.append(d);} $('sifaDashboardExtras').prepend(notices);}
+
+    void window.SIFALoadPhoto?.(supabase,window.SIFA_SUPABASE_CONFIG,user.id);
+    if(appError || publicAppError) { $('applicationNote').textContent='Some application records could not be loaded. Please refresh before applying again.'; $('applicationEmpty').textContent='Application records could not be fully loaded.'; $('sifaApplyLink').textContent='Explore Programs'; $('sifaApplyLink').href='courses.html'; }
+    if (new URLSearchParams(location.search).get('view')==='application') $('sifaOpenApplication')?.click();
     void loadEnrollments(user.id);
-
-    // Remove any staff link left from a previous account.
-    document.getElementById('sifaStaffConsoleLink')?.remove();
-
-    // Ask the protected backend whether this user is SIFA staff.
-    const staffRole = await checkStaffRole();
-
-    if (staffRole && currentUser?.id === user.id) {
-      const staffLink = document.createElement('a');
-
-      staffLink.id = 'sifaStaffConsoleLink';
-      staffLink.href = 'sifa-admin.html';
-      staffLink.textContent = 'Open SIFA Staff Console';
-
-      staffLink.style.display = 'inline-block';
-      staffLink.style.margin = '16px 0';
-      staffLink.style.padding = '12px 20px';
-      staffLink.style.backgroundColor = '#071a33';
-      staffLink.style.color = '#ffffff';
-      staffLink.style.borderRadius = '8px';
-      staffLink.style.textDecoration = 'none';
-      staffLink.style.fontWeight = 'bold';
-
-      dashboard.prepend(staffLink);
-    }
 
     if(noticeText) showMessage(noticeText,'success');
     const params = new URLSearchParams(location.search);
@@ -457,7 +535,7 @@ if (error) {
     password,
     options: {
       data: { full_name: name },
-      emailRedirectTo: `${location.origin}/student-portal.html?confirmed=true`
+      emailRedirectTo: `${location.origin}/student-portal.html?confirmed=true${new URLSearchParams(location.search).get('view')==='application'?'&view=application':''}`
     }
   });
 
@@ -470,21 +548,6 @@ if (error) {
   );
 }
 
-  if (data.user) {
-    const { error: profileError } = await supabase
-      .from('profiles')
-      .upsert({
-        id: data.user.id,
-        full_name: name,
-        email: email
-      });
-
-    if (profileError) {
-      console.error('Profile creation error:', profileError);
-    }
-  }
-
-  
     if (!data.session) {
       showSignup();
       showMessage(
@@ -500,15 +563,24 @@ if (error) {
     }
     
 });
+  $('profileForm')?.addEventListener('input',()=>{if(!profileSaving){profileNotice(profileDirty()?'You have unsaved changes.':'');syncProfileControls();}});
+  $('resetProfileBtn')?.addEventListener('click',()=>{fillProfileFields(savedProfile);profileNotice('Unsaved changes discarded.');syncProfileControls();});
+  $('retryProfileBtn')?.addEventListener('click',reloadProfile);
   $('profileForm')?.addEventListener('submit',async e=>{
-    e.preventDefault();if(!currentUser)return;
-    const btn=$('saveProfileBtn');btn.disabled=true;btn.textContent='Saving…';
-    const full_name=$('profileName').value.trim(), phone=$('profilePhone').value.trim(), country=$('profileCountry').value.trim();
-    if(full_name.length<2){btn.disabled=false;btn.textContent='Save Changes';return showMessage('Please enter your full name.','error');}
-    const{data,error}=await supabase.from('profiles').upsert({id:currentUser.id,full_name,email:currentUser.email||'',phone,country,updated_at:new Date().toISOString()}).select('*').single();
-    btn.disabled=false;btn.textContent='Save Changes';
-    if(error)return showMessage(error.message,'error');
-    renderProfile(currentUser,data);showMessage('Your account information has been updated.','success');
+    e.preventDefault(); if(!currentUser||!profileReady||profileSaving||!profileDirty())return;
+    const user=currentUser, values=profileValues(), btn=$('saveProfileBtn');
+    if(values.full_name.length<2)return profileNotice('Please enter your full name.','error');
+    profileSaving=true; ++profileLoadVersion; syncProfileControls(); btn.textContent='Saving…';profileNotice('Saving your details securely…');
+    try{
+      const {error}=await supabase.from('profiles').upsert({id:user.id,email:user.email||'',...values,updated_at:new Date().toISOString()});
+      if(error)throw error;
+      const {data,error:readError}=await supabase.from('profiles').select('full_name,phone,country').eq('id',user.id).single();
+      if(readError)throw readError;
+      if(!data||Object.keys(values).some(k=>String(data[k]??'')!==values[k]))throw new Error('Saved profile verification mismatch');
+      if(currentUser?.id!==user.id)return;
+      acceptProfile(user,data);renderProfile(user,data);profileNotice('Your details have been saved and verified. They will be available for future applications.','success');
+    }catch(error){console.error('Profile save or verification failed',error);if(currentUser?.id===user.id)profileNotice('We could not confirm that your changes were saved. Your edits are still here. Please try again.','error');}
+    finally{if(currentUser?.id===user.id){profileSaving=false;btn.textContent='Save Changes';syncProfileControls();}}
   });
 
   $('emailChangeForm')?.addEventListener('submit', async e => {
@@ -566,22 +638,22 @@ $('sifaCloseAccount')?.click();
 showMessage('Your password has been changed successfully.','success');
   });
 
-  $('withdrawApplicationBtn')?.addEventListener('click',()=>{
-    if(!currentUser)return;
-    openModal({
-      title:'Withdraw your application?',
-      body:'SIFA will stop processing this application. Your application record will remain securely linked to your account with the status “Withdrawn”.',
-      confirmLabel:'Withdraw Application', danger:true,
-      onConfirm:async()=>{
-        const btn=$('withdrawApplicationBtn');btn.disabled=true;btn.textContent='Withdrawing…';
-        const{error}=await supabase.rpc('withdraw_my_application',{application_id:$('currentApplicationId').value});
-        btn.disabled=false;btn.textContent='Withdraw Application';
+  function requestWithdrawal(id,source,button){
+    if(!currentUser || !id)return;
+    const owner=currentUser.id;
+    openModal({title:'Withdraw your application?',body:'Your application remains in your history. You may apply again when admissions are open. Pending scholarship requests will also be withdrawn. Admitted applications, approved awards or linked enrollments require staff review.',confirmLabel:'Withdraw Application',danger:true,onConfirm:async()=>{
+      if(currentUser?.id!==owner)return closeModal();
+      button.disabled=true;
+      try {
+        const {error}=await supabase.rpc('sifa_withdraw_my_application',{p_application_id:id,p_source:source});
         closeModal();
-        if(error)return showMessage('We could not withdraw the application yet. Please make sure the SIFA Student Portal database setup has been completed.','error');
-        await loadUser(currentUser,'Your application has been withdrawn successfully.');
-      }
-    });
-  });
+        if(currentUser?.id!==owner)return;
+        if(error)return showMessage('Withdrawal could not be completed. Refresh your application status or contact SIFA support.','error');
+        await loadUser(currentUser,'Your application has been withdrawn successfully. You may reapply when admissions are open.'); $('sifaOpenApplication')?.click();
+      } catch(error){closeModal();showMessage('Connection unavailable. Refresh to verify your application status.','error');}
+      finally{button.disabled=false;}
+    }});
+  }
 
     $('deleteAccountBtn')?.addEventListener('click', () => {
     if (!currentUser) return;
@@ -658,6 +730,7 @@ showMessage('Your password has been changed successfully.','success');
   $('actionModalCancel2')?.addEventListener('click',closeModal);
   $('actionModal')?.addEventListener('click',e=>{if(e.target.id==='actionModal')closeModal();});
   $('actionModalConfirm')?.addEventListener('click',()=>{if(pendingConfirm)pendingConfirm();});
+  $('sifaStaffSignOut')?.addEventListener('click',()=> $('logoutBtn')?.click());
   $('logoutBtn')?.addEventListener('click', async () => {
   const { error } = await supabase.auth.signOut();
 
@@ -670,7 +743,8 @@ showMessage('Your password has been changed successfully.','success');
   showLogin('You have been signed out.', 'success');
 });
 
-  supabase.auth.onAuthStateChange(async (event, session) => {
+  supabase.auth.onAuthStateChange((event, session) => {
+    setTimeout(async () => {
  if (event === 'PASSWORD_RECOVERY' && session?.user) {
     currentUser = session.user;
 
@@ -684,6 +758,7 @@ showMessage('Your password has been changed successfully.','success');
 }
 
   if (!bootComplete) return;
+  if (event === "TOKEN_REFRESHED" || (event === "SIGNED_IN" && currentUser?.id === session?.user?.id && !new URLSearchParams(location.search).has("confirmed"))) return;
 
   if (session?.user) {
     const justConfirmed =
@@ -712,12 +787,13 @@ if (justConfirmed) {
     console.error('SIFA welcome email request failed:', welcomeError);
   }
 
-  history.replaceState({}, document.title, window.location.pathname);
+  history.replaceState({}, document.title, window.location.pathname + (new URLSearchParams(location.search).get('view')==='application'?'?view=application':''));
 }
 
   } else {
     showLogin();
   }
+    },0);
 });
 
 supabase.auth.getSession().then(({ data, error }) => {

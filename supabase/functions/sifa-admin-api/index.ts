@@ -33,7 +33,8 @@ Deno.serve(async req => {
   if(userError || !userData.user) return response(401,{error:"Your session is invalid or expired. Sign in again."},origin);
   const userId=userData.user.id;
   const {data:role,error:roleError}=await admin.from("sifa_staff_roles").select("role,active").eq("user_id",userId).eq("active",true).maybeSingle();
-  if(roleError || !role) return response(403,{error:"This account has no active SIFA staff role."},origin);
+  if(roleError) return response(503,{error:"Staff role verification unavailable."},origin);
+  if(!role) return response(403,{error:"This account has no active SIFA staff role."},origin);
   let body:Record<string,unknown>;
   try { body=await req.json(); } catch { return response(400,{error:"Invalid request."},origin); }
   const action=clean(body.action,80);
@@ -65,7 +66,7 @@ const audit = async (
 };
 
   try {
-    if(action==="whoami") return response(200,{role:role.role,active:role.active},origin);
+    if(action==="whoami") return response(200,{role:role.role,active:role.active,full_name:clean(userData.user.user_metadata?.full_name || userData.user.user_metadata?.name,160)},origin);
 
     // Approve a payment quote using the signed-in administrator.
     if (action === "approve_payment_quote") {
@@ -159,7 +160,7 @@ const audit = async (
 
     if(action==="list_applications") {
       if(!isAny("administrator","coordinator")) return response(403,{error:"Coordinator or administrator role required."},origin);
-      const {data,error}=await admin.from("sifa_public_applications").select("id,application_ref,full_name,email,phone,country,program,status,payload,submitted_at,updated_at,decided_at,decision_reason").order("submitted_at",{ascending:false}).limit(200);
+      const {data,error}=await admin.from("sifa_public_applications").select("id,application_ref,full_name,email,phone,country,program,status,payload,submitted_at,updated_at,decided_at,decision_reason,linked_user_id").order("submitted_at",{ascending:false}).limit(200);
       if(error) throw error; return response(200,{items:data},origin);
     }
     if(action==="list_application_documents") {
@@ -171,7 +172,10 @@ const audit = async (
       if(!isAny("administrator","coordinator")) return response(403,{error:"Coordinator or administrator role required."},origin);
       const id=clean(body.id,80), status=clean(body.status,40), reason=clean(body.reason,2000);
       if(!id || !["Under Review","Needs Information","Accepted","Rejected"].includes(status)) return response(400,{error:"Invalid application decision."},origin);
-      const {data,error}=await admin.from("sifa_public_applications").update({status,decision_reason:reason||null,decided_by:userId,decided_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq("id",id).select("id,application_ref,status,decided_at").single();
+      const expected=clean(body.expected_status,40);
+      if(!["Submitted","Under Review","Needs Information","Accepted","Rejected"].includes(expected))return response(409,{error:"Refresh the application before changing its decision."},origin);
+      const {data,error}=await admin.from("sifa_public_applications").update({status,decision_reason:reason||null,decided_by:userId,decided_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq("id",id).eq("status",expected).select("id,application_ref,status,decided_at").maybeSingle();
+      if(!error&&!data)return response(409,{error:"The application changed or was withdrawn. Refresh before deciding."},origin);
       if(error) throw error; await audit("application_decision","public_application",id,data,reason||null); return response(200,{ok:true,item:data},origin);
     }
 
@@ -381,17 +385,53 @@ for (let page = 1; page <= 10; page++) {
       const {data,error}=await admin.from("sifa_enrollments").insert({student_user_id:app.linked_user_id,public_application_id:id,program:app.program,status:"pending_payment",start_date:startDate,end_date:end.toISOString().slice(0,10)}).select("id,student_user_id,public_application_id,program,status,start_date,end_date").single();if(error)throw error;
       await audit("enrollment_created","enrollment",data.id,data);return response(201,{ok:true,item:data},origin);
     }
+    if(action==="get_enrollment_history") {
+      if(!isAny("administrator","coordinator","finance_reviewer")) return response(403,{error:"Authorized staff role required."},origin);
+      const id=clean(body.id,80);
+      if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) return response(400,{error:"Invalid enrollment ID."},origin);
+      const {data:en,error:enErr}=await admin.from("sifa_enrollments").select("id").eq("id",id).maybeSingle();if(enErr)throw enErr;if(!en)return response(404,{error:"Enrollment not found."},origin);
+      const canReadInvoices=isAny("administrator","finance_reviewer");
+      const {data:invoiceRows,error:invoiceErr}=canReadInvoices?await admin.from("sifa_fee_invoices").select("id,invoice_type,period_start,period_end,currency,base_amount,discount_amount,amount_due,due_date,status").eq("enrollment_id",id).order("period_start",{ascending:false}).order("id").limit(101):{data:[],error:null};if(invoiceErr)throw invoiceErr;
+      const invoices=(invoiceRows||[]).slice(0,100);
+      if(!isAny("administrator","coordinator"))return response(200,{invoices,invoices_more:(invoiceRows||[]).length>100,activity:null},origin);
+      const columns="id,actor_user_id,action,reason,created_at,after_data";
+      const events=await admin.from("sifa_audit_log").select(columns).eq("entity_type","enrollment").eq("entity_id",id).order("created_at",{ascending:false}).limit(101);
+      const invoiceEvents=invoices.length?await admin.from("sifa_audit_log").select(columns).eq("entity_type","fee_invoice").in("entity_id",invoices.map(i=>i.id)).in("action",["monthly_invoice_created","certificate_fee_invoice_created"]).order("created_at",{ascending:false}).limit(101):{data:[],error:null};
+      if(events.error)throw events.error;if(invoiceEvents.error)throw invoiceEvents.error;
+      const all=[...(events.data||[]),...(invoiceEvents.data||[])].sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at)));
+      const recent=all.slice(0,100);const names=new Map<string,string>();
+      const actors=[...new Set(recent.map(a=>a.actor_user_id).filter((x):x is string=>typeof x==="string"))].slice(0,10);
+      await Promise.all(actors.map(async actor=>{try{const {data,error}=await admin.auth.admin.getUserById(actor);if(!error&&data.user){const name=String(data.user.user_metadata?.full_name||data.user.user_metadata?.name||"").trim();if(name)names.set(actor,name);}}catch{/* Actor UUID remains available. */}}));
+      const activity=recent.map(a=>({action:a.action,reason:a.reason,created_at:a.created_at,actor_user_id:a.actor_user_id,actor_name:names.get(a.actor_user_id)||null,status:a.action==="enrollment_status_changed"?a.after_data?.status:null}));
+      return response(200,{invoices:canReadInvoices?invoices:null,invoices_more:(invoiceRows||[]).length>100,activity,activity_more:all.length>100},origin);
+    }
     if(action==="list_enrollments") {
       if(!isAny("administrator","coordinator","finance_reviewer")) return response(403,{error:"Authorized staff role required."},origin);
-      const {data,error}=await admin.from("sifa_enrollments").select("id,student_user_id,public_application_id,application_id,program,status,start_date,end_date,created_at").order("created_at",{ascending:false}).limit(200);if(error)throw error;return response(200,{items:data},origin);
+      const {data,error}=await admin.from("sifa_enrollments").select("id,student_user_id,public_application_id,application_id,program,status,start_date,end_date,created_at,classroom_access_authorized,classroom_access_authorized_at,access_exception_expires_at").order("created_at",{ascending:false}).limit(200);if(error)throw error;
+      const records=data||[];
+      const publicIds=records.map(e=>e.public_application_id).filter(Boolean);
+      const legacyIds=records.map(e=>e.application_id).filter(Boolean);
+      const publicResult=publicIds.length?await admin.from("sifa_public_applications").select("id,full_name,email,linked_user_id").in("id",publicIds):{data:[],error:null};
+      const legacyResult=legacyIds.length?await admin.from("applications").select("id,full_name,email,user_id").in("id",legacyIds):{data:[],error:null};
+      if(publicResult.error||legacyResult.error) console.warn("Enrollment display identity lookup unavailable");
+      const publicMap=new Map((publicResult.data||[]).map(a=>[a.id,a]));
+      const legacyMap=new Map((legacyResult.data||[]).map(a=>[a.id,a]));
+      return response(200,{items:records.map(e=>{const a=publicMap.get(e.public_application_id), b=legacyMap.get(e.application_id);const person=a?.linked_user_id===e.student_user_id?a:b?.user_id===e.student_user_id?b:null;return {...e,student_name:person?.full_name||null,student_email:person?.email||null};})},origin);
     }
-    if(action==="authorize_access_exception") {
-      if(!isAny("administrator")) return response(403,{error:"Administrator role required for an access exception."},origin);
-      const id=clean(body.id,80), reason=clean(body.reason,1000), expires=clean(body.expires_at,40);const expiresAt=new Date(expires);
-      if(!id||reason.length<8||!expires||Number.isNaN(expiresAt.getTime())||expiresAt<=new Date()||expiresAt>new Date(Date.now()+31*86400000))return response(400,{error:"Provide an enrollment, a reason of at least 8 characters, and an expiry within the next 31 days."},origin);
-      const {data:existing,error:existingErr}=await admin.from("sifa_enrollments").select("status").eq("id",id).single();if(existingErr)throw existingErr;if(!["active","pending_payment"].includes(existing.status))return response(409,{error:"Suspended, completed or withdrawn enrollments cannot receive a temporary access exception."},origin);
-      const {data,error}=await admin.from("sifa_enrollments").update({status:"active",access_exception_reason:reason,access_exception_approved_by:userId,access_exception_expires_at:expiresAt.toISOString(),updated_at:new Date().toISOString()}).eq("id",id).in("status",["active","pending_payment"]).select("id,status,program,access_exception_reason,access_exception_expires_at").maybeSingle();if(error)throw error;if(!data)return response(409,{error:"Enrollment status changed. Refresh and try again."},origin);
-      await audit("temporary_access_exception_authorized","enrollment",id,data,reason);return response(200,{ok:true,item:data},origin);
+    if(["grant_classroom_access","revoke_classroom_access","authorize_access_exception"].includes(action)) {
+      if(!isAny("administrator")) return response(403,{error:"Administrator permission required."},origin);
+      const id=clean(body.id,80), reason=clean(body.reason,1000);
+      const mode=action==="grant_classroom_access"?"grant":action==="revoke_classroom_access"?"revoke":"grace";
+      if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)||reason.length<8) return response(400,{error:"Select an enrollment and provide a reason of at least 8 characters."},origin);
+      let expiry:string|null=null;
+      if(mode==="grace"){
+        const raw=clean(body.expires_at,40), date=new Date(raw);
+        if(!raw||Number.isNaN(date.getTime())||date<=new Date()||date>new Date(Date.now()+31*86400000))return response(400,{error:"Choose a future expiry within 31 days."},origin);
+        expiry=date.toISOString();
+      }
+      const {data,error}=await admin.rpc("sifa_set_classroom_authorization",{p_enrollment_id:id,p_actor:userId,p_mode:mode,p_reason:reason,p_expires_at:expiry});
+      if(error){console.error("Classroom authorization failed",error.code);return response(error.code==="P0001"?409:500,{error:error.code==="P0001"?error.message:"Classroom authorization could not be updated."},origin);}
+      return response(200,{ok:true,item:data},origin);
     }
     if(action==="set_enrollment_status") {
       if(!isAny("administrator","coordinator")) return response(403,{error:"Coordinator or administrator role required."},origin);
@@ -401,7 +441,7 @@ for (let page = 1; page <= 10; page++) {
         const {data:paidInvoice,error:paidErr}=await admin.from("sifa_fee_invoices").select("id").eq("enrollment_id",id).eq("invoice_type","monthly_course").in("status",["paid","waived"]).lte("period_start",today).gte("period_end",today).limit(1).maybeSingle();if(paidErr)throw paidErr;
         if(!paidInvoice)return response(409,{error:"Activation requires a verified paid or valid waived monthly invoice for the current period. Use the separate time-limited administrator exception only when explicitly authorized."},origin);
       }
-      const patch:Record<string,unknown>={status,updated_at:new Date().toISOString()};patch.access_exception_reason=null;patch.access_exception_approved_by=null;patch.access_exception_expires_at=null;
+      const patch:Record<string,unknown>={status,updated_at:new Date().toISOString()};patch.access_exception_reason=null;patch.access_exception_approved_by=null;patch.access_exception_expires_at=null;if(status!=="active"){patch.classroom_access_authorized=false;patch.classroom_access_authorized_by=null;patch.classroom_access_authorized_at=null;patch.classroom_access_authorization_reason=null;}
       const {data,error}=await admin.from("sifa_enrollments").update(patch).eq("id",id).select("id,status,program").single();if(error)throw error;await audit("enrollment_status_changed","enrollment",id,data,reason||null);return response(200,{ok:true,item:data},origin);
     }
     if(action==="list_scholarships") {
@@ -456,13 +496,13 @@ return response(
     if(action==="create_monthly_invoice") {
       if(!isAny("administrator","finance_reviewer")) return response(403,{error:"Finance reviewer or administrator role required."},origin);
       const enrollmentId=clean(body.enrollment_id,80), periodStart=clean(body.period_start,10), currency=clean(body.currency,3), amount=Number(body.base_amount);
-      if(!enrollmentId||!/^\d{4}-\d{2}-01$/.test(periodStart)||! ["RWF","TRY"].includes(currency)||!Number.isFinite(amount)||amount<=0) return response(400,{error:"Provide a valid enrollment, first-of-month period start, currency, and positive amount."},origin);
+      if(!enrollmentId||!/^\d{4}-\d{2}-01$/.test(periodStart)||! ["RWF","TRY","USD"].includes(currency)||!Number.isFinite(amount)||amount<=0) return response(400,{error:"Provide a valid enrollment, first-of-month period start, currency, and positive amount."},origin);
       const start=new Date(`${periodStart}T00:00:00Z`);const end=new Date(Date.UTC(start.getUTCFullYear(),start.getUTCMonth()+1,0));const periodEnd=end.toISOString().slice(0,10);
       const {data:enrollment,error:eErr}=await admin.from("sifa_enrollments").select("id,status,start_date,end_date").eq("id",enrollmentId).single();if(eErr)throw eErr;if(!["active","suspended","pending_payment"].includes(enrollment.status))return response(409,{error:"Enrollment is not eligible for a monthly invoice."},origin);if(enrollment.start_date&&periodEnd<enrollment.start_date||enrollment.end_date&&periodStart>enrollment.end_date)return response(400,{error:"The invoice month must overlap the enrollment dates."},origin);
       const dueDate=periodStart;
       const {data:enr,error:enrErr}=await admin.from("sifa_enrollments").select("public_application_id,application_id").eq("id",enrollmentId).single();if(enrErr)throw enrErr;
       let discountPercent=0;const appField=enr.public_application_id?"public_application_id":"application_id";const appId=enr.public_application_id||enr.application_id;
-      if(appId){const {data:sch,error:schErr}=await admin.from("sifa_scholarship_decisions").select("monthly_discount_percent,starts_on,ends_on").eq(appField,appId).eq("decision","approved").order("decided_at",{ascending:false}).limit(1).maybeSingle();if(schErr)throw schErr;if(sch&&(!sch.starts_on||sch.starts_on<=periodStart)&&(!sch.ends_on||sch.ends_on>=periodStart))discountPercent=Number(sch.monthly_discount_percent)||0;}
+      if(appId){const {data:sch,error:schErr}=await admin.from("sifa_scholarship_decisions").select("monthly_discount_percent,starts_on,ends_on").eq(appField,appId).eq("decision","approved").order("decided_at",{ascending:false}).limit(1).maybeSingle();if(schErr)throw schErr;if(sch&&(!sch.starts_on||sch.starts_on<=(enrollment.start_date>periodStart?enrollment.start_date:periodStart))&&(!sch.ends_on||sch.ends_on>=(enrollment.end_date<periodEnd?enrollment.end_date:periodEnd)))discountPercent=Number(sch.monthly_discount_percent)||0;}
       const discount=Math.round(amount*discountPercent)/100;
       const {data,error}=await admin.from("sifa_fee_invoices").insert({enrollment_id:enrollmentId,period_start:periodStart,period_end:periodEnd,currency,base_amount:amount,discount_amount:discount,due_date:dueDate,status:discount>=amount?"waived":"unpaid"}).select("id,enrollment_id,period_start,period_end,invoice_type,currency,base_amount,discount_amount,amount_due,due_date,status").single();
       if(error)throw error;await audit("monthly_invoice_created","fee_invoice",data.id,data);return response(201,{ok:true,item:data},origin);
