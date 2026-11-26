@@ -38,7 +38,9 @@
 .application-open-banner{background:#f1faf5!important;border-color:#bfe2cc!important;color:#1d6a3d!important}.application-open-banner .application-closed-icon{background:#dff5e7!important;color:#19733f!important}.application-account-note{font-size:.93rem;color:#62748a}.application-account-note a{color:#19733f;font-weight:800}
 </style>
 <link rel="icon" type="image/png" href="assets/sifa-logo.png">
-</head>
+<style>.sifa-field-error{color:#9f2722;background:#fff4f4;border-left:3px solid #b42318;padding:10px 12px;margin:8px 0;font-size:14px;font-weight:600;grid-column:1/-1}#applicationForm [aria-invalid=true]{border:2px solid #b42318!important}#occupationOther[hidden]{display:none!important}</style><style>
+.apply-shell .application-success-card{box-sizing:border-box;max-width:650px;width:100%;margin:24px auto;padding:clamp(24px,5vw,48px);text-align:center;background:#fff;border:1px solid #dbe9e0;border-radius:20px;box-shadow:0 16px 44px rgba(7,26,51,.08);display:flex;flex-direction:column;align-items:center;gap:16px}.application-success-card .success-icon{display:grid;place-items:center;width:72px;height:72px;border-radius:50%;background:#e3f5e9;color:#19733f;font-size:36px;font-weight:800}.application-success-card h2{margin:0;font-size:clamp(25px,4vw,36px);line-height:1.2;color:#071a33}.application-success-card p{margin:0;line-height:1.65;color:#53687a}.application-success-card .success-reference{box-sizing:border-box;width:100%;padding:18px;background:#f1f7f4;border:1px solid #d6e8dc;border-radius:12px;display:grid;gap:8px}.success-reference strong{color:#071a33;font-size:clamp(18px,3vw,24px);overflow-wrap:anywhere}.application-success-card .success-note{padding:14px;background:#f7fafc;border-radius:10px;font-size:14px;text-align:left}.success-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;width:100%}.success-actions a{box-sizing:border-box;text-align:center}.application-success-card:focus{outline:none}@media(max-width:560px){.success-actions a{width:100%}}
+</style></head>
 <body>
 <div class="topbar"><div class="container"><span>Empowering Financial Professionals Through Technology</span><span>sifaglobalinstitute12@gmail.com</span></div></div>
 <header><div class="container nav">
@@ -47,7 +49,8 @@
 <nav><ul>
 <li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="founder.html">Founder</a></li><li><a href="courses.html">Courses</a></li><li><a href="learning.html">Learning</a></li><li><a href="certifications.html">Certification</a></li><li><a href="resources.html">Resources</a></li><li><a href="ai-support.html">SIFA AI</a></li><li><a href="student-payments.html">Fees &amp; Scholarships</a></li><li><a href="contact.html">Contact</a></li><li><a class="nav-cta" href="student-portal.html">Student Portal</a></li>
 </ul></nav></div></header>
-<main>
+<div id="sifaApplicationGate" role="status" style="padding:32px;text-align:center">Checking your student account… <a href="student-portal.html?view=application">Return to Student Portal</a></div>
+<main id="sifaProtectedApplication" style="display:none">
 <section class="page-hero"><div class="container">
 <span class="eyebrow">SIFA Application</span>
 <h1>Apply to learn, practice, and grow with SIFA.</h1>
@@ -73,7 +76,7 @@
 <p id="admissionsStatusText">SIFA Global Institute is not accepting applications at this time. Your Student Portal account remains active, and you can apply when admissions reopen.</p>
 </div>
 </div>
-<div class="info-box" id="studentPortalRequirement" style="margin-bottom:22px"><strong>Student account required:</strong> Create or sign in to your SIFA Student Portal account before submitting this application. Your application will be securely linked to your student account. <a href="student-portal.html?next=apply.html" style="color:#19733f;font-weight:800">Open Student Portal</a>.</div>
+<div class="info-box" id="studentPortalRequirement" style="margin-bottom:22px"><strong>Student account required:</strong> You are applying through your verified SIFA Student Portal account. Your application will be securely linked to your student account. <a href="student-portal.html?view=application" style="color:#19733f;font-weight:800">Open Student Portal</a>.</div>
 <div aria-label="Application progress" class="progress-wrap">
 <div class="progress-top"><strong id="stepTitle">Step 1 of 6 — Personal Information</strong><span id="stepPercent">17%</span></div>
 <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
@@ -91,6 +94,7 @@
 <input name="_subject" type="hidden" value="SIFA Global Institute — Application Submission"/>
 <section class="wizard-step active" data-step="1">
 <div class="step-heading"><div class="step-number">1</div><div><h2>Personal Information</h2><p>Tell us how SIFA can identify and contact you.</p></div></div>
+<p id="applicationProfileNotice" role="status" aria-live="polite" hidden style="padding:14px 16px;border:1px solid #cfe7d8;border-radius:10px;background:#f1faf5;color:#20573b"></p>
 <div class="form-grid-2">
 <label>Full name *<input autocomplete="name" name="name" required=""/></label>
 <label>Email address *<input autocomplete="email" name="email" required="" type="email"/></label>
@@ -298,13 +302,14 @@
 <div class="form-grid-2">
 <label>Nationality *<input name="nationality" required=""/></label>
 <label>Preferred language<select name="language"><option value="">Select</option><option>English</option><option>French</option><option>Kinyarwanda</option><option>Turkish</option><option>Other</option></select></label>
+<label>Do you speak Kinyarwanda? *<select name="kinyarwanda" required><option value="">Select</option><option>Yes</option><option>No</option></select></label>
 </div>
 </section>
 <section class="wizard-step" data-step="2">
 <div class="step-heading"><div class="step-number">2</div><div><h2>Education &amp; Background</h2><p>Help us understand your current level and relevant experience.</p></div></div>
 <div class="form-grid-2">
 <label>Highest education level *<select name="education" required=""><option value="">Select</option><option>Secondary School</option><option>Certificate / Diploma</option><option>Bachelor's Degree</option><option>Master's Degree</option><option>Doctorate</option><option>Professional Qualification</option><option>Other</option></select></label>
-<label>Current status<select name="status"><option value="">Select</option><option>Student</option><option>Job seeker</option><option>Employed</option><option>Self-employed</option><option>Business owner</option><option>Accounting / finance professional</option><option>Other</option></select></label>
+<label>Current occupation / profession *<select name="status" required><option value="">Select your occupation</option><option>Student</option><option>Recent graduate</option><option>Job seeker</option><option>Unemployed</option><option>Intern / Trainee</option><option>Teacher / Lecturer</option><option>Researcher</option><option>Accountant</option><option>Bookkeeper</option><option>Auditor</option><option>Financial analyst</option><option>Finance manager</option><option>Banking professional</option><option>Tax professional</option><option>Cashier</option><option>Payroll officer</option><option>Business owner</option><option>Entrepreneur</option><option>Self-employed</option><option>Managing director / CEO</option><option>General manager</option><option>Operations manager</option><option>Project manager</option><option>Human resources professional</option><option>Secretary</option><option>Administrative assistant</option><option>Sales professional</option><option>Marketing professional</option><option>Procurement officer</option><option>IT professional</option><option>Software developer</option><option>Data analyst</option><option>Engineer</option><option>Healthcare professional</option><option>Farmer / Agricultural professional</option><option>Agribusiness owner</option><option>Retail worker</option><option>Manufacturing worker</option><option>Construction worker</option><option>Transport / Logistics professional</option><option>Hospitality professional</option><option>Government employee</option><option>NGO / Nonprofit worker</option><option>Consultant</option><option>Freelancer</option><option>Other</option></select></label><label id="occupationOther" hidden>Specify your occupation *<input name="occupationOther" disabled></label>
 </div>
 <label>Accounting, finance or business background<textarea name="background" placeholder="Briefly describe your studies, work, business or other relevant experience."></textarea></label>
 <label>Accounting software and digital tools experience<textarea name="softwareExperience" placeholder="Tell us which accounting software, Excel, ERP systems or other digital tools you have used, if any."></textarea></label>
@@ -313,11 +318,11 @@
 <div class="step-heading"><div class="step-number">3</div><div><h2>Program &amp; Cohort</h2><p>Select a program that is currently open for application and tell us your preferred learning arrangement.</p></div></div>
 <div class="program-status-box">
 <strong>Program availability is controlled by SIFA.</strong>
-<p>All SIFA programs are currently closed for application. Admissions will reopen when SIFA announces the next intake.</p>
+<p><span id="programAvailabilityText">Checking available programs…</span></p>
 </div>
 <div class="form-grid-2">
-<label>Program requested *<select id="programSelect" name="course" required=""><option disabled="" value="QuickBooks Practical Training">QuickBooks Practical Training — Not Open Yet</option><option disabled="" value="Sage Accounting Training">Sage Accounting Training — Not Open Yet</option><option disabled="" value="Tally Practical Accounting">Tally Practical Accounting — Not Open Yet</option><option disabled="" value="Microsoft Excel for Accounting &amp; Finance">Microsoft Excel for Accounting &amp; Finance — Not Open Yet</option><option disabled="" value="Xero Accounting">Xero Accounting — Not Open Yet</option><option disabled="" value="Zoho Books">Zoho Books — Not Open Yet</option><option disabled="" value="Odoo Accounting &amp; Business Systems">Odoo Accounting &amp; Business Systems — Not Open Yet</option><option disabled="" value="SAP Financial &amp; Business Systems">SAP Financial &amp; Business Systems — Not Open Yet</option><option disabled="" value="Oracle NetSuite">Oracle NetSuite — Not Open Yet</option><option disabled="" value="Microsoft Dynamics 365">Microsoft Dynamics 365 — Not Open Yet</option><option disabled="" value="ETA Accounting">ETA Accounting — Not Open Yet</option><option disabled="" value="Logo Accounting &amp; ERP">Logo Accounting &amp; ERP — Not Open Yet</option><option disabled="" value="Mikro Accounting &amp; ERP">Mikro Accounting &amp; ERP — Not Open Yet</option><option disabled="" value="LUCA Accounting">LUCA Accounting — Not Open Yet</option><option disabled="" value="Zirve Accounting">Zirve Accounting — Not Open Yet</option><option disabled="" value="DİA Business Software">DİA Business Software — Not Open Yet</option><option disabled="" value="Paraşüt Accounting">Paraşüt Accounting — Not Open Yet</option><option disabled="" value="AKINSOFT Wolvox">AKINSOFT Wolvox — Not Open Yet</option><option disabled="" value="Nebim">Nebim — Not Open Yet</option><option disabled="" value="Accounting Fundamentals">Accounting Fundamentals — Not Open Yet</option><option disabled="" value="Financial Reporting &amp; Analysis">Financial Reporting &amp; Analysis — Not Open Yet</option><option disabled="" value="Digital Finance &amp; Professional Tools">Digital Finance &amp; Professional Tools — Not Open Yet</option><option disabled="" value="Power BI for Financial Analysis">Power BI for Financial Analysis — Not Open Yet</option><option disabled="" value="Advanced Excel &amp; Financial Modeling">Advanced Excel &amp; Financial Modeling — Not Open Yet</option></select></label>
-<label>Learning mode *<select name="mode" required=""><option value="">Select</option><option>Live online</option><option>Blended / guided learning</option><option>Self-paced / digital resources</option></select></label>
+<label>Program requested *<select id="programSelect" name="course" required=""><option disabled="" value="QuickBooks Practical Training">QuickBooks Practical Training — Not Open Yet</option><option disabled="" value="Sage Accounting Training">Sage Accounting Training — Not Open Yet</option><option disabled="" value="Tally Practical Accounting">Tally Practical Accounting — Not Open Yet</option><option disabled="" value="Microsoft Excel for Accounting &amp; Finance">Microsoft Excel for Accounting &amp; Finance — Not Open Yet</option><option disabled="" value="Xero Accounting">Xero Accounting — Not Open Yet</option><option disabled="" value="Zoho Books">Zoho Books — Not Open Yet</option><option disabled="" value="Odoo Accounting &amp; Business Systems">Odoo Accounting &amp; Business Systems — Not Open Yet</option><option disabled="" value="SAP Financial &amp; Business Systems">SAP Financial &amp; Business Systems — Not Open Yet</option><option disabled="" value="Oracle NetSuite">Oracle NetSuite — Not Open Yet</option><option disabled="" value="Microsoft Dynamics 365">Microsoft Dynamics 365 — Not Open Yet</option><option disabled="" value="ETA Accounting">ETA Accounting — Not Open Yet</option><option disabled="" value="Logo Accounting &amp; ERP">Logo Accounting &amp; ERP — Not Open Yet</option><option disabled="" value="Mikro Accounting &amp; ERP">Mikro Accounting &amp; ERP — Not Open Yet</option><option disabled="" value="LUCA Accounting">LUCA Accounting — Not Open Yet</option><option disabled="" value="Zirve Accounting">Zirve Accounting — Not Open Yet</option><option disabled="" value="DİA Business Software">DİA Business Software — Not Open Yet</option><option disabled="" value="Paraşüt Accounting">Paraşüt Accounting — Not Open Yet</option><option disabled="" value="AKINSOFT Wolvox">AKINSOFT Wolvox — Not Open Yet</option><option disabled="" value="Nebim">Nebim — Not Open Yet</option><option disabled="" value="Accounting Fundamentals">Accounting Fundamentals — Not Open Yet</option><option disabled="" value="Financial Reporting &amp; Analysis">Financial Reporting &amp; Analysis — Not Open Yet</option><option disabled="" value="Digital Finance &amp; Professional Tools">Digital Finance &amp; Professional Tools — Not Open Yet</option><option disabled="" value="Power BI for Financial Analysis">Power BI for Financial Analysis — Not Open Yet</option><option disabled="" value="Advanced Excel &amp; Financial Modeling">Advanced Excel &amp; Financial Modeling — Not Open Yet</option><option disabled value="Advanced Microsoft Word">Advanced Microsoft Word — Not Open Yet</option><option disabled value="Advanced Microsoft PowerPoint">Advanced Microsoft PowerPoint — Not Open Yet</option></select></label>
+<label>Learning mode *<select name="mode" required><option>Live online</option></select></label>
 </div>
 <div class="intake-box">
 <h3>Next Available Cohort</h3>
@@ -353,37 +358,30 @@
 <section class="wizard-step" data-step="5">
 <div class="step-heading"><div class="step-number">5</div><div><h2>Documents</h2><p>Provide the core documents needed for application review and add supporting documents where useful.</p></div></div>
 <div class="info-box"><strong>Document policy:</strong> SIFA will request only documents relevant to the selected program or support request. The requirements below are designed for this application and may be adjusted when SIFA publishes program-specific admission requirements.</div>
-<label style="margin-top:20px">Core document status *</label>
-<div class="document-choice">
-<label><input name="documentStatus" required="" type="radio" value="I have the core documents"/><span><strong>I have the core documents.</strong> I will upload the required identification and education/qualification documents below.</span></label>
-<label><input name="documentStatus" required="" type="radio" value="I need guidance about a core document"/><span><strong>I need guidance.</strong> I do not currently have one or more core documents and would like SIFA to advise me.</span></label>
-</div>
 <div class="document-group show" id="coreDocs">
 <h3>Core application documents <span class="badge-required">Required</span></h3>
-<p>These documents support identity and education/qualification review. If you select the guidance option above, SIFA can advise you about an unavailable document.</p>
-<div class="doc-row"><div class="doc-name"><strong>Identification document / passport</strong><span>Passport or another accepted identification document.</span></div><div class="doc-upload"><input accept=".pdf,.jpg,.jpeg,.png" name="identityDocument" type="file"/></div></div>
-<div class="doc-row"><div class="doc-name"><strong>Highest education or professional qualification</strong><span>Certificate, diploma, degree, professional qualification, or equivalent record.</span></div><div class="doc-upload"><input accept=".pdf,.jpg,.jpeg,.png" name="educationCertificate" type="file"/></div></div>
-</div>
-<div class="conditional" id="documentGuidance">
-<label>Which document do you currently need help with? *<textarea name="documentIssue" placeholder="Tell SIFA which core document you do not currently have and briefly explain the situation."></textarea></label>
+<p>All three core documents are required. Your photograph will be used privately to personalize your student account.</p>
+<div class="doc-row"><div class="doc-name"><strong>Identification document / passport</strong><span>Passport or another accepted identification document.</span></div><div class="doc-upload"><input accept=".pdf,.jpg,.jpeg,.png" name="identityDocument" type="file" required/></div></div>
+<div class="doc-row"><div class="doc-name"><strong>Highest education or professional qualification</strong><span>Certificate, diploma, degree, professional qualification, or equivalent record.</span></div><div class="doc-upload"><input accept=".pdf,.jpg,.jpeg,.png" name="educationCertificate" type="file" required/></div></div>
+<div class="doc-row"><div class="doc-name"><strong>Passport-size photograph</strong><span>Recent professional or identification-style photo.</span></div><div class="doc-upload"><input accept=".jpg,.jpeg,.png" name="photo" type="file" required/></div></div>
 </div>
 <div class="document-group">
-<h3>Optional / Supporting Documents <span class="badge-optional">Optional</span></h3>
-<p>These documents may strengthen your application or help SIFA understand your background. They are not required unless SIFA specifically requests them.</p>
+<h3>Optional / Supporting Documents <span class="badge-optional">Optional</span></h3><div class="info-box"><strong>Scholarship and fee-waiver applicants:</strong> We strongly encourage you to submit all available, relevant supporting documents listed below to help SIFA assess your circumstances. They remain optional and do not guarantee an award.</div>
+<p>These documents remain optional.</p>
 <div class="doc-row"><div class="doc-name"><strong>Academic transcript / record</strong><span>Useful where academic background is relevant.</span></div><div class="doc-upload"><input accept=".pdf,.jpg,.jpeg,.png" name="transcript" type="file"/></div></div>
-<div class="doc-row"><div class="doc-name"><strong>Passport-size photograph</strong><span>Recent professional or identification-style photo.</span></div><div class="doc-upload"><input accept=".jpg,.jpeg,.png" name="photo" type="file"/></div></div>
+
 <div class="doc-row"><div class="doc-name"><strong>CV / Résumé</strong><span>Useful for applicants with professional, volunteer, or business experience.</span></div><div class="doc-upload"><input accept=".pdf,.doc,.docx" name="cv" type="file"/></div></div>
 <div class="doc-row"><div class="doc-name"><strong>Professional or training certificates</strong><span>Relevant accounting, finance, software, or technology certificates.</span></div><div class="doc-upload"><input accept=".pdf,.jpg,.jpeg,.png" multiple="" name="certificates" type="file"/></div></div>
 <div class="doc-row"><div class="doc-name"><strong>Work experience documents</strong><span>Relevant employment or experience evidence, if available.</span></div><div class="doc-upload"><input accept=".pdf,.jpg,.jpeg,.png" multiple="" name="workDocuments" type="file"/></div></div>
 <div class="doc-row"><div class="doc-name"><strong>Other supporting documents</strong><span>Any other relevant document you want SIFA to consider.</span></div><div class="doc-upload"><input accept=".pdf,.jpg,.jpeg,.png" multiple="" name="otherDocument" type="file"/></div></div>
 </div>
-<p class="file-note"><strong>Accepted formats:</strong> PDF, JPG, JPEG, and PNG for most documents; PDF, DOC, or DOCX for CVs. Final file-size limits and secure storage rules will be applied when the online submission service is connected.</p>
+<p class="file-note"><strong>Accepted formats:</strong> PDF, JPG, JPEG, and PNG for most documents; PDF, DOC, or DOCX for CVs. Up to 5 MB per file, 8 MB combined and 12 files per application. Use clear, compressed documents.</p>
 </section>
 <section class="wizard-step" data-step="6">
 <div class="step-heading"><div class="step-number">6</div><div><h2>Review &amp; Submit</h2><p>Review the information you entered before the final submission stage.</p></div></div>
 <div class="review-grid" id="reviewGrid"></div>
 <div class="consent">
-<h3>Declaration &amp; Consent</h3>
+<h3>Declaration &amp; Consent</h3><div class="info-box"><strong>Final review — submitted applications cannot be edited.</strong> Check all information and documents before submitting. You may withdraw an eligible application and apply again when admissions are open. Admitted applications and linked records may require staff review.</div><label class="check-row"><input type="checkbox" name="finalReview" required><span>I have reviewed all information and documents and understand that submitted applications cannot be edited. *</span></label>
 <label class="check-row"><input name="accuracy" required="" type="checkbox"/><span>I confirm that the information I have provided is accurate to the best of my knowledge. I understand that submitting an application does not automatically guarantee admission, enrollment, a scholarship, or a fee waiver. *</span></label>
 <label class="check-row"><input name="contactConsent" required="" type="checkbox"/><span>I agree that SIFA Global Institute may contact me regarding this application and relevant learning opportunities. *</span></label>
 </div>
@@ -399,7 +397,7 @@
 </form>
 </div>
 <div class="apply-note" style="margin-top:24px"><strong>Current admissions status:</strong> 
-Applications are currently closed for all programs. SIFA Global Institute will announce when admissions reopen.
+<span id="footerAdmissionText">Checking admissions…</span>
 </div>
 <div class="apply-note" style="margin-top:24px"><strong>Application process:</strong> Complete the application → SIFA reviews the information → SIFA may contact you for clarification or supporting documents → enrollment arrangements are confirmed where applicable.</div>
 <p style="margin-top:18px">Before applying, you can also review <a href="scholarships.html">Scholarships &amp; Fee Waivers</a>, <a href="courses.html">Courses</a>, or <a href="contact.html">Contact SIFA</a>.</p>
@@ -426,12 +424,34 @@ Applications are currently closed for all programs. SIFA Global Institute will a
 <script src="supabase-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// Public application intake intentionally does not require a student account.
-// The server-side Edge Function validates every submission. Applicants can create
-// a Student Portal account later; staff link it after verifying the same email.
-</script>
-<script>
-(function() {
+(async function() {
+  const gate = document.getElementById('sifaApplicationGate');
+  const portal = 'student-portal.html?view=application';
+  try {
+    const config = window.SIFA_SUPABASE_CONFIG;
+    const client = window.SIFAApplicationClient ||= window.supabase.createClient(config.url, config.anonKey, window.SIFA_AUTH_OPTIONS);
+    const {data: sessionData, error: sessionError} = await client.auth.getSession();
+    if (sessionError) throw sessionError;
+    if (!sessionData.session) { location.replace(portal); return; }
+    const {data: auth, error: authError} = await client.auth.getUser();
+    if (authError) throw authError;
+    if (!auth.user?.email_confirmed_at) { location.replace(portal); return; }
+    const [settings, legacy, linked] = await Promise.all([
+      client.from('admission_settings').select('applications_open,open_programs').eq('id',true).single(),
+      client.from('applications').select('status,payload').eq('user_id',auth.user.id),
+      client.from('sifa_public_applications').select('status,program').eq('linked_user_id',auth.user.id)
+    ]);
+    if (settings.error || legacy.error || linked.error) throw new Error('Application information unavailable');
+    const active = r => !['Rejected','Withdrawn'].includes(r.status);
+    const program = 'QuickBooks Practical Training';
+    if (!settings.data.applications_open || !settings.data.open_programs?.includes(program) || legacy.data.some(r=>active(r)&&r.payload?.course===program) || linked.data.some(r=>active(r)&&r.program===program)) { location.replace(portal); return; }
+    window.SIFA_SETTINGS = {...window.SIFA_SETTINGS, applicationsOpen:true, openPrograms:settings.data.open_programs};
+    client.auth.onAuthStateChange((event)=>{if(event==='SIGNED_OUT') location.replace(portal);});
+  } catch(error) {
+    console.warn('Application access check failed',error);
+    gate.firstChild.textContent='Unable to verify your application access. Please return to the Student Portal. ';
+    return;
+  }
   const form = document.getElementById('applicationForm');
   const steps = Array.from(document.querySelectorAll('.wizard-step'));
   const dots = Array.from(document.querySelectorAll('.step-dot'));
@@ -442,8 +462,7 @@ Applications are currently closed for all programs. SIFA Global Institute will a
   const stepTitle = document.getElementById('stepTitle');
   const stepPercent = document.getElementById('stepPercent');
   const supportDetails = document.getElementById('supportDetails');
-  const coreDocs = document.getElementById('coreDocs');
-  const documentGuidance = document.getElementById('documentGuidance');
+
   const reviewGrid = document.getElementById('reviewGrid');
   const notice = document.getElementById('submissionNotice');
   const titles = ['Personal Information','Education & Background','Program & Cohort','Scholarship & Financial Assistance','Documents','Review & Submit'];
@@ -471,6 +490,12 @@ Applications are currently closed for all programs. SIFA Global Institute will a
       statusText.textContent = 'SIFA Global Institute is not accepting applications at this time. Your Student Portal account remains active, and you can apply when admissions reopen.';
     }
   }
+  const availability = APPLICATIONS_OPEN ? 'Applications are open for: '+openPrograms.join(', ')+'.' : 'Applications are currently closed.';
+  document.getElementById('programAvailabilityText').textContent=availability;
+  document.getElementById('footerAdmissionText').textContent=availability;
+  const occupation=form.elements.status, other=form.elements.occupationOther;
+  function toggleOccupation(){ const active=occupation.value==='Other'; document.getElementById('occupationOther').hidden=!active;other.disabled=!active;other.required=active; }
+  occupation.addEventListener('change',toggleOccupation);toggleOccupation();
   let current = 1;
 
   function showStep(n) {
@@ -494,41 +519,28 @@ backBtn.style.opacity = '1';
     window.scrollTo({top: document.querySelector('.progress-wrap').offsetTop - 20, behavior:'smooth'});
   }
 
-  function validateCurrent() {
-    const fields = steps[current-1].querySelectorAll('input, select, textarea');
-    for(const field of fields) {
-      if(field.disabled || field.type==='file' || field.type==='radio' || field.type==='checkbox') continue;
-      if(!field.checkValidity()) { field.reportValidity(); return false; }
-    }
-    if(current===3) {
-      const schedule = form.querySelector('input[name="schedule"]:checked');
-      if(!schedule) { alert('Please select a schedule preference.'); return false; }
-      const cohort = form.elements.cohort;
-      if(!cohort.value) { cohort.reportValidity(); return false; }
-    }
-    if(current===4) {
-      const selected = form.querySelector('input[name="financialSupport"]:checked');
-      if(!selected) { alert('Please select whether you require financial assistance.'); return false; }
-      if(selected.value === 'Scholarship or fee-waiver request') {
-        const r = form.querySelector('[name="scholarshipReason"]');
-        if(!r.value.trim()) { r.setCustomValidity('Please explain why you are requesting financial assistance.'); r.reportValidity(); r.setCustomValidity(''); return false; }
+  function clearValidation(){form.querySelectorAll('.sifa-field-error').forEach(e=>e.remove());form.querySelectorAll('[aria-invalid="true"]').forEach(e=>{e.removeAttribute('aria-invalid');e.removeAttribute('aria-describedby');});}
+  function fieldError(field,message){
+    const host=field.closest('.doc-row')||field.closest('label')||field.parentElement;
+    const error=document.createElement('p');error.className='sifa-field-error';error.id='sifa-validation-error';error.setAttribute('role','alert');error.textContent=message;host.append(error);
+    field.setAttribute('aria-invalid','true');field.setAttribute('aria-describedby',error.id);field.focus({preventScroll:true});host.scrollIntoView({behavior:'smooth',block:'center'});return false;
+  }
+  function validateCurrent(){
+    clearValidation();
+    for(const field of steps[current-1].querySelectorAll('input,select,textarea')){
+      if(field.disabled||field.type==='hidden')continue;
+      if(!field.checkValidity()||(field.required&&field.type==='file'&&!field.files[0]?.size)){
+        const title=field.closest('.doc-row')?.querySelector('strong')?.textContent||field.closest('label')?.textContent.trim().split('\n')[0]||field.name;
+        return fieldError(field,field.type==='file'?'Please upload: '+title+'.':field.type==='checkbox'?'Please confirm this declaration.':field.type==='radio'?'Please select an option.':field.validity.valueMissing?'Please complete this required field.':field.validationMessage);
       }
     }
-    if(current===5) {
-      const status = form.querySelector('input[name="documentStatus"]:checked');
-      if(!status) { alert('Please select your core document status.'); return false; }
-      if(status.value === 'I have the core documents') {
-        const id = form.elements.identityDocument;
-        const edu = form.elements.educationCertificate;
-        if(!id.files.length) { alert('Please upload your identification document / passport.'); id.focus(); return false; }
-        if(!edu.files.length) { alert('Please upload your highest education or professional qualification.'); edu.focus(); return false; }
-      } else {
-        const issue = form.elements.documentIssue;
-        if(!issue.value.trim()) { issue.setCustomValidity('Please explain which core document you need help with.'); issue.reportValidity(); issue.setCustomValidity(''); return false; }
-      }
-    }
+    if(current===3 && !openPrograms.includes(form.elements.course.value))return fieldError(form.elements.course,'Please select a program currently accepting applications.');
+    if(current===4 && financialLabel()==='Scholarship or fee-waiver request'&&!form.elements.scholarshipReason.value.trim())return fieldError(form.elements.scholarshipReason,'Please explain your request for financial assistance.');
+    if(current===5){const files=Array.from(form.querySelectorAll('input[type=file]')).flatMap(x=>Array.from(x.files).map(f=>({x,f})));let total=0;for(const {x,f} of files){total+=f.size;if(f.size>5*1024*1024||!f.size)return fieldError(x,'Choose a non-empty file of 5 MB or less.');if(total>8*1024*1024)return fieldError(x,'Combined documents must be 8 MB or less.');}if(files.length>12)return fieldError(files[12].x,'Please attach no more than 12 files.');}
     return true;
   }
+  window.SIFAValidateApplication=()=>{const previous=current;for(let i=1;i<=steps.length;i++){current=i;if(!validateCurrent()){const invalid=form.querySelector('[aria-invalid=true]');showStep(i);invalid?.focus({preventScroll:true});invalid?.closest('.doc-row, label')?.scrollIntoView({behavior:'smooth',block:'center'});return false;}}current=previous;return true;};
+  form.addEventListener('input',e=>{if(e.target.hasAttribute('aria-invalid'))clearValidation();});
 
   function filesFor(name) {
     const el = form.elements[name];
@@ -540,11 +552,11 @@ backBtn.style.opacity = '1';
 
   function buildReview() {
     const items = [
-      ['Personal Information', [['Full name',value('name')],['Email',value('email')],['Phone / WhatsApp',value('phone')],['Country',value('country')],['City / Location',value('city')],['Nationality',value('nationality')],['Preferred language',value('language')]],1],
-      ['Education & Background', [['Highest education',value('education')],['Current status',value('status')],['Background',value('background')],['Software experience',value('softwareExperience')]],2],
+      ['Personal Information', [['Full name',value('name')],['Email',value('email')],['Phone / WhatsApp',value('phone')],['Country',value('country')],['City / Location',value('city')],['Nationality',value('nationality')],['Preferred language',value('language')],['Speaks Kinyarwanda',value('kinyarwanda')]],1],
+      ['Education & Background', [['Highest education',value('education')],['Occupation',value('status')],['Other occupation',value('occupationOther')],['Background',value('background')],['Software experience',value('softwareExperience')]],2],
       ['Program & Cohort', [['Program',value('course')],['Learning mode',value('mode')],['Cohort',value('cohort')],['Schedule preference',value('schedule')],['Learning goal',value('goals')]],3],
       ['Financial Assistance', [['Request',financialLabel()],['Reason',value('scholarshipReason')],['Financial circumstances',value('financialCircumstances')],['Why this opportunity matters',value('scholarshipValue')]],4],
-      ['Documents', [['Core document status', form.querySelector('input[name="documentStatus"]:checked')?.value || 'Not selected'],['Identification',filesFor('identityDocument')],['Education / qualification',filesFor('educationCertificate')],['Supporting documents',[filesFor('transcript'),filesFor('photo'),filesFor('cv'),filesFor('certificates'),filesFor('workDocuments'),filesFor('otherDocument')].filter(x=>x!=='Not uploaded').join(', ') || 'None uploaded']],5]
+      ['Documents', [['Identification',filesFor('identityDocument')],['Education / qualification',filesFor('educationCertificate')],['Passport photograph',filesFor('photo')],['Supporting documents',[filesFor('transcript'),filesFor('cv'),filesFor('certificates'),filesFor('workDocuments'),filesFor('otherDocument')].filter(x=>x!=='Not uploaded').join(', ') || 'None uploaded']],5]
     ];
     reviewGrid.innerHTML = items.map(([title,fields,step])=>`<div class="review-card"><h3>${escapeHtml(title)}</h3>${fields.map(([k,v])=>`<p><strong>${escapeHtml(k)}:</strong> ${escapeHtml(v)}</p>`).join('')}<a href="#" class="review-edit" data-edit="${step}">Edit this section</a></div>`).join('');
     reviewGrid.querySelectorAll('.review-edit').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();showStep(Number(a.dataset.edit));}));
@@ -555,13 +567,6 @@ backBtn.style.opacity = '1';
     const yes = form.querySelector('input[name="financialSupport"][value="Scholarship or fee-waiver request"]:checked');
     supportDetails.classList.toggle('show', !!yes);
     form.querySelector('[name="scholarshipReason"]').required = !!yes;
-  }));
-
-  form.querySelectorAll('input[name="documentStatus"]').forEach(r=>r.addEventListener('change',()=>{
-    const hasDocs = form.querySelector('input[name="documentStatus"][value="I have the core documents"]:checked');
-    coreDocs.classList.toggle('show', !!hasDocs);
-    documentGuidance.classList.toggle('show', !hasDocs);
-    form.elements.documentIssue.required = !hasDocs;
   }));
 
   nextBtn.addEventListener('click',()=>{ if(validateCurrent()) showStep(current+1); });
@@ -577,230 +582,6 @@ backBtn.addEventListener('click', () => {
   dots.forEach((dot,i)=>dot.addEventListener('click',()=>{ if(i+1<=current) showStep(i+1); }));
 
   
-form.addEventListener('sifa-legacy-submit-disabled', async e => {
-
-  e.preventDefault();
-
-  if (!APPLICATIONS_OPEN) {
-    notice.classList.add('show');
-    notice.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center'
-    });
-    return;
-  }
-
-  if (!validateCurrent()) {
-    return;
-  }
-
-  const accuracy = form.elements.accuracy;
-  const contact = form.elements.contactConsent;
-
-  if (!accuracy.checked || !contact.checked) {
-    alert('Please confirm both declarations before submitting.');
-    return;
-  }
-
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'Submitting...';
-
-  const submitUrl =
-    'https://script.google.com/macros/s/AKfycbyBD2oQSwzQgx0jJ3LrKwkREOFE2ZOi3BSY_UGSIyyfpRG_wAhBtT207VueByhLD4SsbQ/exec';
-
-  try {
-    const fields = {};
-
-    form.querySelectorAll('input, select, textarea').forEach(field => {
-      if (!field.name || field.type === 'file') return;
-
-      if (field.type === 'checkbox') {
-        fields[field.name] = field.checked;
-      } else if (field.type === 'radio') {
-        if (field.checked) {
-          fields[field.name] = field.value;
-        }
-      } else {
-        fields[field.name] = field.value;
-      }
-    });
-
-    const documents = [];
-
-    const fileInputs = form.querySelectorAll('input[type="file"]');
-
-    for (const input of fileInputs) {
-      if (!input.files || !input.files.length) continue;
-
-      for (const file of input.files) {
-        const base64 = await new Promise((resolve, reject) => {
-          const reader = new FileReader();
-
-          reader.onload = () => {
-            const result = reader.result;
-            resolve(result.split(',')[1]);
-          };
-
-          reader.onerror = reject;
-          reader.readAsDataURL(file);
-        });
-
-        documents.push({
-          name: file.name,
-          type: file.type,
-          base64: base64
-        });
-      }
-    }
-const applicationId =
-  'SIFA-' +
-  new Date().toISOString().slice(0,10).replace(/-/g,'') +
-  '-' +
-  crypto.randomUUID().replace(/-/g,'').substring(0,6).toUpperCase();
-   const payload = {
-  applicationId: applicationId,
-  fullName: fields.name || '',
-  email: fields.email || '',
-  phone: fields.phone || '',
-  country: fields.country || '',
-  city: fields.city || '',
-  nationality: fields.nationality || '',
-  language: fields.language || '',
-  education: fields.education || '',
-  status: fields.status || '',
-  background: fields.background || '',
-  softwareExperience: fields.softwareExperience || '',
-
-  program: fields.course || '',
-  mode: fields.mode || '',
-  cohort: fields.cohort || '',
-  schedule: fields.schedule || '',
-  goals: fields.goals || '',
-
-  financialSupport: fields.financialSupport || '',
-  scholarshipReason: fields.scholarshipReason || '',
-  financialCircumstances: fields.financialCircumstances || '',
-  scholarshipValue: fields.scholarshipValue || '',
-
-  documentStatus: fields.documentStatus || '',
-  documentIssue: fields.documentIssue || '',
-
-  documents: documents
-};
-
-    await fetch(submitUrl, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8'
-      },
-      body: JSON.stringify(payload)
-    });
-
-    submitBtn.textContent = 'Application Submitted';
-
-    form.style.display = 'none';
-
-const confirmation = document.createElement('div');
-
-confirmation.style.maxWidth = '760px';
-confirmation.style.margin = '40px auto';
-confirmation.style.padding = '45px 35px';
-confirmation.style.background = '#ffffff';
-confirmation.style.border = '1px solid #dbe5ee';
-confirmation.style.borderRadius = '18px';
-confirmation.style.boxShadow = '0 10px 35px rgba(0,0,0,0.08)';
-confirmation.style.textAlign = 'center';
-
-confirmation.innerHTML = `
-  <img
-    src="assets/sifa-logo.webp"
-    alt="SIFA Global Institute Logo"
-    style="
-      display:block;
-      width:110px;
-      height:110px;
-      object-fit:contain;
-      margin:0 auto 20px auto;
-    "
-  >
-
-  <div style="
-    font-size:52px;
-    line-height:1;
-    margin-bottom:18px;
-    color:#071a33;
-    font-weight:700;
-  ">✓</div>
-
-  <h2 style="
-    color:#071a33;
-    margin-bottom:14px;
-    font-size:34px;
-  ">
-    Application Submitted Successfully
-  </h2>
-
-  <p style="
-    color:#526579;
-    font-size:16px;
-    line-height:1.7;
-    margin-bottom:10px;
-  ">
-    Thank you for applying to SIFA Global Institute.
-  </p>
-
-  <p style="
-    color:#526579;
-    font-size:16px;
-    line-height:1.7;
-  ">
-    Your application and supporting documents have been received.
-SIFA will review your information and contact you regarding the next steps.
-</p>
-
-<div style="
-    margin:25px auto 10px auto;
-    padding:16px 22px;
-    background:#f3f7fb;
-    border:1px solid #dbe5ee;
-    border-radius:12px;
-    max-width:420px;
-  ">
-    <div style="
-      color:#526579;
-      font-size:13px;
-      font-weight:700;
-      text-transform:uppercase;
-      letter-spacing:.5px;
-      margin-bottom:6px;
-    ">
-      Application Reference
-    </div>
-
-    <div style="
-      color:#071a33;
-      font-size:20px;
-      font-weight:800;
-      letter-spacing:1px;
-    ">
-      ${applicationId}
-    </div>
-</div>
-`;
-
-form.parentElement.insertBefore(confirmation, form);
-  } catch (error) {
-    console.error(error);
-
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Submit Application';
-
-    alert(
-      'We could not submit your application. Please try again.'
-    );
-  }
-});
   const params = new URLSearchParams(window.location.search);
   const requestedProgram = params.get('program');
   if(requestedProgram) {
@@ -816,9 +597,11 @@ form.parentElement.insertBefore(confirmation, form);
     notice.classList.remove('show');
   }
   showStep(1);
+  window.SIFAApplicationReady=true;
+  gate.hidden=true;
+  document.getElementById('sifaProtectedApplication').style.display='';
 })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="student-application.js"></script>
 <script src="script.js"></script>
 </body>

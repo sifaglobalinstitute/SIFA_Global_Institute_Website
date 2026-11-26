@@ -100,12 +100,13 @@
   let historyAvailable = false;
   let programNames = new Map();
   let selectedGroup = null;
+  let supportAwards=[],supportAvailable=false;
   const groups = [
     ['unpaid','Unpaid invoices','Payments requiring attention','#94610e'],
     ['pending','Pending verification','Receipts awaiting staff review','#245b9c'],
     ['paid','Paid invoices','Verified payments','#147847'],
     ['rejected','Rejected payments','Outstanding invoices with rejected evidence','#a72c37'],
-    ['waived','Fee waivers','Invoices fully waived','#147847'],
+    ['waived','Scholarships & Fee Waivers','Awards and fully waived invoices','#147847'],
     ['other','Other invoices','Cancelled or other statuses','#52677b']
   ];
   function category(invoice, latest) {
@@ -116,6 +117,7 @@
     return 'other';
   }
   async function loadDashboardData(result) {
+    try{const support=await invoke('sifa-student-billing',{action:'student_support'});supportAwards=Array.isArray(support.awards)?support.awards:[];supportAvailable=true;}catch{supportAwards=[];supportAvailable=false;}
     programNames = new Map((Array.isArray(result.enrollments) ? result.enrollments : []).map(e => [e.id,e.program]));
     receiptHistory = new Map(); historyAvailable = false;
     const list = Array.isArray(result.invoices) ? result.invoices : [];
@@ -144,16 +146,24 @@
   function program(i) { return programNames.get(i.enrollment_id) || i.program || ''; }
   function renderCategories(host,list) {
     const grid=element('div',undefined,'billing-groups');
-    const panel=element('div',undefined,'billing-records'); panel.id='billingRecords';
+    const panel=element('div',undefined,'billing-records'); panel.id='billingRecords'; panel.tabIndex=-1; panel.setAttribute('role','region'); panel.setAttribute('aria-labelledby','billingRecordsTitle');
     const buttons=[];
     if (!historyAvailable) host.append(element('p','Receipt history is temporarily unavailable. Outstanding invoices remain under Unpaid; rejected payment counts cannot be confirmed. Refresh records or contact SIFA support.','billing-history-warning'));
-    function show(key) {
+    function show(key, reveal = false) {
       selectedGroup=key; panel.replaceChildren(); panel.hidden=!key;
       for(const [k,b] of buttons) { b.setAttribute('aria-expanded',String(k===key)); b.querySelector('.billing-view').textContent=k===key?'Close records':'View records'; }
       if (!key) return;
-      const group=groups.find(g=>g[0]===key); panel.append(element('h3',group[1]));
+      const group=groups.find(g=>g[0]===key); const heading=element('h3',group[1]); heading.id='billingRecordsTitle'; panel.append(heading);
+      if(key==='waived'){
+        panel.append(element('h4','Scholarship awards'));
+        if(!supportAvailable)panel.append(element('p','Scholarship records are temporarily unavailable. Refresh to try again.','billing-history-warning'));
+        else if(!supportAwards.length)panel.append(element('p','No scholarship requests or awards recorded.','billing-empty'));
+        for(const a of supportAwards){const card=element('div',undefined,'invoice');card.style.padding='16px';card.append(element('strong',a.program+' — '+a.decision),element('p',a.application_ref||''));if(a.decision==='approved')card.append(element('p',`${a.monthly_discount_percent}% monthly tuition discount · ${a.starts_on||'No start date'} to ${a.ends_on||'No end date'}`));card.append(element('p','Admission status: '+a.admission_status+'. Award approval is separate from enrollment and classroom authorization.'));panel.append(card);}
+        panel.append(element('h4','Fully waived invoices'));
+      }
       const rows=list.filter(i=>category(i,receiptHistory.get(i.id))===key);
-      if (!rows.length) panel.append(element('p',key==='rejected'&&!historyAvailable?'Receipt history unavailable.':'No records in this category.','billing-empty'));
+      panel.append(element('p',key==='rejected'&&!historyAvailable?'Receipt history unavailable.':`${rows.length} ${rows.length===1?'invoice':'invoices'} in this category.`,'billing-result-count'));
+      if (!rows.length) panel.append(element('p',key==='rejected'&&!historyAvailable?'Refresh records to try again.':'There are no records in this category.','billing-empty'));
       for(const i of rows) {
         const r=receiptHistory.get(i.id); const item=element('details',undefined,'invoice');
         const summary=element('summary'); const left=element('div'); left.append(element('strong',invoiceTitle(i)),element('small',[program(i),i.period_start+' — '+i.period_end].filter(Boolean).join(' · ')));
@@ -171,12 +181,14 @@
         }
         item.append(summary,detail); panel.append(item);
       }
+      const back=element('button','Back to payment categories','btn btn-secondary billing-back'); back.type='button'; back.addEventListener('click',()=>{const button=buttons.find(([k])=>k===key)?.[1]; show(null); button?.focus();}); panel.append(back);
+      if (reveal) { panel.focus({preventScroll:true}); panel.scrollIntoView({block:'start',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'}); }
     }
     for(const [key,name,desc,color] of groups) {
       const count=list.filter(i=>category(i,receiptHistory.get(i.id))===key).length;
       if(key==='other' && !count) continue;
       const b=element('button',undefined,'billing-group'); b.type='button'; b.style.setProperty('--accent',color); b.setAttribute('aria-controls','billingRecords');
-      b.append(element('span',key==='rejected'&&!historyAvailable?'—':String(count),'billing-count'),element('strong',name),element('small',desc),element('span','View records','billing-view')); b.addEventListener('click',()=>show(selectedGroup===key?null:key)); buttons.push([key,b]); grid.append(b);
+      b.append(element('span',key==='rejected'&&!historyAvailable?'—':(key==='waived' ? `${supportAvailable?supportAwards.filter(a=>a.decision==='approved').length:'—'} awards · ${count} invoices` : String(count)),'billing-count'),element('strong',name),element('small',desc),element('span','View records','billing-view')); b.addEventListener('click',()=>show(selectedGroup===key?null:key,true)); buttons.push([key,b]); grid.append(b);
     }
     host.append(grid,panel); show(buttons.some(([k])=>k===selectedGroup)?selectedGroup:null);
   }
@@ -323,6 +335,7 @@ sb = window.supabase.createClient(
         return;
       }
 
+      void window.SIFALoadPhoto?.(sb,cfg,session.user.id);
       // Load private invoices from the billing API.
       const result = await invoke(
         'sifa-student-billing',

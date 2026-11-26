@@ -24,6 +24,7 @@
 
 .danger-zone{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:18px;padding:16px;border:1px solid #f0cccc;background:#fff8f8;border-radius:12px}.danger-zone strong{color:#8a2d2d}.danger-zone p{margin:4px 0 0;font-size:13px;color:#7b5b5b}.danger-btn{background:#fff!important;color:#8a2d2d!important;border:1px solid #d9aaaa!important}.closed-badge{background:#eef1f4!important;color:#5f6f7e!important}.application-subsection{margin-top:20px;padding-top:20px;border-top:1px solid #e5ebf0}.application-subsection h4{margin:0 0 12px;color:#071a33}.application-actions{display:flex;justify-content:flex-end;margin-top:18px}
 @media(max-width:560px){.danger-zone{align-items:stretch}.danger-zone .btn{width:100%}.application-actions{justify-content:stretch}.application-actions .btn{width:100%}}
+#my-account .sifa-profile-heading{display:flex;align-items:center;gap:18px;padding:20px 24px;margin:16px 0 24px;background:#0b2540;color:#fff;border-radius:14px}#my-account .sifa-profile-initials{display:grid;place-items:center;flex:0 0 60px;height:60px;border-radius:50%;background:#dff5e9;color:#11653b;font-size:1.4rem;font-weight:800}#my-account .sifa-profile-heading small{color:#9ce1b6;font-size:.7rem;letter-spacing:.09em;font-weight:700}#my-account .sifa-profile-heading h4{color:white;margin:4px 0;font-size:1.4rem;overflow-wrap:anywhere}#my-account .sifa-profile-heading p{color:#d9e5f2;margin:0;font-size:.85rem}#my-account .sifa-profile-heading>div:last-child{min-width:0}@media(max-width:650px){#my-account .sifa-profile-heading{padding:16px;gap:12px}#my-account .sifa-profile-initials{flex-basis:44px;height:44px;font-size:1rem}#my-account .sifa-profile-heading h4{font-size:1.15rem}}
 </style>
 
 <style id="sifa-streamlined-portal">
@@ -127,7 +128,26 @@
 @media(max-width:560px){#sifaEnrollmentSection{padding:15px}.sifa-enrollment-summary{display:grid;grid-template-columns:36px minmax(0,1fr) 12px;gap:7px 10px;padding:12px}.sifa-enrollment-mark{grid-row:1/3}.sifa-enrollment-badge{grid-column:2;justify-self:start}.sifa-enrollment-chevron{grid-column:3;grid-row:1/3}.sifa-finance-panel{padding:20px}}
 </style>
 
-</head>
+<style id="sifa-student-refinement">
+/* Student-only layout refinements; existing staff workspace is retained. */
+body:has(#studentDashboard:not([hidden])) .page-hero{display:none}
+body:has(#studentDashboard:not([hidden])) main>section:has(.portal-shell){padding-top:24px;padding-bottom:36px}
+#studentDashboard .sifa-student-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#fff;border:1px solid #dce6ef;border-radius:12px;padding:12px 16px;color:#0b2545}
+.sifa-student-toolbar>div{display:flex;gap:8px 16px;align-items:center;flex-wrap:wrap}.sifa-student-toolbar a,.sifa-student-toolbar button{font:inherit;font-size:14px;font-weight:700;color:#17643b}.sifa-student-toolbar button{background:#fff;border:1px solid #cbd9e5;border-radius:8px;padding:7px 12px;cursor:pointer}
+#studentDashboard .student-summary{padding:20px 24px;gap:14px}#studentDashboard .student-summary h2{font-size:clamp(22px,3vw,32px);line-height:1.2;overflow-wrap:anywhere}#studentDashboard .student-summary p{overflow-wrap:anywhere}
+#studentDashboard .sifa-finance-panel{padding:20px 24px;gap:18px}#studentDashboard .sifa-finance-panel h3{font-size:24px}
+#studentDashboard #sifaAccountGrid{grid-template-columns:minmax(0,1fr)}#studentDashboard #my-account{width:100%;box-sizing:border-box;max-width:100%;padding:24px}#my-account .account-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#my-account .account-item{min-width:0;overflow-wrap:anywhere}
+#my-account .portal-form{max-width:none}#my-account .account-grid input{min-width:0}#my-account .sifa-view-heading{flex-wrap:wrap}
+#studentDashboard #my-application{margin:0;box-shadow:none;padding:18px}#studentDashboard #my-application[data-empty=true] #applicationNote{display:none}#studentDashboard #my-application[data-empty=true] .application-actions{display:none}
+#sifaApplyLink[aria-disabled=true]{opacity:.65;cursor:not-allowed;pointer-events:none}
+#sifaApplicationPanel,#my-account{scroll-margin-top:110px}
+@media(max-width:650px){#studentDashboard .student-summary,#studentDashboard .sifa-finance-panel,#studentDashboard #my-account{padding:16px}#my-account .account-grid{grid-template-columns:1fr}#studentDashboard .sifa-student-toolbar{align-items:flex-start;flex-direction:column}.sifa-student-toolbar>div{gap:10px}#sifaApplicationPanel,#my-account{scroll-margin-top:140px}}
+
+</style><style>
+#my-account .account-section-label{font-size:1.12rem;font-weight:800;color:#0b2540;margin:12px 0 4px}#my-account .profile-edit-panel{margin:22px 0;padding:22px;border:1px solid #dbe6ef;border-radius:14px;background:#fff}#my-account .profile-edit-panel .portal-message{margin:0;scroll-margin-top:100px}#my-account .account-item{background:#f5f8fb}#my-account .portal-actions button:disabled{opacity:.55;cursor:not-allowed}#my-account .profile-edit-panel select{background:white;color:#203247}#my-account .email-change-panel{margin-top:22px}@media(max-width:650px){#my-account .profile-edit-panel{padding:14px}#my-account .portal-actions button{width:100%}}
+</style><style>
+#studentDashboard #my-application{padding:0;border:0;background:transparent}#applicationHistory{display:grid;gap:16px}.sifa-app-record{display:grid;gap:12px;border:1px solid #dfe7ef;border-radius:14px;padding:20px;background:white;min-width:0}.sifa-app-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}.sifa-app-header h4{margin:0;font-size:19px;color:#071a33}.sifa-app-status{padding:5px 10px;border-radius:20px;background:#edf2f7;color:#36516e;font-size:12px;font-weight:700}.sifa-app-status[data-status=Accepted]{background:#e4f5eb;color:#17653b}.sifa-app-status[data-status=Rejected],.sifa-app-status[data-status=Withdrawn]{background:#f3f4f6;color:#596575}.sifa-app-ref{color:#53687a;font-size:13px;overflow-wrap:anywhere}.sifa-app-record details{border:1px solid #dfe7ef;border-radius:10px;padding:12px}.sifa-app-record summary{cursor:pointer;font-weight:700;color:#173b56}.sifa-app-record details[open] summary{margin-bottom:14px}.sifa-app-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid #e7edf2;padding-top:12px}.sifa-app-actions p,.sifa-app-help{font-size:13px;line-height:1.6;margin:0;color:#53687a;flex:1 1 250px}.sifa-app-actions button{flex-shrink:0}@media(max-width:600px){.sifa-app-record .application-grid{grid-template-columns:1fr}.sifa-app-actions button{width:100%}}
+</style></head>
 <body>
 <div class="topbar"><div class="container"><span>Empowering Financial Professionals Through Technology</span><span>sifaglobalinstitute12@gmail.com</span></div></div>
 <header><div class="container nav">
@@ -155,7 +175,7 @@
 <section id="sifaStaffWorkspace" class="sifa-staff-workspace" aria-label="SIFA authorized staff tools" hidden>
   <div class="sifa-staff-hero">
     <div class="sifa-staff-kicker"><span aria-hidden="true">◆</span> Authorized staff account</div>
-    <h2>SIFA Global Institute Administration</h2>
+    <h2>SIFA Global Institute Administration</h2><h3 id="sifaStaffName" style="color:white;margin:10px 0 4px"></h3><p id="sifaStaffRole"></p>
     <p>Secure access to institutional management tools. Permissions are verified by SIFA's protected backend.</p>
   </div>
   <div class="sifa-staff-cards">
@@ -171,12 +191,11 @@
     </section>
   </div>
   <div class="sifa-staff-bottom">
-    <button type="button" id="sifaBackToStudent" class="sifa-staff-back">← Back to Student Portal</button>
-    <span style="color:#607387;font-size:13px">Student features remain available below.</span>
+    <a class="sifa-staff-back" href="sifa-admin.html">My staff profile &amp; account settings</a><button type="button" id="sifaStaffSignOut" class="sifa-staff-back">Sign out</button>
   </div>
 </section>
 <button type="button" id="sifaReopenStaff" class="sifa-staff-reopen" hidden>Open Staff Administration</button>
-<div class="student-summary"><div><div class="eyebrow" style="color:#62c78a;margin-bottom:8px">Student Account</div><h2>Welcome, <span id="studentName">Student</span></h2><p id="studentEmail"></p></div><div class="summary-meta"><span class="status-pill" id="applicationStatus">Not started</span><small>Application reference: <span id="applicationRef">—</span></small></div></div>
+<nav class="sifa-student-toolbar" aria-label="Student workspace"><strong>Digital Campus</strong><div><a href="student-portal.html">Overview</a><a href="student-learning.html">My Learning</a><a href="my-payments.html">Payments</a><button type="button" id="sifaTopSignOut">Sign out</button></div></nav><div class="student-summary"><div><div class="eyebrow" style="color:#62c78a;margin-bottom:8px">Student Account</div><h2>Welcome, <span id="studentName">Student</span></h2><p id="studentEmail"></p></div><div class="summary-meta"><span class="status-pill" id="applicationStatus">Not started</span><small>Application reference: <span id="applicationRef">—</span></small></div></div>
 
 <section id="sifaFinancePanel" class="sifa-finance-panel" aria-labelledby="sifaFinanceTitle">
   <div><div class="sifa-finance-kicker">SIFA Global Institute · Student financial services</div>
@@ -207,17 +226,212 @@
    <div id="sifaEnrollmentStatus" class="sifa-state" role="status" aria-live="polite" style="margin-top:16px">Loading your enrollments…</div>
    <div id="sifaEnrollmentItems" class="sifa-enrollment-items"></div>
  </section>
-<section id="sifaApplicationPanel" class="sifa-detail-panel" hidden><h3>Application</h3><p id="sifaApplicationSummary">Loading your application status…</p><div class="sifa-action-row"><a id="sifaApplyLink" class="btn btn-primary" href="apply.html">Apply / Continue Application</a><button type="button" class="btn btn-secondary" id="sifaCloseApplication">Back to Student Portal</button></div><div id="sifaApplicationStatusDetail" style="margin-top:18px"></div></section>
+<section id="sifaApplicationPanel" class="sifa-detail-panel" hidden><h3>My Application</h3><p id="sifaApplicationSummary">Loading your application status…</p><div class="sifa-action-row"><a id="sifaApplyLink" class="btn btn-primary" href="apply.html">Apply / Continue Application</a><button type="button" class="btn btn-secondary" id="sifaCloseApplication">Back to Student Portal</button></div><div id="sifaApplicationStatusDetail" style="margin-top:18px"></div></section>
 <div class="dashboard-grid" id="sifaAccountGrid" hidden>
-<section class="account-card" id="my-account"><div class="sifa-view-heading"><h3>Account Settings</h3><button type="button" class="btn btn-secondary" id="sifaCloseAccount">Back to Student Portal</button></div><p>Manage your personal details and account security. Your login email is linked to your SIFA account.</p>
-<form id="profileForm" class="portal-form"><div class="account-grid">
+<section class="account-card" id="my-account"><div class="sifa-view-heading"><h3>My Account</h3><button type="button" class="btn btn-secondary" id="sifaCloseAccount">Back to Student Portal</button></div><p>Manage your student profile and account security. Your saved personal details will be used to help complete new applications.</p>
+<div class="sifa-profile-heading"><div id="accountProfileInitials" class="sifa-profile-initials" aria-hidden="true">S</div><div><small>SIFA DIGITAL CAMPUS · STUDENT PROFILE</small><h4 id="accountProfileName">Student</h4><p>Your personal information and account security</p></div></div><div class="account-section-label">Account overview</div><div class="account-grid">
 <div class="account-item"><span>Email</span><strong id="accountEmail">—</strong><small class="account-hint">Login email</small></div><div class="account-item"><span>Account status</span><strong id="accountStatus">Active</strong></div><div class="account-item"><span>Email verification</span><strong id="emailStatus">—</strong></div><div class="account-item"><span>Member since</span><strong id="memberSince">—</strong></div></div>
-<label>Full name <span class="field-required">Required</span><input id="profileName" type="text" autocomplete="name" required></label>
-<div class="account-grid"><label>Phone <span class="field-optional">Optional</span><input id="profilePhone" type="tel" autocomplete="tel" placeholder="e.g. +250 7xx xxx xxx"></label><label>Country <span class="field-optional">Optional</span><input id="profileCountry" type="text" autocomplete="country-name" placeholder="e.g. Rwanda"></label></div>
-<p class="profile-help">Full name is required. Phone and country can be updated at any time.</p><div class="portal-actions"><button class="btn btn-primary" type="submit" id="saveProfileBtn">Save Changes</button></div></form>
+<form id="profileForm" class="portal-form profile-edit-panel"><div class="account-section-label">Personal &amp; contact information</div><p class="profile-help">Edit your details whenever necessary. Changes apply to your profile and future applications, not previously submitted applications.</p><label>Full name <span class="field-required">Required</span><input id="profileName" type="text" autocomplete="name" required></label>
+<div class="account-grid"><label>Phone <span class="field-optional">Optional</span><input id="profilePhone" type="tel" autocomplete="tel" placeholder="e.g. +250 7xx xxx xxx"></label><label>Country <span class="field-optional">Optional</span><select id="profileCountry" autocomplete="country-name"><option value="">Select your country (optional)</option><option value="Afghanistan">Afghanistan</option>
+<option value="Albania">Albania</option>
+<option value="Algeria">Algeria</option>
+<option value="Andorra">Andorra</option>
+<option value="Angola">Angola</option>
+<option value="Antigua and Barbuda">Antigua and Barbuda</option>
+<option value="Argentina">Argentina</option>
+<option value="Armenia">Armenia</option>
+<option value="Australia">Australia</option>
+<option value="Austria">Austria</option>
+<option value="Azerbaijan">Azerbaijan</option>
+<option value="Bahamas">Bahamas</option>
+<option value="Bahrain">Bahrain</option>
+<option value="Bangladesh">Bangladesh</option>
+<option value="Barbados">Barbados</option>
+<option value="Belarus">Belarus</option>
+<option value="Belgium">Belgium</option>
+<option value="Belize">Belize</option>
+<option value="Benin">Benin</option>
+<option value="Bhutan">Bhutan</option>
+<option value="Bolivia">Bolivia</option>
+<option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
+<option value="Botswana">Botswana</option>
+<option value="Brazil">Brazil</option>
+<option value="Brunei">Brunei</option>
+<option value="Bulgaria">Bulgaria</option>
+<option value="Burkina Faso">Burkina Faso</option>
+<option value="Burundi">Burundi</option>
+<option value="Cabo Verde">Cabo Verde</option>
+<option value="Cambodia">Cambodia</option>
+<option value="Cameroon">Cameroon</option>
+<option value="Canada">Canada</option>
+<option value="Central African Republic">Central African Republic</option>
+<option value="Chad">Chad</option>
+<option value="Chile">Chile</option>
+<option value="China">China</option>
+<option value="Colombia">Colombia</option>
+<option value="Comoros">Comoros</option>
+<option value="Congo (Republic of the)">Congo (Republic of the)</option>
+<option value="Costa Rica">Costa Rica</option>
+<option value="Côte d’Ivoire">Côte d’Ivoire</option>
+<option value="Croatia">Croatia</option>
+<option value="Cuba">Cuba</option>
+<option value="Cyprus">Cyprus</option>
+<option value="Czechia">Czechia</option>
+<option value="Democratic Republic of the Congo">Democratic Republic of the Congo</option>
+<option value="Denmark">Denmark</option>
+<option value="Djibouti">Djibouti</option>
+<option value="Dominica">Dominica</option>
+<option value="Dominican Republic">Dominican Republic</option>
+<option value="Ecuador">Ecuador</option>
+<option value="Egypt">Egypt</option>
+<option value="El Salvador">El Salvador</option>
+<option value="Equatorial Guinea">Equatorial Guinea</option>
+<option value="Eritrea">Eritrea</option>
+<option value="Estonia">Estonia</option>
+<option value="Eswatini">Eswatini</option>
+<option value="Ethiopia">Ethiopia</option>
+<option value="Fiji">Fiji</option>
+<option value="Finland">Finland</option>
+<option value="France">France</option>
+<option value="Gabon">Gabon</option>
+<option value="Gambia">Gambia</option>
+<option value="Georgia">Georgia</option>
+<option value="Germany">Germany</option>
+<option value="Ghana">Ghana</option>
+<option value="Greece">Greece</option>
+<option value="Grenada">Grenada</option>
+<option value="Guatemala">Guatemala</option>
+<option value="Guinea">Guinea</option>
+<option value="Guinea-Bissau">Guinea-Bissau</option>
+<option value="Guyana">Guyana</option>
+<option value="Haiti">Haiti</option>
+<option value="Honduras">Honduras</option>
+<option value="Hungary">Hungary</option>
+<option value="Iceland">Iceland</option>
+<option value="India">India</option>
+<option value="Indonesia">Indonesia</option>
+<option value="Iran">Iran</option>
+<option value="Iraq">Iraq</option>
+<option value="Ireland">Ireland</option>
+<option value="Israel">Israel</option>
+<option value="Italy">Italy</option>
+<option value="Jamaica">Jamaica</option>
+<option value="Japan">Japan</option>
+<option value="Jordan">Jordan</option>
+<option value="Kazakhstan">Kazakhstan</option>
+<option value="Kenya">Kenya</option>
+<option value="Kiribati">Kiribati</option>
+<option value="Kuwait">Kuwait</option>
+<option value="Kyrgyzstan">Kyrgyzstan</option>
+<option value="Laos">Laos</option>
+<option value="Latvia">Latvia</option>
+<option value="Lebanon">Lebanon</option>
+<option value="Lesotho">Lesotho</option>
+<option value="Liberia">Liberia</option>
+<option value="Libya">Libya</option>
+<option value="Liechtenstein">Liechtenstein</option>
+<option value="Lithuania">Lithuania</option>
+<option value="Luxembourg">Luxembourg</option>
+<option value="Madagascar">Madagascar</option>
+<option value="Malawi">Malawi</option>
+<option value="Malaysia">Malaysia</option>
+<option value="Maldives">Maldives</option>
+<option value="Mali">Mali</option>
+<option value="Malta">Malta</option>
+<option value="Marshall Islands">Marshall Islands</option>
+<option value="Mauritania">Mauritania</option>
+<option value="Mauritius">Mauritius</option>
+<option value="Mexico">Mexico</option>
+<option value="Micronesia">Micronesia</option>
+<option value="Moldova">Moldova</option>
+<option value="Monaco">Monaco</option>
+<option value="Mongolia">Mongolia</option>
+<option value="Montenegro">Montenegro</option>
+<option value="Morocco">Morocco</option>
+<option value="Mozambique">Mozambique</option>
+<option value="Myanmar">Myanmar</option>
+<option value="Namibia">Namibia</option>
+<option value="Nauru">Nauru</option>
+<option value="Nepal">Nepal</option>
+<option value="Netherlands">Netherlands</option>
+<option value="New Zealand">New Zealand</option>
+<option value="Nicaragua">Nicaragua</option>
+<option value="Niger">Niger</option>
+<option value="Nigeria">Nigeria</option>
+<option value="North Korea">North Korea</option>
+<option value="North Macedonia">North Macedonia</option>
+<option value="Norway">Norway</option>
+<option value="Oman">Oman</option>
+<option value="Pakistan">Pakistan</option>
+<option value="Palau">Palau</option>
+<option value="Palestine">Palestine</option>
+<option value="Panama">Panama</option>
+<option value="Papua New Guinea">Papua New Guinea</option>
+<option value="Paraguay">Paraguay</option>
+<option value="Peru">Peru</option>
+<option value="Philippines">Philippines</option>
+<option value="Poland">Poland</option>
+<option value="Portugal">Portugal</option>
+<option value="Qatar">Qatar</option>
+<option value="Romania">Romania</option>
+<option value="Russia">Russia</option>
+<option value="Rwanda">Rwanda</option>
+<option value="Saint Kitts and Nevis">Saint Kitts and Nevis</option>
+<option value="Saint Lucia">Saint Lucia</option>
+<option value="Saint Vincent and the Grenadines">Saint Vincent and the Grenadines</option>
+<option value="Samoa">Samoa</option>
+<option value="San Marino">San Marino</option>
+<option value="Sao Tome and Principe">Sao Tome and Principe</option>
+<option value="Saudi Arabia">Saudi Arabia</option>
+<option value="Senegal">Senegal</option>
+<option value="Serbia">Serbia</option>
+<option value="Seychelles">Seychelles</option>
+<option value="Sierra Leone">Sierra Leone</option>
+<option value="Singapore">Singapore</option>
+<option value="Slovakia">Slovakia</option>
+<option value="Slovenia">Slovenia</option>
+<option value="Solomon Islands">Solomon Islands</option>
+<option value="Somalia">Somalia</option>
+<option value="South Africa">South Africa</option>
+<option value="South Korea">South Korea</option>
+<option value="South Sudan">South Sudan</option>
+<option value="Spain">Spain</option>
+<option value="Sri Lanka">Sri Lanka</option>
+<option value="Sudan">Sudan</option>
+<option value="Suriname">Suriname</option>
+<option value="Sweden">Sweden</option>
+<option value="Switzerland">Switzerland</option>
+<option value="Syria">Syria</option>
+<option value="Taiwan">Taiwan</option>
+<option value="Tajikistan">Tajikistan</option>
+<option value="Tanzania">Tanzania</option>
+<option value="Thailand">Thailand</option>
+<option value="Timor-Leste">Timor-Leste</option>
+<option value="Togo">Togo</option>
+<option value="Tonga">Tonga</option>
+<option value="Trinidad and Tobago">Trinidad and Tobago</option>
+<option value="Tunisia">Tunisia</option>
+<option value="Türkiye">Türkiye</option>
+<option value="Turkmenistan">Turkmenistan</option>
+<option value="Tuvalu">Tuvalu</option>
+<option value="Uganda">Uganda</option>
+<option value="Ukraine">Ukraine</option>
+<option value="United Arab Emirates">United Arab Emirates</option>
+<option value="United Kingdom">United Kingdom</option>
+<option value="United States">United States</option>
+<option value="Uruguay">Uruguay</option>
+<option value="Uzbekistan">Uzbekistan</option>
+<option value="Vanuatu">Vanuatu</option>
+<option value="Vatican City">Vatican City</option>
+<option value="Venezuela">Venezuela</option>
+<option value="Vietnam">Vietnam</option>
+<option value="Yemen">Yemen</option>
+<option value="Zambia">Zambia</option>
+<option value="Zimbabwe">Zimbabwe</option></select></label></div>
+<p class="profile-help">Full name is required. Phone and country are optional.</p><div class="portal-actions"><button class="btn btn-primary" type="submit" id="saveProfileBtn" disabled>Save Changes</button><button class="btn btn-secondary" type="button" id="resetProfileBtn" disabled>Discard unsaved changes</button><button class="btn btn-secondary" type="button" id="retryProfileBtn" hidden>Reload saved details</button></div><div id="profileSaveMessage" class="portal-message" role="status" aria-live="polite" hidden></div></form>
 <section class="email-change-panel" aria-labelledby="emailChangeHeading">
   <h4 id="emailChangeHeading">Change email address</h4>
-  <p>Enter your new email address. Supabase will send a confirmation message; your login email changes only after the required confirmation is completed.</p>
+  <p>Enter your new email address. SIFA will send a confirmation message; your login email changes only after the required confirmation is completed.</p>
   <form id="emailChangeForm" class="portal-form">
     <label>New email address <span class="field-required">Required</span><input id="newEmail" type="email" autocomplete="email" placeholder="Enter your new email address" required></label>
     <div class="portal-actions"><button class="btn btn-primary" type="submit" id="requestEmailChangeBtn">Request Email Change</button></div>
@@ -238,14 +452,9 @@
 <section class="quickbooks-card"><span class="course-badge closed-badge">ADMISSIONS CLOSED</span><h3>QuickBooks Practical Training</h3><p>Practical training in setup, transactions, reconciliation, reporting and accounting workflows.</p><div class="account-grid" style="margin-top:18px"><div class="account-item"><span>Learning model</span><strong>Learn → Practice → Apply</strong></div><div class="account-item"><span>Application status</span><strong id="quickbooksStatus">Not available</strong></div></div><div class="portal-actions" style="margin-top:18px"><a id="applyPortalBtn" class="btn btn-disabled" href="apply.html" aria-disabled="true">Applications Closed</a><a class="btn btn-secondary" href="courses.html">View Courses</a></div></section>
 </div>
 
-<section class="application-card" id="my-application" hidden><h3>My Application</h3><p id="applicationNote">Your application information will appear here after you submit it.</p>
-<div id="applicationDetails" class="application-grid">
-<div class="application-item"><span>Status</span><strong id="detailStatus">Not started</strong></div><div class="application-item"><span>Reference</span><strong id="detailReference">—</strong></div><div class="application-item"><span>Program</span><strong id="detailProgram">—</strong></div><div class="application-item"><span>Learning mode</span><strong id="detailMode">—</strong></div><div class="application-item"><span>Cohort</span><strong id="detailCohort">—</strong></div><div class="application-item"><span>Submitted</span><strong id="detailSubmitted">—</strong></div><div class="application-item"><span>Schedule</span><strong id="detailSchedule">—</strong></div><div class="application-item"><span>Latest update</span><strong id="detailUpdated">—</strong></div>
-</div>
-<div class="application-subsection"><h4>Submitted information</h4><div class="application-grid"><div class="application-item"><span>Full name</span><strong id="detailFullName">—</strong></div><div class="application-item"><span>Email</span><strong id="detailEmail">—</strong></div><div class="application-item"><span>Phone</span><strong id="detailPhone">—</strong></div><div class="application-item"><span>Country</span><strong id="detailCountry">—</strong></div></div></div>
+<section class="application-card" id="my-application" hidden><p id="applicationNote" role="status">Your application information will appear here after you submit it.</p>
 <input type="hidden" id="currentApplicationId" value="">
-<div class="application-actions"><button id="withdrawApplicationBtn" class="btn danger-btn" type="button" hidden>Withdraw Application</button></div>
-<div id="applicationEmpty" class="empty-state" style="margin-top:14px">No application has been submitted. Admissions are currently closed.</div><div id="applicationHistory" class="history-list"></div>
+<div id="applicationEmpty" class="empty-state">No application has been submitted.</div><div id="applicationHistory" class="history-list"></div>
 </section>
 
 <section class="classroom-launch" id="my-classroom" hidden aria-labelledby="classroomTitle">
@@ -328,7 +537,7 @@
     moveApplicationIntoPanel();
     if (legacyApp) legacyApp.hidden = false;
     if (appPanel) appPanel.hidden = false;
-    $('sifaApplicationSummary').textContent = 'Your application status, reference number, and submitted details are shown below when available.';
+    $('sifaApplicationSummary').textContent = 'Track your application and admission status.';
     appPanel?.scrollIntoView({behavior:'smooth', block:'start'});
   }
   function showAccount(){
@@ -343,6 +552,7 @@
     $('my-account')?.scrollIntoView({behavior:'smooth', block:'start'});
   }
 
+  $('sifaTopSignOut')?.addEventListener('click', () => $('logoutBtn')?.click());
   $('sifaOpenApplication')?.addEventListener('click', showApplication);
   $('sifaOpenAccount')?.addEventListener('click', showAccount);
   $('sifaCloseApplication')?.addEventListener('click', showHome);
@@ -356,49 +566,8 @@ $('sifaOpenClassroom')?.addEventListener('click', () => {
 })();
 </script>
 
-<script id="sifa-staff-workspace-behavior">
-(function () {
-  const dashboard = document.getElementById('studentDashboard');
-  const workspace = document.getElementById('sifaStaffWorkspace');
-  const slot = document.getElementById('sifaStaffConsoleSlot');
-  const reopen = document.getElementById('sifaReopenStaff');
-  const back = document.getElementById('sifaBackToStudent');
-  const summary = dashboard?.querySelector('.student-summary');
-  if (!dashboard || !workspace || !slot || !reopen || !back) return;
-
-  function synchronizeStaffLink() {
-    // The existing student-portal.js only creates this link after the
-    // protected sifa-admin-api whoami call confirms an active staff role.
-    const link = document.getElementById('sifaStaffConsoleLink');
-    if (!link || dashboard.hidden) {
-      if (!workspace.hidden) workspace.hidden = true;
-      if (!reopen.hidden) reopen.hidden = true;
-      return;
-    }
-    if (link.parentElement !== slot) slot.appendChild(link);
-    link.removeAttribute('style');
-    if (link.textContent !== 'Open SIFA Staff Console') link.textContent = 'Open SIFA Staff Console';
-    if (workspace.hidden && reopen.hidden) workspace.hidden = false;
-  }
-
-  back.addEventListener('click', function () {
-    workspace.hidden = true;
-    reopen.hidden = false;
-    (summary || dashboard).scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-  reopen.addEventListener('click', function () {
-    workspace.hidden = false;
-    reopen.hidden = true;
-    workspace.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-
-  // React to the existing authorized-link creation and its removal on sign-out.
-  const observer = new MutationObserver(synchronizeStaffLink);
-  observer.observe(dashboard, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden'] });
-  synchronizeStaffLink();
-})();
-</script>
+<style>#studentDashboard[data-staff="true"] > :not(#sifaStaffWorkspace){display:none!important}#studentDashboard[data-staff="true"] #sifaStaffWorkspace{display:block}#studentDashboard .sifa-student-toolbar>strong{margin-right:auto}</style>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js"></script><script src="script.js"></script><script src="student-portal.js"></script>
+<script src="supabase-config.js"></script><script src="script.js"></script><script src="student-photo.js"></script><script src="student-portal.js"></script>
 </body></html>

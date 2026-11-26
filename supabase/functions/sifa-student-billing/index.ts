@@ -64,6 +64,11 @@ Deno.serve(async (req) => {
   } catch {
     return out(400, { error: "Invalid request." }, origin);
   }
+  if (body.action === "student_support") {
+    const {data,error}=await db.rpc("sifa_student_support_v3",{p_user_id:userData.user.id});
+    if(error){console.error("Student support lookup failed",error.code);return out(503,{error:"Scholarship records are temporarily unavailable."},origin);}
+    return out(200,data as Record<string,unknown>,origin);
+  }
   if (body.action !== "list_invoices") return out(400, { error: "Unknown action." }, origin);
 
   // The authenticated user ID, not any browser-supplied ID, controls access.
