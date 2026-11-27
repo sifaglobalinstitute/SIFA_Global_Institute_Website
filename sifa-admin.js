@@ -425,6 +425,55 @@ async function loadCertificates() {
 
  let uiQueue=Promise.resolve();function updateUI(){uiQueue=uiQueue.catch(()=>{}).then(refreshUI);return uiQueue;} async function refreshUI(){enrollmentNotices.clear();const {data}=await sb.auth.getSession();session=data.session;if(!session){currentRole='';loadedCounts={};$('staffKpis').replaceChildren();$('staffWelcome').textContent='Staff Administration Portal';for(const id of Object.keys(sectionMap))$(id).replaceChildren();setQuoteAccess(false);$('loginCard').classList.remove('hidden');$('console').classList.add('hidden');return;} $('console').classList.add('hidden');currentRole='';loadedCounts={};$('staffKpis').replaceChildren();for(const id of Object.keys(sectionMap))$(id).replaceChildren();$('staffWelcome').textContent='Staff Administration Portal';try{const me=await api('whoami');currentRole=me.role;const name=String(me.full_name||session.user.user_metadata?.full_name||session.user.user_metadata?.name||'').trim();$('staffIdentity').textContent=name||'Staff member — name not set';$('staffWelcome').textContent=name?'Welcome, '+name:'Staff Administration Portal';$('staffRole').textContent=pretty(currentRole);$('staffEmail').textContent=session.user.email||'';$('staffAvatar').textContent=name?name.split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase():'S';setQuoteAccess(currentRole==='administrator');}catch(e){setQuoteAccess(false);$('loginCard').classList.remove('hidden');msg(e.message,'error');return;}$('loginCard').classList.add('hidden');$('console').classList.remove('hidden');const canApps=['administrator','coordinator'].includes(currentRole),canFinance=['administrator','finance_reviewer'].includes(currentRole),canEnroll=['administrator','coordinator','finance_reviewer'].includes(currentRole),canScholar=['administrator','coordinator'].includes(currentRole),canCert=['administrator','coordinator'].includes(currentRole);const hideCard=(id,hide)=>{$(id).closest('.admin-card').classList.toggle('hidden',hide);};hideCard('applications',!canApps);hideCard('receipts',!canFinance);hideCard('enrollments',!canEnroll);hideCard('scholarships',!canScholar);hideCard('certificates',!canCert);$('refreshApps').classList.toggle('hidden',!canApps);$('refreshReceipts').classList.toggle('hidden',!canFinance);$('refreshEnrollments').classList.toggle('hidden',!canEnroll);$('refreshScholarships').classList.toggle('hidden',!canScholar);$('refreshCertificates').classList.toggle('hidden',!canCert);$('staffClassroom').classList.toggle('hidden',!['administrator','coordinator','instructor'].includes(currentRole));for(const a of document.querySelectorAll('.sifa-shortcuts a'))a.classList.toggle('hidden',$(a.hash.slice(1)).classList.contains('hidden'));const allowed=[...document.querySelectorAll('.sifa-shortcuts a:not(.hidden)')];if(allowed.length)selectSection(allowed.some(a=>a.hash==='#admin-'+activeSection)?activeSection:allowed[0].hash.slice(7));$('staffSearch').disabled=!allowed.length||!sectionMap[activeSection];$('staffStatus').disabled=$('staffSearch').disabled;$('staffRefresh').disabled=$('staffSearch').disabled;const jobs=[];if(canApps)jobs.push(loadApps());if(canFinance)jobs.push(loadReceipts());if(canEnroll)jobs.push(loadEnrollments());if(canScholar)jobs.push(loadScholarships());if(canCert)jobs.push(loadCertificates());await Promise.all(jobs);}
  $('staffProfile').addEventListener('click',async()=>{const c=await workflowDialog('My staff profile','Update your display name. Your verified staff role cannot be changed here.',session?.user?.email||'',[{key:'name',label:'Full name',value:session?.user?.user_metadata?.full_name||session?.user?.user_metadata?.name||'',minLength:2}]);if(!c)return;try{const {error}=await sb.auth.updateUser({data:{full_name:c.name}});if(error)throw error;await updateUI();msg('Display name updated.','success');}catch(e){msg(e.message,'error');}});
- $('loginForm').addEventListener('submit',async e=>{e.preventDefault();const fd=new FormData(e.currentTarget);try{msg('Signing in…');const {error}=await sb.auth.signInWithPassword({email:String(fd.get('email')).trim(),password:String(fd.get('password'))});if(error)throw error;await updateUI();}catch(err){msg(err.message||'Sign-in failed.','error');}});
+ // SIFA authentication loading feedback (UI only).
+  let sifaAuthPending = false;
+  function sifaAuthLoading(label, handler, onFailure) {
+    return async function (event) {
+      event.preventDefault();
+      if (sifaAuthPending) return;
+      const form = event.currentTarget;
+      const button = form.querySelector('button[type="submit"]');
+      if (!button) return handler(event);
+      sifaAuthPending = true;
+      const original = Array.from(button.childNodes);
+      const wasDisabled = button.disabled;
+      const priorBusy = form.getAttribute('aria-busy');
+      const controls = Array.from(form.querySelectorAll('button')).map(b => [b, b.disabled]);
+      const status = document.createElement('span');
+      status.className = 'sifa-auth-live';
+      status.setAttribute('role', 'status');
+      status.setAttribute('aria-live', 'polite');
+      try {
+        if (!document.getElementById('sifa-auth-loading-style')) {
+          const style = document.createElement('style');
+          style.id = 'sifa-auth-loading-style';
+          style.textContent = '.sifa-auth-spinner{display:inline-block;width:1em;height:1em;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;box-sizing:border-box;vertical-align:-.12em;margin-inline-end:.55em;animation:sifa-auth-spin .8s linear infinite}.sifa-auth-live{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}@keyframes sifa-auth-spin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.sifa-auth-spinner{animation:none}}';
+          document.head.append(style);
+        }
+        const spinner = document.createElement('span');
+        spinner.className = 'sifa-auth-spinner';
+        spinner.setAttribute('aria-hidden', 'true');
+        form.after(status);
+        form.setAttribute('aria-busy', 'true');
+        button.replaceChildren(spinner, document.createTextNode(label));
+        controls.forEach(([b]) => { b.disabled = true; });
+        status.textContent = label + ' Please wait.';
+        await handler(event);
+      } catch (error) {
+        console.error('SIFA authentication request failed:', error);
+        onFailure();
+      } finally {
+        button.replaceChildren(...original);
+        controls.forEach(([b, disabled]) => { b.disabled = disabled; });
+        button.disabled = wasDisabled;
+        if (priorBusy === null) form.removeAttribute('aria-busy');
+        else form.setAttribute('aria-busy', priorBusy);
+        status.remove();
+        sifaAuthPending = false;
+      }
+    };
+  }
+  $('loginForm').addEventListener('submit',sifaAuthLoading('Signing in…', async e=>{e.preventDefault();const fd=new FormData(e.currentTarget);try{msg('Signing in…');const {error}=await sb.auth.signInWithPassword({email:String(fd.get('email')).trim(),password:String(fd.get('password'))});if(error)throw error;await updateUI();}catch(err){msg(err.message||'Sign-in failed.','error');}}, () => msg('Unable to sign in right now. Please try again.', 'error')));
  $('refreshApps').addEventListener('click',loadApps);$('refreshReceipts').addEventListener('click',loadReceipts);$('refreshEnrollments').addEventListener('click',loadEnrollments);$('refreshScholarships').addEventListener('click',loadScholarships);$('refreshCertificates').addEventListener('click',loadCertificates);$('signOut').addEventListener('click',async()=>{await sb.auth.signOut();await updateUI();msg('Signed out.','success');});sb.auth.onAuthStateChange((event)=>{if(event==='SIGNED_OUT')$('console').classList.add('hidden');if(event!=='TOKEN_REFRESHED')setTimeout(updateUI,0);});updateUI();
 })();
+
