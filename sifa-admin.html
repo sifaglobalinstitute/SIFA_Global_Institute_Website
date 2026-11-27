@@ -56,7 +56,48 @@ body.sifa-workspace{background:#f5f8fc}
 </style>
 <link rel="icon" type="image/png" href="assets/sifa-logo.png"><style>
 .sifa-workspace .page-hero{padding:25px 0 28px}.sifa-workspace .page-hero h1{font-size:clamp(27px,3vw,40px);margin:8px 0}.sifa-workspace main>section:not(.page-hero){padding:16px 0 32px}.sifa-workspace .admin-card{padding:20px;margin:14px 0}.sifa-workspace .admin-list{min-height:0;gap:9px;color:#25435c}.sifa-workspace .admin-item{margin:0;padding:16px}.sifa-workspace .sifa-shortcuts{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}.sifa-workspace .sifa-shortcuts a{display:block;min-height:0;padding:11px 15px;flex:1;text-align:center;font-size:14px;white-space:nowrap}.sifa-shortcuts small,.sifa-shortcuts .sifa-num{display:none}.sifa-shortcuts a[aria-current=true]{background:#0b3158;color:white}.staff-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between}.staff-person{display:flex;align-items:center;gap:10px;min-width:0}.staff-avatar{display:grid;place-items:center;width:44px;height:44px;flex:none;border-radius:50%;background:#e0f2e7;color:#166534;font-weight:800}.staff-person span{display:block;overflow-wrap:anywhere}.staff-person small{display:block;color:#52697d}.staff-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:9px;margin:12px 0}.staff-kpi{border:1px solid #dce7ef;border-radius:12px;background:white;padding:12px}.staff-kpi strong{display:block;font-size:25px;color:#0b3158}.staff-kpi small{color:#52697d}.staff-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.staff-field{padding:10px;background:#f1f5f9;border-radius:8px;overflow-wrap:anywhere;white-space:pre-wrap}.staff-field small{display:block;color:#52697d;font-weight:600}.staff-field span{display:block;color:#102e49}.staff-record summary,.admin-item details summary{cursor:pointer;font-weight:650;color:#123c62;padding:10px 8px}.admin-item details{border:1px solid #d8e3ed;border-radius:8px;margin-top:10px;padding:4px 10px}.staff-record{border:1px solid #d8e3ed;border-radius:10px;margin:8px 0;padding:6px}.staff-app-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:15px}.staff-decision{background:#eef4f8;padding:12px;border-radius:10px}.staff-decision select,.staff-decision button{width:100%}.staff-decision .admin-row{margin:7px 0}.staff-filter{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.staff-filter input,.staff-filter select{padding:9px;border:1px solid #cbd9e5;border-radius:8px;min-width:0;font:inherit}.staff-filter input{flex:1}.staff-invoice{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:9px!important;align-items:end!important;background:#eef4f8;padding:12px;border-radius:9px}.staff-invoice label{font-size:13px;font-weight:600;min-width:0}.staff-invoice input,.staff-invoice select{width:100%!important;max-width:none!important}.sifa-workspace #quoteApprovalForm{max-width:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.staff-quote-field{display:grid;gap:5px;min-width:0}.staff-empty{text-align:center;padding:24px;color:#52697d}.staff-actions{display:flex;gap:8px;flex-wrap:wrap}.staff-actions button{font-size:13px}.sifa-workspace .admin-row button.staff-primary{background:#16834b!important;color:white!important}.staff-record summary{overflow-wrap:anywhere}.staff-profile-menu{position:relative}.staff-profile-menu summary{cursor:pointer}.staff-profile-menu[open] .staff-actions{padding:10px 0}.staff-note{font-size:13px;color:#536b80}.staff-status{font-weight:700}.staff-status[data-status=approved],.staff-status[data-status=accepted]{color:#166534}.staff-status[data-status=rejected]{color:#9f2722}@media(max-width:760px){.staff-app-grid,.staff-fields,.sifa-workspace #quoteApprovalForm{grid-template-columns:1fr}.staff-invoice{grid-template-columns:1fr 1fr}.staff-toolbar{align-items:flex-start}.sifa-workspace .sifa-shortcuts a{flex:1 1 30%}}@media(max-width:440px){.staff-invoice{grid-template-columns:1fr}.staff-fields{grid-template-columns:1fr}}
-</style></head><body class="sifa-workspace"><header><div class="container nav"><a class="brand" href="index.html"><img src="assets/sifa-logo.png" alt="SIFA logo"><span>SIFA Global Institute<small>Restricted staff console</small></span></a>
+</style>
+<style id="sifa-staff-refinement-v3">
+body.sifa-workspace{background:linear-gradient(135deg,#e9f1f8,#f4f9f6 65%,#e9f3ed)}
+.sifa-workspace main>section:not(.page-hero){padding:22px 0 42px}
+.sifa-workspace .admin-shell>section,.sifa-workspace .cm>section,.sifa-workspace #cmWorkspace{padding:0}
+.sifa-workspace .page-hero{padding:30px 0 34px}
+.sifa-workspace .page-hero h1{font-size:clamp(28px,4vw,45px)}
+.sifa-workspace .page-hero .eyebrow{color:#b9f29b}
+.sifa-workspace .admin-card,.sifa-workspace .cm-card{background:#f8fbff;border-color:#c8d9e8;box-shadow:0 8px 24px #0b31580d}
+.sifa-workspace section.cm-card,.sifa-workspace section.admin-card{padding:24px}
+.sifa-workspace .admin-card.staff-toolbar,.sifa-workspace .cm-card.cm-staff-toolbar{background:linear-gradient(115deg,#09294b,#12466a 70%,#12634b);color:#fff;border:0;padding:22px 24px;overflow:visible}
+.sifa-workspace .staff-person span,.sifa-workspace #cmIdentity{font-size:20px;font-weight:800;color:#fff;overflow-wrap:anywhere}
+.sifa-workspace .staff-person small,.sifa-workspace #cmStaffRole,.sifa-workspace #cmStaffEmail{display:block;color:#e0eef9;font-size:13px;overflow-wrap:anywhere}
+.sifa-workspace .staff-avatar{width:52px;height:52px;background:#b9ef9d;color:#09294b}
+.sifa-workspace .staff-toolbar .btn,.sifa-workspace .cm-staff-toolbar .btn{background:#eaf4ee;color:#10482e;border:1px solid #c5e5d0;font-weight:750}
+.sifa-workspace .staff-profile-menu summary{color:#fff;font-weight:700;padding:10px;border:1px solid #7194aa;border-radius:9px}
+.sifa-workspace .staff-kpis{gap:12px}
+.sifa-workspace .staff-kpi{padding:17px;background:#e3f0fa;border:1px solid #c1d9ee;border-left:5px solid #2774a5}
+.sifa-workspace .staff-kpi:nth-child(2n){background:#e6f5eb;border-color:#b8dfc6;border-left-color:#16834c}
+.sifa-workspace .staff-kpi strong{font-size:29px}
+.sifa-workspace .staff-kpi small{color:#264660}
+.sifa-workspace .sifa-shortcuts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px}
+.sifa-workspace .sifa-shortcuts a{display:block;white-space:normal;text-align:left;background:#e4eef8;color:#0b3158;border-color:#c0d6e8;padding:13px 14px}
+.sifa-workspace .sifa-shortcuts a:nth-child(2n){background:#e7f3eb;border-color:#c1dfca}
+.sifa-workspace .sifa-shortcuts a[aria-current=true]{background:#0b3158;color:#fff;border-color:#0b3158;box-shadow:inset 0 -4px #80d64b}
+.sifa-workspace .sifa-shortcuts .sifa-num{display:block;font-size:10px;letter-spacing:.04em;color:inherit;margin-bottom:4px}
+.sifa-workspace .staff-filter{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) auto;align-items:center;padding:12px;background:#dce8f2;border-radius:12px}
+.sifa-workspace .staff-filter input,.sifa-workspace .staff-filter select{width:100%;background:#fff}
+.sifa-workspace .staff-filter button{background:#0b3158;color:white}
+.sifa-workspace .cm-staff-toolbar .cm-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.sifa-workspace .cm-staff-toolbar .cm-profile{flex:1;min-width:180px;display:flex;align-items:center;gap:12px}
+.sifa-workspace .cm-staff-toolbar #cmIdentity{display:block;background:none;padding:0}
+.sifa-workspace .cm-staff-toolbar .cm-small{color:#e0eef9;margin:15px 0 0}
+.sifa-workspace .cm-form input,.sifa-workspace .cm-form select,.sifa-workspace .cm-form textarea{background:#fff}
+.sifa-workspace .cm-card:has(#cmUploadForm){background:#edf7f0;border-color:#b9ddc5;border-top:4px solid #16834c}
+.sifa-workspace .cm-card:has(#cmMaterials){background:#eaf2fa;border-color:#c0d7eb;border-top:4px solid #287bb5}
+.sifa-workspace .admin-item,.sifa-workspace .cm-item{background:#fff;border-left:4px solid #93b7d4}
+.sifa-workspace .btn:focus-visible,.sifa-workspace a:focus-visible,.sifa-workspace summary:focus-visible,.sifa-workspace button:focus-visible{outline:3px solid #2474ad;outline-offset:3px}
+.sifa-workspace .staff-toolbar :focus-visible,.sifa-workspace .cm-staff-toolbar :focus-visible{outline-color:#b9ef9d}
+@media(max-width:700px){.sifa-workspace .staff-filter{grid-template-columns:1fr}.sifa-workspace .sifa-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}.sifa-workspace .admin-card,.sifa-workspace section.cm-card,.sifa-workspace section.admin-card{padding:16px}.sifa-workspace .staff-toolbar,.sifa-workspace .cm-staff-toolbar{gap:15px}.sifa-workspace .cm-form{grid-template-columns:1fr}.sifa-workspace .cm-wide{grid-column:1/-1}}
+</style>
+</head><body class="sifa-workspace"><header><div class="container nav"><a class="brand" href="index.html"><img src="assets/sifa-logo.png" alt="SIFA logo"><span>SIFA Global Institute<small>Restricted staff console</small></span></a>
 <div class="sifa-nav-actions">
   <a href="student-portal.html" class="btn btn-secondary">
     ← Back to Student Portal
