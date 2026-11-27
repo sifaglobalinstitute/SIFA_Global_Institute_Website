@@ -1,0 +1,17 @@
+# SIFA Global Institute
+
+> Software Institute for Financial Accountants. Practical education in accounting software, financial systems and digital professional tools.
+
+## Public information
+
+- [Home](https://sifaglobalinstitute.pages.dev/): Institutional overview and learning approach.
+- [About](https://sifaglobalinstitute.pages.dev/about.html): Institute information.
+- [Courses](https://sifaglobalinstitute.pages.dev/courses.html): Public training catalogue.
+- [Learning](https://sifaglobalinstitute.pages.dev/learning.html): Learning approach.
+- [Certifications](https://sifaglobalinstitute.pages.dev/certifications.html): Certification information.
+- [Fees and scholarships](https://sifaglobalinstitute.pages.dev/student-payments.html): Public fees information.
+- [Scholarships](https://sifaglobalinstitute.pages.dev/scholarships.html): Scholarship information.
+- [Contact](https://sifaglobalinstitute.pages.dev/contact.html): Official contact channels.
+- [Privacy](https://sifaglobalinstitute.pages.dev/privacy.html): Privacy information.
+
+Use the live public pages for current policies and availability. This file does not authorize access to private student or staff information.

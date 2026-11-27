@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="SIFA Global Institute" />
 <meta content="SIFA Global Institute provides practical education in accounting software, financial systems and digital professional tools." name="description"/>
 <link href="styles.css" rel="stylesheet"/>
-<link rel="icon" type="image/png" href="assets/sifa-logo.png">
+<link rel="icon" type="image/webp" href="assets/sifa-logo.webp">
 <style>
 .home-intro {
     padding: 90px 0 80px;
@@ -292,6 +292,22 @@ height: 430px;
 @media(max-width:480px){.sifa-home .hero-grid{padding:30px 0}.sifa-home .hero .actions{margin-top:20px}.sifa-home .hero .actions a{flex:1 1 100%}.sifa-home .topbar .container{overflow-wrap:anywhere}.sifa-home .joseph-profile-section{padding:28px 12px}.sifa-home .joseph-profile-card{padding:16px}}
 </style>
 <link rel="canonical" href="https://sifaglobalinstitute.pages.dev/">
+
+<style>
+/* Homepage-only performance and accessibility refinement V2 */
+.sifa-home{--green-dark:#23701a}
+.sifa-home .hero-card .hero-card-title{font-size:1.17em;font-weight:700;line-height:1.4;color:#fff;margin:0 0 8px;text-align:center}
+.sifa-home footer .footer-heading{font-size:1.17em;line-height:1.65;letter-spacing:normal;color:#fff;margin:1em 0;font-weight:700}
+.sifa-home .home-image-note{color:#52677f}
+.sifa-home .joseph-profile-label,.sifa-home .joseph-profile-content h3{color:#116b41}
+.sifa-home .joseph-contact-link{background:linear-gradient(135deg,#116b41,#137746)}
+.sifa-home main .btn-primary{background:#116b41;color:#fff}
+.sifa-home main .btn-primary:hover{background:#0d5635}
+.sifa-home main section:not(.hero):not(.home-cta) .btn-secondary{color:#062a52;border-color:#8196a8;background:#fff}
+.sifa-home .sifa-video-launch{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:linear-gradient(rgba(6,26,51,.25),rgba(6,26,51,.65)),url("assets/sifa-video-thumbnail.jpg") center/cover no-repeat;color:#fff;font-weight:700;text-align:center;padding:16px}
+.sifa-home .sifa-video-play{display:grid;place-items:center;width:64px;height:64px;border:2px solid #fff;border-radius:50%;font-size:26px}
+.sifa-home .sifa-video-launch:focus-visible{outline:3px solid #fff;outline-offset:-6px}
+</style>
 </head>
 <body class="sifa-home">
 <div class="topbar">
@@ -303,7 +319,7 @@ height: 430px;
 <header>
 <div class="container nav">
 <a class="brand" href="index.html">
-<img alt="SIFA Global Institute logo" src="assets/sifa-logo.webp"/>
+<img alt="SIFA Global Institute logo" src="assets/sifa-logo.webp" width="260" height="256"/>
 <span>SIFA Global Institute<small>Software Institute for Financial Accountants</small></span>
 </a>
 <button aria-label="Open menu" class="menu">☰</button>
@@ -339,8 +355,8 @@ height: 430px;
 </div>
 </div>
 <div class="hero-card">
-<img alt="SIFA learning environment" src="assets/home-photos/home-learning.webp"/>
-<h3>Learn. Practice. Apply.</h3>
+<img alt="SIFA learning environment" src="assets/home-photos/home-learning.webp" width="1672" height="861" srcset="assets/home-photos/home-learning-480.webp 480w, assets/home-photos/home-learning-800.webp 800w, assets/home-photos/home-learning.webp 1672w" sizes="(max-width: 900px) 92vw, 580px" fetchpriority="high" loading="eager"/>
+<p class="hero-card-title">Learn. Practice. Apply.</p>
 <p>
                 Understand the concept. Practice with realistic exercises.
                 Apply the skill in professional scenarios.
@@ -377,7 +393,7 @@ height: 430px;
 </div>
 <div class="home-photo-strip">
 <div class="home-photo-feature">
-<img alt="Diverse learners collaborating with laptops in a modern learning environment" src="assets/home-photos/home-learning.webp"/>
+<img alt="Diverse learners collaborating with laptops in a modern learning environment" src="assets/home-photos/home-learning.webp" width="1672" height="861" srcset="assets/home-photos/home-learning-480.webp 480w, assets/home-photos/home-learning-800.webp 800w, assets/home-photos/home-learning.webp 1672w" sizes="(max-width: 900px) 92vw, 580px" loading="lazy" decoding="async"/>
 <div class="home-photo-caption">
 <span class="kicker">Practical Learning</span>
 <h3>Learning should be active, collaborative, and useful.</h3>
@@ -385,7 +401,7 @@ height: 430px;
 </div>
 </div>
 <div class="home-photo-side">
-<img alt="African professionals collaborating around financial reports and a laptop" src="assets/home-photos/home-rwanda-team.webp"/>
+<img alt="African professionals collaborating around financial reports and a laptop" src="assets/home-photos/home-rwanda-team.webp" width="1536" height="938" srcset="assets/home-photos/home-rwanda-team-480.webp 480w, assets/home-photos/home-rwanda-team-800.webp 800w, assets/home-photos/home-rwanda-team.webp 1536w" sizes="(max-width: 900px) 92vw, 580px" loading="lazy" decoding="async"/>
 <div class="home-photo-caption">
 <span class="kicker">African Perspective</span>
 <h3>Skills that connect local realities with global opportunities.</h3>
@@ -428,7 +444,7 @@ height: 430px;
 </div>
 <div class="home-learning-visual">
 <div class="visual-image">
-<img alt="Professionals practicing accounting and digital skills together in a modern classroom" src="assets/home-photos/home-practice.webp"/>
+<img alt="Professionals practicing accounting and digital skills together in a modern classroom" src="assets/home-photos/home-practice.webp" width="1672" height="861" srcset="assets/home-photos/home-practice-480.webp 480w, assets/home-photos/home-practice-800.webp 800w, assets/home-photos/home-practice.webp 1672w" sizes="(max-width: 900px) 92vw, 580px" loading="lazy" decoding="async"/>
 </div>
 <div class="visual-content">
 <span class="kicker">From Learning to Practice</span>
@@ -490,7 +506,7 @@ height: 430px;
 <a class="btn btn-secondary" href="courses.html">Explore Training Areas</a>
 </div>
 <div class="software-image">
-<img alt="Laptop displaying an illustrative financial dashboard in a modern accounting workspace" src="assets/home-photos/home-software.webp"/>
+<img alt="Laptop displaying an illustrative financial dashboard in a modern accounting workspace" src="assets/home-photos/home-software.webp" width="1672" height="861" srcset="assets/home-photos/home-software-480.webp 480w, assets/home-photos/home-software-800.webp 800w, assets/home-photos/home-software.webp 1672w" sizes="(max-width: 900px) 92vw, 580px" loading="lazy" decoding="async"/>
 </div>
 </div>
 </div>
@@ -499,7 +515,7 @@ height: 430px;
 <div class="container">
 <div class="profile">
 <div class="profile-photo">
-<img alt="Jean Bosco NKURIKIYUMUKIZA, Founder and Chief Executive Officer of SIFA Global Institute" src="assets/founder-professional.webp"/>
+<img alt="Jean Bosco NKURIKIYUMUKIZA, Founder and Chief Executive Officer of SIFA Global Institute" src="assets/founder-professional.webp" width="900" height="890" loading="lazy" decoding="async"/>
 </div>
 <div>
 <span class="kicker">Founder &amp; CEO</span>
@@ -562,7 +578,7 @@ height: 430px;
 </div>
 <div class="home-global-visual">
 <div class="global-image">
-<img alt="International professionals discussing financial and business data around a laptop" src="assets/home-photos/home-global-team.webp"/>
+<img alt="International professionals discussing financial and business data around a laptop" src="assets/home-photos/home-global-team.webp" width="1536" height="938" srcset="assets/home-photos/home-global-team-480.webp 480w, assets/home-photos/home-global-team-800.webp 800w, assets/home-photos/home-global-team.webp 1536w" sizes="(max-width: 900px) 92vw, 580px" loading="lazy" decoding="async"/>
 </div>
 <div class="visual-content">
 <span class="kicker">Global Learning Community</span>
@@ -576,8 +592,8 @@ height: 430px;
   <div class="joseph-profile-card">
     <div class="joseph-profile-photo">
       <img
-        src="assets/joseph-professional.png"
-        alt="Joseph IZABAKUZA, Rwanda Country Coordinator"
+        src="assets/joseph-professional.webp"
+        alt="Joseph IZABAKUZA, Rwanda Country Coordinator" width="830" height="1100" loading="lazy" decoding="async"
       >
     </div>
 
@@ -637,7 +653,7 @@ height: 430px;
     <div class="sifa-video-layout">
       <div class="sifa-video-frame">
         <div class="sifa-video-ratio">
-          <iframe src="https://www.youtube-nocookie.com/embed/5Vdn_AVGRA4" title="Welcome to SIFA Global Institute — Official introduction video" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          <a class="sifa-video-launch" id="sifa-video-launch" href="https://www.youtube.com/watch?v=5Vdn_AVGRA4" target="_blank" rel="noopener noreferrer"><span aria-hidden="true" class="sifa-video-play">▶</span><span>Play official introduction</span></a>
         </div>
       </div>
       <div class="sifa-video-copy">
@@ -661,25 +677,25 @@ height: 430px;
 <footer>
 <div class="container footer-grid">
 <div>
-<img alt="SIFA Global Institute logo" src="assets/sifa-logo.webp" style="width:100px;background:#fff;border-radius:50%;padding:4px"/>
-<h3>SIFA Global Institute</h3>
+<img alt="SIFA Global Institute logo" src="assets/sifa-logo.webp" style="width:100px;height:auto;background:#fff;border-radius:50%;padding:4px" width="260" height="256" loading="lazy" decoding="async"/>
+<h2 class="footer-heading">SIFA Global Institute</h2>
 <p>Practical education in accounting technology, financial systems and digital professional tools.</p>
 </div>
 <div>
-<h3>Explore</h3>
+<h2 class="footer-heading">Explore</h2>
 <p><a href="about.html">About SIFA</a></p>
 <p><a href="founder.html">Founder</a></p>
 <p><a href="courses.html">Courses</a></p>
 <p><a href="learning.html">Learning</a></p>
 </div>
 <div>
-<h3>Credentials</h3>
+<h2 class="footer-heading">Credentials</h2>
 <p><a href="certifications.html">SIFA Certifications</a></p>
 <p><a href="verify.html">Verify a Certificate</a></p>
 <p><a href="scholarships.html">Scholarships &amp; Fee Waivers</a><a href="privacy.html">Privacy Policy</a></p>
 </div>
 <div>
-<h3>Contact</h3>
+<h2 class="footer-heading">Contact</h2>
 <p><a href="https://mail.google.com/mail/?view=cm&fs=1&to=sifaglobalinstitute12@gmail.com">sifaglobalinstitute12@gmail.com</a></p>
 <p>Türkiye: <a href="tel:+905372746944">+90 537 274 6944</a></p>
 <p>Rwanda: <a href="tel:+250782817643">+250 782 817 643</a></p><p>Rwanda:<br/>+250 796 965 639</p>
@@ -713,6 +729,7 @@ height: 430px;
         © <span data-year=""></span> SIFA Global Institute. All rights reserved.
     </div>
 </footer>
-<script src="script.js"></script>
+<script src="script.js" defer></script>
+<script src="homepage-video.js" defer></script>
 </body>
 </html>
