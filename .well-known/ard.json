@@ -1,0 +1,22 @@
+{
+  "entries": [
+    {
+      "identifier": "urn:air:sifaglobalinstitute.pages.dev:education:public-information",
+      "displayName": "SIFA Global Institute Public Information",
+      "type": "text/plain",
+      "url": "https://sifaglobalinstitute.pages.dev/llms.txt",
+      "description": "Public institutional information about accounting education, business software training, professional development and educational opportunities.",
+      "tags": [
+        "education",
+        "accounting",
+        "financial-software",
+        "professional-development"
+      ],
+      "representativeQueries": [
+        "What courses does SIFA Global Institute offer?",
+        "Where can I find SIFA training program information?",
+        "How can I contact SIFA Global Institute?"
+      ]
+    }
+  ]
+}
