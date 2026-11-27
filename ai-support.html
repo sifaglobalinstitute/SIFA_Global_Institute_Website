@@ -508,6 +508,8 @@
   }
 }
 
+
+.ai-message.assistant a{color:#075b9c!important;text-decoration:underline!important;font-weight:600;overflow-wrap:anywhere}.ai-message.assistant hr{border:0;border-top:1px solid #c4d7e3;margin:12px 0}.ai-message.assistant blockquote{margin:8px 0;padding-left:12px;border-left:3px solid #16834c}.ai-message.assistant p{margin:6px 0}.ai-message.assistant li{margin:3px 0}
 </style>
 <link rel="icon" type="image/png" href="assets/sifa-logo.png">
 <link rel="canonical" href="https://sifaglobalinstitute.pages.dev/ai-support.html">
@@ -585,7 +587,8 @@
 </div>
 <form class="ai-form" id="aiForm">
 <label for="question">Ask SIFA AI anything about SIFA or its learning areas</label>
-<textarea id="question" placeholder="Type your question here..."></textarea>
+<textarea id="question" maxlength="4000" placeholder="Type your question here..."></textarea>
+<p class="ai-status">Online questions and recent conversation may be sent to an external AI provider. Do not enter passwords, payment credentials, identity documents or private student records.</p>
 <div class="ai-actions">
 <button class="ai-ask" type="submit">Ask SIFA AI</button>
 <button class="ai-clear" id="clearQuestion" type="button">Clear conversation</button>
@@ -1030,11 +1033,11 @@ function appendMessageWithLinks(container, text) {
         parent.appendChild(a);
       } else if (raw.startsWith("**")) {
         const strong = document.createElement("strong");
-        strong.textContent = raw.slice(2, -2);
+        appendInline(strong, raw.slice(2, -2));
         parent.appendChild(strong);
       } else {
         const em = document.createElement("em");
-        em.textContent = raw.slice(1, -1);
+        appendInline(em, raw.slice(1, -1));
         parent.appendChild(em);
       }
 
@@ -1056,6 +1059,8 @@ function appendMessageWithLinks(container, text) {
       continue;
     }
 
+    if (/^[-*_]{3,}$/.test(trimmed)) { list = null; container.appendChild(document.createElement("hr")); continue; }
+    if (trimmed.startsWith("> ")) { list = null; const quote = document.createElement("blockquote"); appendInline(quote, trimmed.slice(2)); container.appendChild(quote); continue; }
     const item = trimmed.match(/^[-*]\s+(.+)$/);
 
     if (item) {
@@ -1156,8 +1161,19 @@ const askButton = aiForm ? aiForm.querySelector('button[type="submit"]') : null;
 const aiStatus = aiForm ? aiForm.querySelector(".ai-status") : null;
 let aiIsResponding = false;
 
-const SIFA_PUBLIC_ANSWERS = [[["official website", "website link", "sifa website", "link of sifa", "link to sifa", "sifa web site"], "Official SIFA website: https://sifaglobalinstitute.pages.dev/"], [["course list", "list of courses", "all courses", "all programs", "training programs"], "- QuickBooks Practical Training (4 months)\n- Sage Accounting Training (2 months)\n- Tally Practical Accounting (2 months)\n- Microsoft Excel for Accounting & Finance (1 month)\n- Xero Accounting (2 months)\n- Zoho Books (2 months)\n- Odoo Accounting & Business Systems (2 months)\n- SAP Financial & Business Systems (2 months)\n- Oracle NetSuite (2 months)\n- Microsoft Dynamics 365 (2 months)\n- ETA Accounting (2 months)\n- Logo Accounting & ERP (2 months)\n- Mikro Accounting & ERP (2 months)\n- LUCA Accounting (2 months)\n- Zirve Accounting (2 months)\n- DİA Business Software (2 months)\n- Paraşüt Accounting (2 months)\n- AKINSOFT Wolvox (2 months)\n- Nebim (2 months)\n- Accounting Fundamentals (1 month)\n- Financial Reporting & Analysis (1 month)\n- Digital Finance & Professional Tools (2 months)\n- Power BI for Financial Analysis (1 month)\n- Advanced Excel & Financial Modeling (1 month)\n- Advanced Microsoft Word (1 month)\n- Advanced Microsoft PowerPoint (1 month)\nhttps://sifaglobalinstitute.pages.dev/courses.html"], [["scholarship decision", "scholarship status", "fee waiver status"], "Open My Application or Scholarships & Fee Waivers in My Fees & Payments. Awards and waived invoices are displayed separately.\nhttps://sifaglobalinstitute.pages.dev/student-portal.html"], [["classroom access", "enter classroom", "access my classroom"], "An eligible enrollment, staff classroom authorization and current verified payment or waiver (or a valid authorized temporary exception) are required.\nhttps://sifaglobalinstitute.pages.dev/student-portal.html"], [["tuition fees", "monthly tuition", "course fees", "how much is tuition"], "Monthly published tuition is 10,000 RWF in Rwanda, 15 USD in other African countries and 25 USD in the rest of the world. Follow your issued invoice.\nhttps://sifaglobalinstitute.pages.dev/student-payments.html"], [["apply for", "how to apply", "admission status", "application status"], "Sign in to the Student Portal, open My Application and apply when admissions for your program are available. You can track your decision and reference there.\nhttps://sifaglobalinstitute.pages.dev/student-portal.html"], [["payment history", "payment records", "my invoices"], "Sign in and open My Fees & Payments. Review unpaid, pending, paid, rejected and waived records before paying again.\nhttps://sifaglobalinstitute.pages.dev/student-portal.html"], [["admissions open", "applications open", "scholarships open"], "Check current availability in your Student Portal. Public program listings do not indicate that applications are open. https://sifaglobalinstitute.pages.dev/student-portal.html"]];
-function publicSifaAnswer(q){const n=normalize(q);for(const [terms,answer] of SIFA_PUBLIC_ANSWERS){if(terms.some(t=>n.includes(t)))return answer;}return null;}
+const SIFA_PUBLIC_ANSWERS = [[["official website", "website link", "sifa website", "what is the official website of sifa"], "Official SIFA website: https://sifaglobalinstitute.pages.dev/"], [["course list", "list of courses", "all courses", "all programs", "training programs", "what courses does sifa offer"], "- 4 month(s): QuickBooks Practical Training Practical training in company setup, customers and suppliers, transactions, reconciliation, reporting and accounting workflows.\n- 2 month(s): Sage Accounting Training Practical computerized accounting workflows, transaction processing, reporting and financial management.\n- 2 month(s): Tally Practical Accounting Practical accounting operations, transaction recording, inventory-related workflows and business reporting.\n- 1 month(s): Microsoft Excel for Accounting & Finance Spreadsheet fundamentals, formulas, financial analysis, reporting, dashboards and practical accounting applications.\n- 2 month(s): Xero Accounting Cloud accounting workflows, transaction processing, reconciliation and financial reporting.\n- 2 month(s): Zoho Books Cloud-based accounting workflows, invoicing, expenses, reconciliation and business reporting.\n- 2 month(s): Odoo Accounting & Business Systems Practical introduction to accounting workflows within integrated business management systems.\n- 2 month(s): SAP Financial & Business Systems Foundations of enterprise financial systems, business processes and integrated reporting environments.\n- 2 month(s): Oracle NetSuite Introduction to cloud ERP concepts, financial workflows and integrated business management.\n- 2 month(s): Microsoft Dynamics 365 Practical foundations in integrated business applications, finance workflows and digital operations.\n- 2 month(s): ETA Accounting Practical training in accounting software workflows used in Türkiye.\n- 2 month(s): Logo Accounting & ERP Training in accounting, finance and business management workflows using Logo systems.\n- 2 month(s): Mikro Accounting & ERP Practical training in accounting and business management workflows using Mikro systems.\n- 2 month(s): LUCA Accounting Practical training in accounting workflows and digital financial systems in Türkiye.\n- 2 month(s): Zirve Accounting Practical training in computerized accounting and financial workflows.\n- 2 month(s): DİA Business Software Practical training in cloud business management, accounting and operational workflows.\n- 2 month(s): Paraşüt Accounting Practical training in cloud-based accounting and small-business financial workflows.\n- 2 month(s): AKINSOFT Wolvox Practical training in accounting, commercial operations and business software workflows.\n- 2 month(s): Nebim Practical training in integrated retail, commercial and business management systems.\n- 1 month(s): Accounting Fundamentals Foundations of bookkeeping, transactions, financial statements, accounting concepts and practical business records.\n- 1 month(s): Financial Reporting & Analysis Practical understanding of financial statements, reporting processes, analysis and decision-support information.\n- 2 month(s): Digital Finance & Professional Tools Practical digital tools and workflows supporting modern accounting, finance and business professionals.\n- 1 month(s): Power BI for Financial Analysis Training in dashboards, data visualization and financial reporting using modern analytics tools.\n- 1 month(s): Advanced Excel & Financial Modeling Advanced spreadsheet training for financial models, analysis, dashboards and decision support.\n- 1 month(s): Advanced Microsoft Word Create and manage professional documents, reports, tables and templates.\n- 1 month(s): Advanced Microsoft PowerPoint Develop clear professional presentations, visual reports and business communication.\nhttps://sifaglobalinstitute.pages.dev/courses.html"], [["tuition fees", "monthly tuition", "course fees", "how much is tuition"], "Published monthly tuition: Rwanda 10,000 RWF; other African countries USD 15; rest of world USD 25. Programs last one, two or four months. Follow your issued invoice.\nhttps://sifaglobalinstitute.pages.dev/student-payments.html"], [["admissions open", "applications open", "scholarships open", "are admissions open", "are applications open"], "Check current availability in your Student Portal. I cannot confirm live intake status.\nhttps://sifaglobalinstitute.pages.dev/student-portal.html"], [["classroom access", "enter classroom", "access my classroom"], "Eligible enrollment, staff classroom authorization and current verified payment or waiver (or valid authorized temporary exception) are required.\nhttps://sifaglobalinstitute.pages.dev/student-portal.html"], [["payment history", "payment records", "my invoices"], "Sign in and open My Fees & Payments to view your private records.\nhttps://sifaglobalinstitute.pages.dev/student-portal.html"]];
+function publicSifaAnswer(q){const n=normalize(q).replace(/[?.!]+$/g,"").trim();for(const [terms,answer] of SIFA_PUBLIC_ANSWERS){if(terms.some(t=>n===normalize(t)))return answer;}return null;}
+function reliablePublicFallback(q) {
+  const n = normalize(q);
+  const exact = publicSifaAnswer(q);
+  if (exact) return exact;
+  if (/^(what|which) (courses|programs|training programs) (does|do) sifa(?: global institute)? (offer|provide|teach)$/.test(n) || /^(list|show)( me)? (all )?(sifa )?(courses|programs)$/.test(n)) return SIFA_PUBLIC_ANSWERS[1][1];
+  if (/^ni ayahe masomo sifa(?: global institute)? itanga$/.test(n)) return "SIFA Global Institute itanga amasomo 26. Dore amazina y’amasomo n’igihe amara:\n- QuickBooks Practical Training — amezi ane\n- Sage Accounting Training — amezi abiri\n- Tally Practical Accounting — amezi abiri\n- Microsoft Excel for Accounting & Finance — ukwezi kumwe\n- Xero Accounting — amezi abiri\n- Zoho Books — amezi abiri\n- Odoo Accounting & Business Systems — amezi abiri\n- SAP Financial & Business Systems — amezi abiri\n- Oracle NetSuite — amezi abiri\n- Microsoft Dynamics 365 — amezi abiri\n- ETA Accounting — amezi abiri\n- Logo Accounting & ERP — amezi abiri\n- Mikro Accounting & ERP — amezi abiri\n- LUCA Accounting — amezi abiri\n- Zirve Accounting — amezi abiri\n- DİA Business Software — amezi abiri\n- Paraşüt Accounting — amezi abiri\n- AKINSOFT Wolvox — amezi abiri\n- Nebim — amezi abiri\n- Accounting Fundamentals — ukwezi kumwe\n- Financial Reporting & Analysis — ukwezi kumwe\n- Digital Finance & Professional Tools — amezi abiri\n- Power BI for Financial Analysis — ukwezi kumwe\n- Advanced Excel & Financial Modeling — ukwezi kumwe\n- Advanced Microsoft Word — ukwezi kumwe\n- Advanced Microsoft PowerPoint — ukwezi kumwe\nhttps://sifaglobalinstitute.pages.dev/courses.html";
+  if (/^how much do students (from|in) rwanda pay$/.test(n)) return SIFA_PUBLIC_ANSWERS[2][1];
+  if (/^are (sifa )?(admissions|applications) currently open$/.test(n)) return SIFA_PUBLIC_ANSWERS[3][1];
+  if (/^how can i access my (online )?classroom$/.test(n)) return SIFA_PUBLIC_ANSWERS[4][1];
+  return null;
+}
 async function submitSifaQuestion(event){
   if(event) {
     event.preventDefault();
@@ -1232,7 +1248,7 @@ if (!response.ok) {
 const answer = data.answer;
     conversation.push({
   role: "assistant",
-  text: String(answer || multilingualFallback(detectSifaLanguage(q)))
+  text: String((data.incomplete && reliablePublicFallback(q)) || answer || multilingualFallback(detectSifaLanguage(q))) + (data.incomplete && !reliablePublicFallback(q) ? "\n\n[Response incomplete. Please ask a narrower follow-up question.]" : "")
 });
     conversation = conversation.slice(-80);
     saveConversation();
@@ -1242,7 +1258,7 @@ const answer = data.answer;
     conversationEl.scrollIntoView({behavior:"smooth", block:"nearest"});
   } catch(error) {
     console.error("SIFA AI response error:", error);
-    conversation.push({role:"assistant",text:"The online assistant is temporarily unavailable. "+multilingualFallback(detectSifaLanguage(q))});saveConversation();renderConversation();if(aiStatus) aiStatus.textContent="Online service unavailable; official support links are shown above.";
+    conversation.push({role:"assistant",text:reliablePublicFallback(q) || ("The online assistant is temporarily unavailable. "+multilingualFallback(detectSifaLanguage(q)))});saveConversation();renderConversation();if(aiStatus) aiStatus.textContent="Online service unavailable; showing available institutional guidance.";
   } finally {
   if (loadingIndicator) loadingIndicator.remove();
     aiIsResponding = false;
