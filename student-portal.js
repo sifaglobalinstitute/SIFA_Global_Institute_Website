@@ -494,7 +494,55 @@ showMessage(
 );
 });
 
-  $('loginForm')?.addEventListener('submit',async e=>{
+  // SIFA authentication loading feedback (UI only).
+  let sifaAuthPending = false;
+  function sifaAuthLoading(label, handler, onFailure) {
+    return async function (event) {
+      event.preventDefault();
+      if (sifaAuthPending) return;
+      const form = event.currentTarget;
+      const button = form.querySelector('button[type="submit"]');
+      if (!button) return handler(event);
+      sifaAuthPending = true;
+      const original = Array.from(button.childNodes);
+      const wasDisabled = button.disabled;
+      const priorBusy = form.getAttribute('aria-busy');
+      const controls = Array.from(form.querySelectorAll('button')).map(b => [b, b.disabled]);
+      const status = document.createElement('span');
+      status.className = 'sifa-auth-live';
+      status.setAttribute('role', 'status');
+      status.setAttribute('aria-live', 'polite');
+      try {
+        if (!document.getElementById('sifa-auth-loading-style')) {
+          const style = document.createElement('style');
+          style.id = 'sifa-auth-loading-style';
+          style.textContent = '.sifa-auth-spinner{display:inline-block;width:1em;height:1em;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;box-sizing:border-box;vertical-align:-.12em;margin-inline-end:.55em;animation:sifa-auth-spin .8s linear infinite}.sifa-auth-live{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}@keyframes sifa-auth-spin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.sifa-auth-spinner{animation:none}}';
+          document.head.append(style);
+        }
+        const spinner = document.createElement('span');
+        spinner.className = 'sifa-auth-spinner';
+        spinner.setAttribute('aria-hidden', 'true');
+        form.after(status);
+        form.setAttribute('aria-busy', 'true');
+        button.replaceChildren(spinner, document.createTextNode(label));
+        controls.forEach(([b]) => { b.disabled = true; });
+        status.textContent = label + ' Please wait.';
+        await handler(event);
+      } catch (error) {
+        console.error('SIFA authentication request failed:', error);
+        onFailure();
+      } finally {
+        button.replaceChildren(...original);
+        controls.forEach(([b, disabled]) => { b.disabled = disabled; });
+        button.disabled = wasDisabled;
+        if (priorBusy === null) form.removeAttribute('aria-busy');
+        else form.setAttribute('aria-busy', priorBusy);
+        status.remove();
+        sifaAuthPending = false;
+      }
+    };
+  }
+  $('loginForm')?.addEventListener('submit',sifaAuthLoading('Signing in…', async e=>{
     e.preventDefault();hideMessage();
     const email=$('loginEmail').value.trim(), password=$('loginPassword').value;
     const{data,error}=await supabase.auth.signInWithPassword({email,password});
@@ -508,8 +556,8 @@ if (error) {
 }
 
     await loadUser(data.user);
-  });
-  $('signupForm')?.addEventListener('submit', async e => {
+  }, () => showMessage('Unable to sign in right now. Please try again.', 'error')));
+  $('signupForm')?.addEventListener('submit', sifaAuthLoading('Creating account…', async e => {
   e.preventDefault();
   hideMessage();
 
@@ -562,7 +610,7 @@ if (error) {
       );
     }
     
-});
+}, () => showMessage('Unable to create your account right now. Please try again.', 'error')));
   $('profileForm')?.addEventListener('input',()=>{if(!profileSaving){profileNotice(profileDirty()?'You have unsaved changes.':'');syncProfileControls();}});
   $('resetProfileBtn')?.addEventListener('click',()=>{fillProfileFields(savedProfile);profileNotice('Unsaved changes discarded.');syncProfileControls();});
   $('retryProfileBtn')?.addEventListener('click',reloadProfile);
