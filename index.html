@@ -308,6 +308,22 @@ height: 430px;
 .sifa-home .sifa-video-play{display:grid;place-items:center;width:64px;height:64px;border:2px solid #fff;border-radius:50%;font-size:26px}
 .sifa-home .sifa-video-launch:focus-visible{outline:3px solid #fff;outline-offset:-6px}
 </style>
+<style>
+.sifa-home .hero-card .sifa-panorama{margin:0 0 14px;min-width:0;text-align:left;color:#fff;position:relative}
+.sifa-home .hero-card .sifa-panorama-window{width:100%;aspect-ratio:16/10;overflow:hidden;border-radius:16px;position:relative;background:#08294b}
+.sifa-home .hero-card .sifa-panorama-track{display:flex;width:375%;height:100%;animation:sifa-panorama-slide 32s linear infinite;will-change:transform}
+.sifa-home .hero-card .sifa-panorama-track img{display:block;flex:0 0 50%;width:50%;max-width:none;height:100%;max-height:none;aspect-ratio:auto;object-fit:fill;margin:0;border-radius:0}
+@keyframes sifa-panorama-slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.sifa-home .hero-card .sifa-panorama-pause{position:absolute;width:1px;height:1px;opacity:0;margin:0;overflow:hidden}
+.sifa-home .hero-card .sifa-panorama-meta{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:7px}
+.sifa-home .hero-card .sifa-panorama-meta small{font-size:.7rem;color:#fff;margin:0;line-height:1.4}
+.sifa-home .hero-card .sifa-panorama-meta label{display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:.75rem;font-weight:600;border:1px solid #a9cbd4;border-radius:999px;padding:3px 12px;min-height:28px;background:#0b355a;margin:0}
+.sifa-home .hero-card .sifa-panorama-pause:focus-visible ~ .sifa-panorama-meta label{outline:2px solid #fff;outline-offset:3px}
+.sifa-home .hero-card .sifa-panorama-pause:checked ~ .sifa-panorama-window .sifa-panorama-track{animation-play-state:paused}
+.sifa-home .hero-card .sifa-resume-text,.sifa-home .hero-card .sifa-panorama-pause:checked ~ .sifa-panorama-meta .sifa-pause-text{display:none}
+.sifa-home .hero-card .sifa-panorama-pause:checked ~ .sifa-panorama-meta .sifa-resume-text{display:inline}
+@media(prefers-reduced-motion:reduce){.sifa-home .hero-card .sifa-panorama-window{aspect-ratio:3/1}.sifa-home .hero-card .sifa-panorama-track{animation:none;transform:none;width:100%;will-change:auto}.sifa-home .hero-card .sifa-panorama-track img{flex-basis:100%;width:100%}.sifa-home .hero-card .sifa-panorama-track img+img,.sifa-home .hero-card .sifa-panorama-pause,.sifa-home .hero-card .sifa-panorama-meta label{display:none}}
+</style>
 </head>
 <body class="sifa-home">
 <div class="topbar">
@@ -355,7 +371,16 @@ height: 430px;
 </div>
 </div>
 <div class="hero-card">
-<img alt="SIFA learning environment" src="assets/home-photos/home-learning.webp" width="1672" height="861" srcset="assets/home-photos/home-learning-480.webp 480w, assets/home-photos/home-learning-800.webp 800w, assets/home-photos/home-learning.webp 1672w" sizes="(max-width: 900px) 92vw, 580px" fetchpriority="high" loading="eager"/>
+<div class="sifa-panorama">
+  <input type="checkbox" id="sifa-panorama-pause" class="sifa-panorama-pause" />
+  <div class="sifa-panorama-window">
+    <div class="sifa-panorama-track">
+      <img src="assets/home-photos/sifa-hero-panorama.webp" width="2172" height="724" alt="Illustration of online accounting software training, graduates and sample SIFA certificates" fetchpriority="high" />
+      <img src="assets/home-photos/sifa-hero-panorama.webp" width="2172" height="724" alt="" aria-hidden="true" />
+    </div>
+  </div>
+  <div class="sifa-panorama-meta"><small>Illustrative imagery</small><label for="sifa-panorama-pause"><span class="sifa-pause-text">Pause</span><span class="sifa-resume-text">Resume</span></label></div>
+</div>
 <p class="hero-card-title">Learn. Practice. Apply.</p>
 <p>
                 Understand the concept. Practice with realistic exercises.
